@@ -1,11 +1,11 @@
 #!/bin/sh
-# Regenerates the test bed's forms: one app (Tests/Testbed/base) expressed as each project form, at the
+# Regenerates the forms: one app (base/) expressed as each project form, at the
 # repository root and under ios/. Runs on a Mac with Xcode 27.2 or later, Tuist and XcodeGen
 # (brew install tuist xcodegen); CI never runs it, it reads what this wrote.
 # scripts/testbed/generate.sh [--build]   --build also builds each form for testing, to prove it's real
 set -eu
-cd "$(dirname "$0")/../.."
-testbed=Tests/Testbed
+cd "$(dirname "$0")/.."
+testbed=.
 base=$testbed/base
 build=${1:-}
 xcode=$(xcodebuild -version | head -1 | sed 's/Xcode //')
