@@ -185,3 +185,42 @@ form() {
 for name in classic folders json xcodegen tuist tuist-ungenerated; do
   for layout in root ios; do form "$name" "$layout"; done
 done
+
+# Projects shaped to trip tools up, each with the expectation it must still meet.
+adversarial() {
+  fixture=$testbed/adversarial/$1
+  expectation=$(cat "$fixture/expect.xcrew.json" 2>/dev/null || true)
+  rm -rf "$fixture"
+  sources "$fixture"
+  case $1 in
+    project-swift-trap)
+      # A source file named like Tuist's manifest, a folder or two down: not a Tuist project.
+      mkdir -p "$fixture/App/Models"
+      printf 'struct Project {\n    let name: String\n}\n' > "$fixture/App/Models/Project.swift"
+      xcodegen_project "$fixture" group
+      rm "$fixture/project.yml"
+      fixture_json "$fixture" pbxproj-groups none root ;;
+    json-macro-copy)
+      # Tuist before 4.203 gave each macro target a phase that copies the plugin in place; this project has it in
+      # the JSON format, as one converted after generation would.
+      tuist_manifests "$fixture"
+      json_project "$fixture"
+      phase=$(mktemp)
+      cat > "$phase" <<'SCRIPT'
+#  This build phase serves two purposes:
+#  - Force Xcode build system to compile the macOS executable transitively when compiling for non-macOS destinations
+    cp -f "$BUILD_DIR/$CONFIGURATION/AMacros" "$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/AMacros"
+SCRIPT
+      xcrun xcodeproj target phase add-script --target App --script "@$phase" -P "$fixture/App.xcodeproj" > /dev/null
+      rm "$phase"
+      mkdir -p "$fixture/App.xcodeproj/xcshareddata/xcschemes"
+      cp "$testbed/forms/classic/App.xcodeproj/xcshareddata/xcschemes/App.xcscheme" "$fixture/App.xcodeproj/xcshareddata/xcschemes/"
+      fixture_json "$fixture" json tuist root ;;
+  esac
+  (cd "$fixture" && xcodebuild -list -project App.xcodeproj > /dev/null)
+  if [ -n "$expectation" ]; then printf '%s\n' "$expectation" > "$fixture/expect.xcrew.json"; fi
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
+for name in project-swift-trap json-macro-copy; do adversarial "$name"; done
