@@ -3,36 +3,36 @@
     "attachments" : [
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000003",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000009",
         "isAssociatedWithFailure" : false,
-        "suggestedHumanReadableName" : "reference_0_00000000-0000-0000-0000-000000000001.png",
-        "timestamp" : 1793359133.586
+        "suggestedHumanReadableName" : "reference_0_00000000-0000-0000-0000-000000000003.png",
+        "timestamp" : 1793370598.568
       },
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000013",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000007",
         "isAssociatedWithFailure" : false,
-        "suggestedHumanReadableName" : "failure_1_00000000-0000-0000-0000-000000000001.png",
-        "timestamp" : 1793359133.586
+        "suggestedHumanReadableName" : "failure_1_00000000-0000-0000-0000-000000000003.png",
+        "timestamp" : 1793370598.568
       },
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000012",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000005",
         "isAssociatedWithFailure" : false,
-        "suggestedHumanReadableName" : "difference_2_00000000-0000-0000-0000-000000000001.png",
-        "timestamp" : 1793359133.586
+        "suggestedHumanReadableName" : "difference_2_00000000-0000-0000-0000-000000000003.png",
+        "timestamp" : 1793370598.568
       },
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000011.txt",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000017.txt",
         "isAssociatedWithFailure" : true,
         "suggestedHumanReadableName" : "Complete Issue Description.txt"
       }
@@ -44,36 +44,36 @@
     "attachments" : [
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000015.png",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000011.png",
         "isAssociatedWithFailure" : false,
-        "suggestedHumanReadableName" : "Reference Image_0_00000000-0000-0000-0000-000000000004.png",
-        "timestamp" : 1793359133.839
+        "suggestedHumanReadableName" : "Reference Image_0_00000000-0000-0000-0000-000000000015.png",
+        "timestamp" : 1793370598.611
       },
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
         "exportedFileName" : "00000000-0000-0000-0000-000000000006.png",
         "isAssociatedWithFailure" : false,
-        "suggestedHumanReadableName" : "Failed Image_1_00000000-0000-0000-0000-000000000004.png",
-        "timestamp" : 1793359133.839
+        "suggestedHumanReadableName" : "Failed Image_1_00000000-0000-0000-0000-000000000015.png",
+        "timestamp" : 1793370598.611
       },
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000018.png",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000001.png",
         "isAssociatedWithFailure" : false,
-        "suggestedHumanReadableName" : "Diffed Image_2_00000000-0000-0000-0000-000000000004.png",
-        "timestamp" : 1793359133.839
+        "suggestedHumanReadableName" : "Diffed Image_2_00000000-0000-0000-0000-000000000015.png",
+        "timestamp" : 1793370598.611
       },
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000016.txt",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000002.txt",
         "isAssociatedWithFailure" : true,
         "suggestedHumanReadableName" : "Complete Issue Description.txt"
       }
@@ -85,36 +85,36 @@
     "attachments" : [
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000010.png",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000018.png",
         "isAssociatedWithFailure" : false,
-        "suggestedHumanReadableName" : "difference_0_00000000-0000-0000-0000-000000000007.png",
-        "timestamp" : 1793359133.869
+        "suggestedHumanReadableName" : "difference_0_00000000-0000-0000-0000-000000000014.png",
+        "timestamp" : 1793370598.643
       },
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000009.png",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000013.png",
         "isAssociatedWithFailure" : false,
         "suggestedHumanReadableName" : "failure_0_00000000-0000-0000-0000-000000000008.png",
-        "timestamp" : 1793359133.869
+        "timestamp" : 1793370598.643
       },
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000017.png",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000004.png",
         "isAssociatedWithFailure" : false,
-        "suggestedHumanReadableName" : "reference_0_00000000-0000-0000-0000-000000000005.png",
-        "timestamp" : 1793359133.869
+        "suggestedHumanReadableName" : "reference_0_00000000-0000-0000-0000-000000000016.png",
+        "timestamp" : 1793370598.643
       },
       {
         "configurationName" : "Test Scheme Action",
-        "deviceId" : "00000000-0000-0000-0000-000000000002",
-        "deviceName" : "iPhone 17",
-        "exportedFileName" : "00000000-0000-0000-0000-000000000014.txt",
+        "deviceId" : "00000000-0000-0000-0000-000000000012",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000010.txt",
         "isAssociatedWithFailure" : true,
         "suggestedHumanReadableName" : "Complete Issue Description.txt"
       }

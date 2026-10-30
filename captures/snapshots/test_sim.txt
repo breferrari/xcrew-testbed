@@ -40,14 +40,14 @@ Test Failures (5):
     
     Newly-taken snapshot does not match reference.
 
-  ✗ UberTests / testSquare: Snapshot comparison failed: Optional(Error Domain=FBSnapshotTestControllerErrorDomain Code=4 "Images different" UserInfo={NSLocalizedFailureReason=image pixels differed by more than 0.00% from the reference image, FBDiffedImageKey=<UIImage:0x106198280 anonymous {4, 4} renderingMode=automatic(original)>, FBReferenceImageKey=<UIImage:0x106198320 anonymous {4, 4} renderingMode=automatic(original)>, FBCapturedImageKey=<UIImage:0x106198460 anonymous {4, 4} renderingMode=automatic(original)>, NSLocalizedDescription=Images different})
+  ✗ UberTests / testSquare: Snapshot comparison failed: Optional(Error Domain=FBSnapshotTestControllerErrorDomain Code=4 "Images different" UserInfo={NSLocalizedFailureReason=image pixels differed by more than 0.00% from the reference image, FBDiffedImageKey=<UIImage:0x106184280 anonymous {4, 4} renderingMode=automatic(original)>, FBReferenceImageKey=<UIImage:0x106184460 anonymous {4, 4} renderingMode=automatic(original)>, FBCapturedImageKey=<UIImage:0x1061843c0 anonymous {4, 4} renderingMode=automatic(original)>, NSLocalizedDescription=Images different})
     /testbed/captures/snapshots/SnapshotTests/SnapshotTests.swift:38
 
-  ✗ UberTests / testSquare(): failed - Snapshot comparison failed: Optional(Error Domain=FBSnapshotTestControllerErrorDomain Code=4 "Images different" UserInfo={NSLocalizedFailureReason=image pixels differed by more than 0.00% from the reference image, FBDiffedImageKey=<UIImage:0x106198280 anonymous {4, 4} renderingMode=automatic(original)>, FBReferenceImageKey=<UIImage:0x106198320 anonymous {4, 4} renderingMode=automatic(original)>, FBCapturedImageKey=<UIImage:0x106198460 anonymous {4, 4} renderingMode=automatic(original)>, NSLocalizedDescription=Images different})
+  ✗ UberTests / testSquare(): failed - Snapshot comparison failed: Optional(Error Domain=FBSnapshotTestControllerErrorDomain Code=4 "Images different" UserInfo={NSLocalizedFailureReason=image pixels differed by more than 0.00% from the reference image, FBDiffedImageKey=<UIImage:0x106184280 anonymous {4, 4} renderingMode=automatic(original)>, FBReferenceImageKey=<UIImage:0x106184460 anonymous {4, 4} renderingMode=automatic(original)>, FBCapturedImageKey=<UIImage:0x1061843c0 anonymous {4, 4} renderingMode=automatic(original)>, NSLocalizedDescription=Images different})
 
-❌ 3 tests failed, 0 passed, 0 skipped (⏱️ 28.1s)
+❌ 3 tests failed, 0 passed, 0 skipped (⏱️ 6.7s)
   └ Files:
      └── ~/Library/Developer/MobileBuildMCP/workspaces/snapshots-d63531045c52/
-         ├── logs/test_sim_2026-10-30T11-18-29-303Z_pid78700_8d7dd1a9.log — Build Logs
-         ├── result-bundles/test_sim_2026-10-30T11-18-29-303Z_pid78700_8fe8795c.xcresult — Result Bundle
-         └── test-products/test_sim_2026-10-30T11-18-29-303Z_pid78700_6c6c4741.xctestproducts — Test Products
+         ├── logs/test_sim_2026-10-30T14-29-52-361Z_pid85237_57ee8259.log — Build Logs
+         ├── result-bundles/test_sim_2026-10-30T14-29-52-361Z_pid85237_915ade19.xcresult — Result Bundle
+         └── test-products/test_sim_2026-10-30T14-29-52-361Z_pid85237_7465cefb.xctestproducts — Test Products

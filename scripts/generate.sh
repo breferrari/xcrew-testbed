@@ -334,9 +334,50 @@ capture_simulator() {
   crash_check
 }
 
+# Known Apple crashes of the runtime itself, which no capture causes: remove an entry once Apple fixes its runtime.
+# iOS 27.2 (24B8117) on macOS 27.2 (26B123), 2026-10-30 (README, "Known runtime crashes"):
+# - launching only Settings and Safari with simctl, nothing built, crashes AppIntentsLiveEntityService and
+#   SettingsSearchReindexService about 30 s later, each an EXC_BREAKPOINT in XPCPeerRequirement.hasEntitlement ->
+#   __XPC_API_MISUSE__;
+# - on a fresh simulator, during a test run, assetsd aborts on an exception PhotoLibraryServices throws while preparing
+#   its library (queue PLLibraryServicesStateNode, prep-pre-migration); nothing here uses Photos.
+# A report is known only when its process, exception, queue and frames all match an entry. An entry may be added only
+# for an Apple system process, with only Apple frames in the crashing thread, and with evidence that no capture's code
+# is involved. A third new process crashing means this is the wrong tool: let the simulator settle longer after boot.
+known_crash() {
+  node -e '
+    // frames are found in the crashing thread or, for an uncaught exception, in the backtrace that threw it.
+    const known = [
+      { process: "AppIntentsLiveEntityService", type: "EXC_BREAKPOINT", signal: "SIGTRAP", queue: "", frames: ["XPCPeerRequirement.hasEntitlement", "__XPC_API_MISUSE__"] },
+      { process: "SettingsSearchReindexService", type: "EXC_BREAKPOINT", signal: "SIGTRAP", queue: "", frames: ["XPCPeerRequirement.hasEntitlement", "__XPC_API_MISUSE__"] },
+      { process: "assetsd", type: "EXC_CRASH", signal: "SIGABRT", queue: "PLLibraryServicesStateNode", frames: ["prep-pre-migration", "objc_exception_throw", "PLLibraryServicesOperation"] },
+    ]
+    const text = require("fs").readFileSync(process.argv[1], "utf8")
+    const report = JSON.parse(text.slice(text.indexOf("\n") + 1))
+    const thread = (report.threads ?? []).find(t => t.triggered) ?? {}
+    const symbols = [thread.queue ?? "", ...[...(thread.frames ?? []), ...(report.lastExceptionBacktrace ?? [])].map(f => f.symbol ?? "")]
+    const matches = known.some(k => report.procName === k.process && report.exception?.type === k.type && report.exception?.signal === k.signal &&
+      (thread.queue ?? "").includes(k.queue) && k.frames.every(f => symbols.some(s => s.includes(f))))
+    process.exit(matches ? 0 : 1)
+  ' "$1" 2> /dev/null
+}
+
+# The reports since the run began that name the capture simulator and aren't a known crash; the known ones are listed.
+simulator_crashes() {
+  find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null | while IFS= read -r report; do
+    if [ -n "${shutdown_marker:-}" ] && [ "$report" -nt "$shutdown_marker" ] && grep -q -F '"signal":"SIGKILL"' "$report"; then continue; fi
+    grep -q -F "$simulator_id" "$report" || continue
+    if known_crash "$report"; then
+      echo "generate.sh: known Apple iOS 27.2 runtime crash, ignored: $report" >&2
+    else
+      echo "$report"
+    fi
+  done
+}
+
 # Stops the run at the first crash report that names the capture simulator; the trap still deletes it.
 crash_check() {
-  if find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' -exec grep -l -F "$simulator_id" {} + 2> /dev/null | grep -q .; then
+  if simulator_crashes | grep -q .; then
     echo "generate.sh: stopping: the capture simulator ($simulator_id) crashed" >&2
     exit 1
   fi
@@ -344,14 +385,19 @@ crash_check() {
 
 finish_simulator() {
   status=$?
+  shutdown_marker=$(mktemp)
   xcrun simctl shutdown "$simulator_id" 2> /dev/null || true
   xcrun simctl delete "$simulator_id"
+  # The shutdown kills the simulator's services, and their SIGKILL reports land up to half a minute later: wait for
+  # them, and leave out only those, so a real crash during the shutdown still counts.
+  sleep 45
   # A report of the capture simulator names its id, in its coalition or its paths; the Mac's own apps may crash too,
   # which is no fault of the run.
-  reports=$(find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null)
-  rm -f "$crash_marker"
-  ours=$(if [ -n "$reports" ]; then echo "$reports" | while IFS= read -r report; do grep -l -F "$simulator_id" "$report" || true; done; fi)
-  others=$(if [ -n "$reports" ]; then echo "$reports" | while IFS= read -r report; do grep -q -F "$simulator_id" "$report" || echo "$report"; done; fi)
+  ours=$(simulator_crashes)
+  others=$(find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null | while IFS= read -r report; do
+    grep -q -F "$simulator_id" "$report" || echo "$report"
+  done)
+  rm -f "$crash_marker" "$shutdown_marker"
   if [ -n "$others" ]; then
     echo "generate.sh: other crash reports appeared during the run, not the capture simulator's:" >&2
     echo "$others" >&2
@@ -569,6 +615,7 @@ final class UberTests: FBSnapshotTestCase {
     }
 }
 EOF
+  # Signed ad hoc, as a developer's simulator build is.
   cat > "$fixture/project.yml" <<'EOF'
 name: App
 options:
@@ -589,6 +636,8 @@ targets:
     sources: [App]
     settings:
       GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_ALLOWED: YES
   SnapshotTests:
     type: bundle.unit-test
     platform: iOS
@@ -599,6 +648,8 @@ targets:
       - package: iOSSnapshotTestCase
     settings:
       GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_ALLOWED: YES
 schemes:
   App:
     build:
@@ -618,9 +669,9 @@ EOF
       "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME"
   }
   # Both runs fail by design: a test that records fails in both libraries, and so does every comparison after.
-  (cd "$fixture" && TEST_RUNNER_SNAPSHOT_RECORD=1 xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1) || true
+  (cd "$fixture" && TEST_RUNNER_SNAPSHOT_RECORD=1 xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -quiet > /dev/null 2>&1) || true
   crash_check
-  (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -resultBundlePath "$results/Snapshots.xcresult" CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1) || true
+  (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -resultBundlePath "$results/Snapshots.xcresult" -quiet > /dev/null 2>&1) || true
   crash_check
   exported() {
     out=$fixture/$1
@@ -656,7 +707,7 @@ EOF
   exported mobilebuildmcp "$bundle"
   rm -rf "${fixture:?}/.mobilebuildmcp" "${derived:?}" "${results:?}"
   fixture_json "$fixture" pbxproj-groups xcodegen root
-  printf '{\n  "replay": "xcodebuild/ and mobilebuildmcp/ are xcresulttool export attachments --only-failures and get test-results tests on one run each of three failing snapshot tests, from xcodebuild test and from MobileBuildMCP test_sim, whose MCP result is test_sim.txt; made on the Mac that generated them, tests read them and never render",\n  "swiftSnapshotTesting": "1.19.7",\n  "iOSSnapshotTestCase": "8.0.0",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$fixture/capture.json"
+  printf '{\n  "replay": "xcodebuild/ and mobilebuildmcp/ are xcresulttool export attachments (every attachment, since the images are not associated with the failure) and get test-results tests on one run each of three failing snapshot tests, from xcodebuild test and from MobileBuildMCP test_sim, whose MCP result is test_sim.txt; made on the Mac that generated them, tests read them and never render",\n  "swiftSnapshotTesting": "1.19.7",\n  "iOSSnapshotTestCase": "8.0.0",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$fixture/capture.json"
   find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
   echo "$fixture"
 }
