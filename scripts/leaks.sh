@@ -8,7 +8,7 @@ set -eu
 cd "$(dirname "$0")/.."
 escaped() { printf '%s' "$1" | sed 's#/#\\/#g'; }
 found=0
-if grep -rIlF -e "$HOME" -e "$(pwd -P)" -e "$(escaped "$HOME")" -e "$(escaped "$(pwd -P)")" forms adversarial modular captures; then
+if grep -rIlF -e "$HOME" -e "$(pwd -P)" -e "$(escaped "$HOME")" -e "$(escaped "$(pwd -P)")" forms adversarial modular field captures; then
   echo "leaks.sh: the files above hold an absolute path of this Mac" >&2
   found=1
 fi
