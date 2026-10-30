@@ -1,0 +1,4 @@
+{
+  "replay": "each .txt is MobileBuildMCP build_sim's MCP result, and the .log beside it the build log it names: module-cache-malformed after one of Clang's cached modules (Darwin) was cut short, module-cache-invalid after one of the SDK's precompiled modules (SwiftShims) was, simulator-missing for an iPhone name no simulator has; tests read them and never build",
+  "mobilebuildmcp": "2.7.1"
+}

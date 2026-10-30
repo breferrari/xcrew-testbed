@@ -1,7 +1,7 @@
 #!/bin/sh
 # Regenerates the forms: one app (base/) expressed as each project form, at the
-# repository root and under ios/. Runs on a Mac with Xcode 27.2 or later, Tuist and XcodeGen
-# (brew install tuist xcodegen); CI never runs it, it reads what this wrote.
+# repository root and under ios/. Runs on a Mac with Xcode 27.2 or later, Tuist, XcodeGen, MobileBuildMCP and Node
+# (brew install tuist xcodegen getsentry/xcodebuildmcp/mobilebuildmcp); CI never runs it, it reads what this wrote.
 # scripts/testbed/generate.sh [--build]   --build also builds each form for testing, to prove it's real
 set -eu
 cd "$(dirname "$0")/.."
@@ -368,9 +368,73 @@ EOF
   echo "$fixture"
 }
 
+# Captures of builds that fail on the Mac, not in the code, as MobileBuildMCP's MCP results and the logs they name: a
+# module in the module cache made corrupt, once in Clang's cache and once among the SDK's precompiled modules, and an
+# iPhone name no simulator has. Tests replay the text; nothing breaks anywhere else.
+environment() {
+  fixture=$testbed/captures/environment
+  rm -rf "$fixture"
+  sources "$fixture"
+  xcodegen_project "$fixture" group
+  derived=$(mktemp -d)
+  results=$(mktemp -d)
+  resolved=$(cd "$fixture" && pwd -P)
+  # The resolved spellings first, since each holds the written one (`/private/var/…` holds `/var/…`).
+  neutral() {
+    perl -pe 'BEGIN { ($rf, $wf, $rd, $wd, $h) = @ARGV; @ARGV = () } s#\Q$rf\E#/testbed/captures/environment#g; s#\Q$wf\E#/testbed/captures/environment#g; s#\Q$rd\E#/testbed/DerivedData#g; s#\Q$wd\E#/testbed/DerivedData#g; s#\Q$h\E#/testbed/home#g' \
+      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME"
+  }
+  configure() {
+    mkdir -p "$fixture/.mobilebuildmcp"
+    printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'App'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/App.xcodeproj" "$1" "$derived" > "$fixture/.mobilebuildmcp/config.yaml"
+  }
+  build() {
+    node scripts/mcp-call.mjs "$fixture" build_sim
+  }
+  # A source changed since the last build, so the next one compiles again and reads the modules.
+  touch_source() {
+    printf '\n' >> "$fixture/App/ContentView.swift"
+  }
+  corrupt() {
+    module=$(find "$derived/$1" -name "$2-*.pcm" | head -1)
+    head -c 4096 "$module" > "$results/module" && mv "$results/module" "$module"
+  }
+  # xcodebuild lists every destination it knows after a failure, this Mac and the devices paired with it among them,
+  # with their owner's name and their hardware ids; simulators and the placeholder destinations stay.
+  devices_out() {
+    perl -ne 'print unless /^\s*\{ platform:(?!\w+ Simulator)[^,]+, (?!id:dvtdevice-)/'
+  }
+  capture() {
+    build > "$results/$1.txt"
+    log=$(grep -o '~/[^ ]*\.log' "$results/$1.txt" | head -1 | sed "s#^~#$HOME#")
+    neutral < "$results/$1.txt" > "$fixture/$1.txt"
+    neutral < "$log" | devices_out > "$fixture/$1.log"
+  }
+  configure "$simulator"
+  build | grep -q 'Build succeeded'
+  corrupt ModuleCache.noindex Darwin
+  touch_source
+  capture module-cache-malformed
+  rm -rf "$derived/ModuleCache.noindex" "$derived/SDKExplicitPrecompiledModules"
+  build | grep -q 'Build succeeded'
+  corrupt SDKExplicitPrecompiledModules SwiftShims
+  touch_source
+  capture module-cache-invalid
+  # A name like an iPhone's reaches xcodebuild; MobileBuildMCP turns away one that names no platform itself.
+  configure "iPhone 1"
+  capture simulator-missing
+  cp "$base/App/ContentView.swift" "$fixture/App/ContentView.swift"
+  rm -rf "$fixture/.mobilebuildmcp" "$derived" "$results"
+  fixture_json "$fixture" pbxproj-groups xcodegen root
+  printf '{\n  "replay": "each .txt is MobileBuildMCP build_sim'"'"'s MCP result, and the .log beside it the build log it names: module-cache-malformed after one of Clang'"'"'s cached modules (Darwin) was cut short, module-cache-invalid after one of the SDK'"'"'s precompiled modules (SwiftShims) was, simulator-missing for an iPhone name no simulator has; tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$fixture/capture.json"
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
 simulator=${XCREW_TESTBED_SIMULATOR:-iPhone 17}
 repetitions
 coverage
+environment
 
 # No fixture may hold a path of the Mac that made it: a home folder, or this checkout.
 # JSON may write each slash escaped, as `\/`.

@@ -1,0 +1,11 @@
+
+🔨 Build
+
+Errors (1):
+
+  ✗ Unable to find a device matching the provided destination specifier:
+    { platform:iOS Simulator, OS:latest, name:iPhone 1 }
+
+❌ Build failed. (⏱️ 61.0s)
+  └ Files:
+     └── ~/Library/Developer/MobileBuildMCP/workspaces/environment-f963804cb4be/logs/build_sim_2026-10-30T07-36-11-835Z_pid22649_9d28cb16.log — Build Logs
