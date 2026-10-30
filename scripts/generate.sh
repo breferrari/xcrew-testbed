@@ -317,11 +317,19 @@ finish_simulator() {
   status=$?
   xcrun simctl shutdown "$simulator_id" 2> /dev/null || true
   xcrun simctl delete "$simulator_id"
+  # A report of the capture simulator names its id, in its coalition or its paths; the Mac's own apps may crash too,
+  # which is no fault of the run.
   reports=$(find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null)
   rm -f "$crash_marker"
-  if [ -n "$reports" ]; then
-    echo "generate.sh: crash reports appeared during the run (the capture simulator was $simulator_id):" >&2
-    echo "$reports" >&2
+  ours=$(if [ -n "$reports" ]; then echo "$reports" | while IFS= read -r report; do grep -l -F "$simulator_id" "$report" || true; done; fi)
+  others=$(if [ -n "$reports" ]; then echo "$reports" | while IFS= read -r report; do grep -q -F "$simulator_id" "$report" || echo "$report"; done; fi)
+  if [ -n "$others" ]; then
+    echo "generate.sh: other crash reports appeared during the run, not the capture simulator's:" >&2
+    echo "$others" >&2
+  fi
+  if [ -n "$ours" ]; then
+    echo "generate.sh: the capture simulator ($simulator_id) crashed during the run:" >&2
+    echo "$ours" >&2
     status=1
   fi
   exit "$status"

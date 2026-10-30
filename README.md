@@ -43,7 +43,7 @@ brew install tuist xcodegen getsentry/xcodebuildmcp/mobilebuildmcp
 scripts/generate.sh --build
 ```
 
-`--build` also builds each form for testing, to prove it real. The captures run on a simulator of their own: an iPhone on the newest released iOS runtime, created for the run, booted once, and deleted at the end. A beta runtime's system apps can crash on boot, and nothing the captures do may crash anything on the Mac, so the run fails, naming them, when crash reports appeared while it ran. Regenerating keeps each fixture's expectations. It ends with `scripts/leaks.sh`, which fails when a fixture holds a path of the Mac that made it or the id of one of its devices or simulators; captures number those ids instead. The JSON forms' object IDs change on every run, because Xcode's tool picks them at random.
+`--build` also builds each form for testing, to prove it real. The captures run on a simulator of their own: an iPhone on the newest released iOS runtime, created for the run, booted once, and deleted at the end. A beta runtime's system apps can crash on boot, and nothing the captures do may crash anything on the Mac, so the run fails, naming them, when crash reports from that simulator appeared while it ran. Other reports that appear meanwhile, from the Mac's own apps, are listed without failing it. Regenerating keeps each fixture's expectations. It ends with `scripts/leaks.sh`, which fails when a fixture holds a path of the Mac that made it or the id of one of its devices or simulators; captures number those ids instead. The JSON forms' object IDs change on every run, because Xcode's tool picks them at random.
 
 ## How xcrew uses it
 
