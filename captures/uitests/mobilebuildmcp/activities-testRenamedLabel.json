@@ -1,0 +1,503 @@
+{
+  "testIdentifier" : "UITests/testRenamedLabel()",
+  "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testRenamedLabel",
+  "testName" : "testRenamedLabel()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Screen Recording 2026-10-30 at 03.55.33 PM.mp4",
+              "payloadId" : "0~VXOeUEwOUjjFHvzB-ZcAoi4TF6aaP1d9clzw-d2YSdZ8jBJrCmv3qHDyMmsxSoEzGo6YylXScStfdHxYB87dzw==",
+              "timestamp" : 1793372133.971,
+              "userInfos" : [
+                {
+                  "key" : "scale",
+                  "value" : "3"
+                },
+                {
+                  "key" : "initialDeviceOrientation",
+                  "value" : "0"
+                },
+                {
+                  "key" : "initialInterfaceOrientation",
+                  "value" : "1"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000007"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372133.971,
+              "title" : "kXCTAttachmentScreenRecording"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372133.937,
+          "title" : "Start Test at 2026-10-30 15:55:33.937"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372133.972,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372133.973,
+                  "title" : "Terminate dev.xcrew.testbed.App:28539"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372135.263,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372137.521,
+                  "title" : "Wait for dev.xcrew.testbed.App to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372133.973,
+              "title" : "Launch dev.xcrew.testbed.App"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372133.973,
+          "title" : "Open dev.xcrew.testbed.App"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000034.txt",
+              "payloadId" : "0~5BSB7bKRq2gEHXPnbMcGRP-psfIv9974ZLZzlKRG_rM25sjLt7UKCN8bIZ4ObJTFI96tKWLOcRZc-5DNWF6InQ==",
+              "timestamp" : 1793372139.968,
+              "uuid" : "00000000-0000-0000-0000-000000000020"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000023.txt",
+              "payloadId" : "0~5BSB7bKRq2gEHXPnbMcGRP-psfIv9974ZLZzlKRG_rM25sjLt7UKCN8bIZ4ObJTFI96tKWLOcRZc-5DNWF6InQ==",
+              "timestamp" : 1793372140.902,
+              "uuid" : "00000000-0000-0000-0000-000000000038"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000034.txt",
+                  "payloadId" : "0~5BSB7bKRq2gEHXPnbMcGRP-psfIv9974ZLZzlKRG_rM25sjLt7UKCN8bIZ4ObJTFI96tKWLOcRZc-5DNWF6InQ==",
+                  "timestamp" : 1793372139.968,
+                  "uuid" : "00000000-0000-0000-0000-000000000020"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372139.909,
+                  "title" : "Checking existence of `\"Hello\" StaticText`"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372139.968,
+                  "title" : "Debug description for `\"Hello\" StaticText`"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372139.968,
+                  "title" : "Capturing element debug description"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372139.907,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Hello\" StaticText`"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000023.txt",
+                  "payloadId" : "0~5BSB7bKRq2gEHXPnbMcGRP-psfIv9974ZLZzlKRG_rM25sjLt7UKCN8bIZ4ObJTFI96tKWLOcRZc-5DNWF6InQ==",
+                  "timestamp" : 1793372140.902,
+                  "uuid" : "00000000-0000-0000-0000-000000000038"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372140.895,
+                  "title" : "Checking existence of `\"Hello\" StaticText`"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372140.902,
+                  "title" : "Debug description for `\"Hello\" StaticText`"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372140.902,
+                  "title" : "Capturing element debug description"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372140.895,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Hello\" StaticText`"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372140.902,
+              "title" : "Checking existence of `\"Hello\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372138.888,
+          "title" : "Waiting 2.0s for \"Hello\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000003.App",
+              "payloadId" : "0~GjTKNtx0Sa0YIFyCz0n7X_-Gm9bR_wlrkDZscCqvVk27uYbJnmomzulTkDvHqG8BV_R6JdchK4wCICG9ZjOxdQ==",
+              "timestamp" : 1793372140.915,
+              "uuid" : "00000000-0000-0000-0000-000000000019"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-30 at 03.55.40 PM",
+              "payloadId" : "0~qCMpkCHzpyxNXlK6cYa1rgOdlOo2GZrQ7Q_vdsbeCrfPNFjFc32YPGDZzPCUrdXmqSAGrwt5kYmqLqzEhawMpQ==",
+              "timestamp" : 1793372140.915,
+              "uuid" : "00000000-0000-0000-0000-000000000015"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372140.909,
+              "title" : "Requesting snapshot of accessibility hierarchy for app with pid 28541"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372140.915,
+              "title" : "App UI hierarchy for dev.xcrew.testbed.App"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372140.915,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372140.909,
+          "title" : "Collecting debug information to assist test failure triage"
+        },
+        {
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "title" : "UITests.testRenamedLabel()"
+            }
+          ],
+          "isAssociatedWithFailure" : true,
+          "startTime" : 1793372140.916,
+          "title" : "XCTAssertTrue failed"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372140.918,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "modelName" : "iPhone 18 Pro Max",
+        "osBuildNumber" : "24B8117",
+        "osVersion" : "27.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Plan A"
+      }
+    },
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Screen Recording 2026-10-30 at 03.56.09 PM.mp4",
+              "payloadId" : "0~bBQvDSmMMQwVsLeYlwIWYfmObrUAk1zZQfQD0RNcdvjP5w82mi7WyxKvWqpiROIlHXY1WXlJC6H1kxk6tg2FfA==",
+              "timestamp" : 1793372169.795,
+              "userInfos" : [
+                {
+                  "key" : "scale",
+                  "value" : "3"
+                },
+                {
+                  "key" : "initialDeviceOrientation",
+                  "value" : "0"
+                },
+                {
+                  "key" : "initialInterfaceOrientation",
+                  "value" : "1"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000031"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372169.795,
+              "title" : "kXCTAttachmentScreenRecording"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372169.759,
+          "title" : "Start Test at 2026-10-30 15:56:09.759"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372169.797,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372169.8,
+                  "title" : "Terminate dev.xcrew.testbed.App:28911"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372171.075,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372173.429,
+                  "title" : "Wait for dev.xcrew.testbed.App to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372169.799,
+              "title" : "Launch dev.xcrew.testbed.App"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372169.799,
+          "title" : "Open dev.xcrew.testbed.App"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000017.txt",
+              "payloadId" : "0~5BSB7bKRq2gEHXPnbMcGRP-psfIv9974ZLZzlKRG_rM25sjLt7UKCN8bIZ4ObJTFI96tKWLOcRZc-5DNWF6InQ==",
+              "timestamp" : 1793372175.903,
+              "uuid" : "00000000-0000-0000-0000-000000000029"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000002.txt",
+              "payloadId" : "0~5BSB7bKRq2gEHXPnbMcGRP-psfIv9974ZLZzlKRG_rM25sjLt7UKCN8bIZ4ObJTFI96tKWLOcRZc-5DNWF6InQ==",
+              "timestamp" : 1793372176.831,
+              "uuid" : "00000000-0000-0000-0000-000000000022"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000017.txt",
+                  "payloadId" : "0~5BSB7bKRq2gEHXPnbMcGRP-psfIv9974ZLZzlKRG_rM25sjLt7UKCN8bIZ4ObJTFI96tKWLOcRZc-5DNWF6InQ==",
+                  "timestamp" : 1793372175.903,
+                  "uuid" : "00000000-0000-0000-0000-000000000029"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372175.849,
+                  "title" : "Checking existence of `\"Hello\" StaticText`"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372175.903,
+                  "title" : "Debug description for `\"Hello\" StaticText`"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372175.903,
+                  "title" : "Capturing element debug description"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372175.848,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Hello\" StaticText`"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000002.txt",
+                  "payloadId" : "0~5BSB7bKRq2gEHXPnbMcGRP-psfIv9974ZLZzlKRG_rM25sjLt7UKCN8bIZ4ObJTFI96tKWLOcRZc-5DNWF6InQ==",
+                  "timestamp" : 1793372176.831,
+                  "uuid" : "00000000-0000-0000-0000-000000000022"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372176.809,
+                  "title" : "Checking existence of `\"Hello\" StaticText`"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372176.83,
+                  "title" : "Capturing element debug description"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372176.831,
+                  "title" : "Debug description for `\"Hello\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372176.807,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Hello\" StaticText`"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372176.831,
+              "title" : "Checking existence of `\"Hello\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372174.802,
+          "title" : "Waiting 2.0s for \"Hello\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000009.App",
+              "payloadId" : "0~zysug1mVFt4dJL_d3C_iwUwI0EjcLAM46TZh_kFtPHtv1Izbuu5ORj0BAZop0q-GrWpD3BOYBSW94ZKWOv6hhA==",
+              "timestamp" : 1793372176.848,
+              "uuid" : "00000000-0000-0000-0000-000000000028"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-30 at 03.56.16 PM",
+              "payloadId" : "0~V3eomB7UgD754Z6See5cr_4zkRiHF_3jjbOr_C_DoIYKNAnCAktxSfwRerlzKdQBGxKsg62fc0a91BuRSlPvSA==",
+              "timestamp" : 1793372176.848,
+              "uuid" : "00000000-0000-0000-0000-000000000033"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372176.839,
+              "title" : "Requesting snapshot of accessibility hierarchy for app with pid 28938"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372176.848,
+              "title" : "App UI hierarchy for dev.xcrew.testbed.App"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372176.848,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372176.839,
+          "title" : "Collecting debug information to assist test failure triage"
+        },
+        {
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "title" : "UITests.testRenamedLabel()"
+            }
+          ],
+          "isAssociatedWithFailure" : true,
+          "startTime" : 1793372176.849,
+          "title" : "XCTAssertTrue failed"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372176.852,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "modelName" : "iPhone 18 Pro Max",
+        "osBuildNumber" : "24B8117",
+        "osVersion" : "27.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "2",
+        "configurationName" : "Plan B"
+      }
+    }
+  ]
+}

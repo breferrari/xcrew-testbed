@@ -1,0 +1,263 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00000000-0000-0000-0000-000000000011",
+      "deviceName" : "xcrew-testbed",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "children" : [
+                        {
+                          "name" : "XCTAssertEqual failed: (\"Done\") is not equal to (\"Welcome\")",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                            "lineNumber" : 28
+                          }
+                        }
+                      ],
+                      "duration" : "5s",
+                      "durationInSeconds" : 5.317613005638123,
+                      "name" : "Plan A",
+                      "nodeIdentifier" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testFailsAfterTaps?config=Plan%20A",
+                      "nodeType" : "Test Plan Configuration",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "XCTAssertEqual failed: (\"Done\") is not equal to (\"Welcome\")",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                            "lineNumber" : 28
+                          }
+                        }
+                      ],
+                      "duration" : "5s",
+                      "durationInSeconds" : 5.051573991775513,
+                      "name" : "Plan B",
+                      "nodeIdentifier" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testFailsAfterTaps?config=Plan%20B",
+                      "nodeType" : "Test Plan Configuration",
+                      "result" : "Failed"
+                    }
+                  ],
+                  "duration" : "5s",
+                  "durationInSeconds" : 5.184593498706818,
+                  "name" : "testFailsAfterTaps()",
+                  "nodeIdentifier" : "UITests/testFailsAfterTaps()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testFailsAfterTaps",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "children" : [
+                    {
+                      "children" : [
+                        {
+                          "name" : "Failed to tap \"checkout\" Button: No matches found for Elements matching predicate '\"checkout\" IN identifiers' from input {(\n    Button, identifier: 'continue', label: 'Continue'\n)}",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                            "lineNumber" : 15
+                          }
+                        }
+                      ],
+                      "duration" : "7s",
+                      "durationInSeconds" : 7.232715010643005,
+                      "name" : "Plan A",
+                      "nodeIdentifier" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testMissingElement?config=Plan%20A",
+                      "nodeType" : "Test Plan Configuration",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "Failed to tap \"checkout\" Button: No matches found for Elements matching predicate '\"checkout\" IN identifiers' from input {(\n    Button, identifier: 'continue', label: 'Continue'\n)}",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                            "lineNumber" : 15
+                          }
+                        }
+                      ],
+                      "duration" : "7s",
+                      "durationInSeconds" : 7.514868974685669,
+                      "name" : "Plan B",
+                      "nodeIdentifier" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testMissingElement?config=Plan%20B",
+                      "nodeType" : "Test Plan Configuration",
+                      "result" : "Failed"
+                    }
+                  ],
+                  "duration" : "7s",
+                  "durationInSeconds" : 7.373791992664337,
+                  "name" : "testMissingElement()",
+                  "nodeIdentifier" : "UITests/testMissingElement()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testMissingElement",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "5s",
+                      "durationInSeconds" : 5.400473952293396,
+                      "name" : "Plan A",
+                      "nodeIdentifier" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPasses?config=Plan%20A",
+                      "nodeType" : "Test Plan Configuration",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "5s",
+                      "durationInSeconds" : 5.468015909194946,
+                      "name" : "Plan B",
+                      "nodeIdentifier" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPasses?config=Plan%20B",
+                      "nodeType" : "Test Plan Configuration",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "5s",
+                  "durationInSeconds" : 5.434244930744171,
+                  "name" : "testPasses()",
+                  "nodeIdentifier" : "UITests/testPasses()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPasses",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "6s",
+                      "durationInSeconds" : 6.600656986236572,
+                      "name" : "Plan A",
+                      "nodeIdentifier" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPlanA?config=Plan%20A",
+                      "nodeType" : "Test Plan Configuration",
+                      "result" : "Passed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "XCTAssertTrue failed",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                            "lineNumber" : 33
+                          }
+                        }
+                      ],
+                      "duration" : "7s",
+                      "durationInSeconds" : 7.289963960647583,
+                      "name" : "Plan B",
+                      "nodeIdentifier" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPlanA?config=Plan%20B",
+                      "nodeType" : "Test Plan Configuration",
+                      "result" : "Failed"
+                    }
+                  ],
+                  "duration" : "6s",
+                  "durationInSeconds" : 6.945310473442078,
+                  "name" : "testPlanA()",
+                  "nodeIdentifier" : "UITests/testPlanA()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPlanA",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "children" : [
+                    {
+                      "children" : [
+                        {
+                          "name" : "XCTAssertTrue failed",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                            "lineNumber" : 20
+                          }
+                        }
+                      ],
+                      "duration" : "7s",
+                      "durationInSeconds" : 7.199444055557251,
+                      "name" : "Plan A",
+                      "nodeIdentifier" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testRenamedLabel?config=Plan%20A",
+                      "nodeType" : "Test Plan Configuration",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "XCTAssertTrue failed",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                            "lineNumber" : 20
+                          }
+                        }
+                      ],
+                      "duration" : "7s",
+                      "durationInSeconds" : 7.316215991973877,
+                      "name" : "Plan B",
+                      "nodeIdentifier" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testRenamedLabel?config=Plan%20B",
+                      "nodeType" : "Test Plan Configuration",
+                      "result" : "Failed"
+                    }
+                  ],
+                  "duration" : "7s",
+                  "durationInSeconds" : 7.257830023765564,
+                  "name" : "testRenamedLabel()",
+                  "nodeIdentifier" : "UITests/testRenamedLabel()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testRenamedLabel",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "UITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "UITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "App",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Plan A"
+    },
+    {
+      "configurationId" : "2",
+      "configurationName" : "Plan B"
+    }
+  ]
+}

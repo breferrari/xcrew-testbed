@@ -1,0 +1,9 @@
+Application, 0x10a440c80, pid: 25738, label: 'App' <App element pid: 25738>
+  Window (Main), 0x10a441040, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 25738, elementOrHash.elementID: 4343742464.4>
+    Other, 0x10a441180, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 25738, elementOrHash.elementID: 4388551040.5>
+      Other, 0x10a4412c0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 25738, elementOrHash.elementID: 4387472640.6>
+        Other, 0x10a441540, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 25738, elementOrHash.elementID: 4343810560.7>
+          Other, 0x10a441900, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 25738, elementOrHash.elementID: 4391030368.8>
+            StaticText, 0x10a441a40, {{184.5, 459.5}, {71.0, 20.3}}, identifier: 'title', label: 'Welcome' <AX element pid: 25738, elementOrHash.elementID: 4391030048.9>
+            StaticText, 0x10a441e00, {{195.8, 481.8}, {48.3, 20.3}}, identifier: 'plan', label: 'Plan A' <AX element pid: 25738, elementOrHash.elementID: 4391027808.10>
+            Button, 0x10a441f40, {{185.7, 504.3}, {68.7, 20.3}}, identifier: 'continue', label: 'Continue' <AX element pid: 25738, elementOrHash.elementID: 4391030208.11>

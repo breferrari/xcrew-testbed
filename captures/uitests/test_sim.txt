@@ -1,0 +1,23 @@
+
+🧪 Test
+
+Test Failures (4):
+
+  ✗ UITests / testFailsAfterTaps: XCTAssertEqual failed: ("Done") is not equal to ("Welcome")
+    /testbed/captures/uitests/UITests/UITests.swift:28
+
+  ✗ UITests / testMissingElement: Failed to tap "checkout" Button: No matches found for Elements matching predicate '"checkout" IN identifiers' from input {(
+    /testbed/captures/uitests/UITests/UITests.swift:15
+
+  ✗ UITests / testPlanA: XCTAssertTrue failed
+    /testbed/captures/uitests/UITests/UITests.swift:33
+
+  ✗ UITests / testRenamedLabel: XCTAssertTrue failed
+    /testbed/captures/uitests/UITests/UITests.swift:20
+
+❌ 4 tests failed, 1 passed, 0 skipped (⏱️ 73.9s)
+  └ Files:
+     └── ~/Library/Developer/MobileBuildMCP/workspaces/uitests-2cbe65a6cc00/
+         ├── logs/test_sim_2026-10-30T14-55-03-681Z_pid28210_e346e089.log — Build Logs
+         ├── result-bundles/test_sim_2026-10-30T14-55-03-682Z_pid28210_3a626fee.xcresult — Result Bundle
+         └── test-products/test_sim_2026-10-30T14-55-03-682Z_pid28210_b56d3672.xctestproducts — Test Products

@@ -1,0 +1,74 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00000000-0000-0000-0000-000000000013",
+      "deviceName" : "xcrew-testbed",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "duration" : "Average duration 7,0 seconds",
+  "durationInSeconds" : 6.984633028507233,
+  "hasMediaAttachments" : false,
+  "hasPerformanceMetrics" : false,
+  "startTime" : 1793372023.407,
+  "testDescription" : "Test case with 2 runs",
+  "testIdentifier" : "UITests/testPlanA()",
+  "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPlanA",
+  "testName" : "testPlanA()",
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Plan A"
+    },
+    {
+      "configurationId" : "2",
+      "configurationName" : "Plan B"
+    }
+  ],
+  "testResult" : "Failed",
+  "testRuns" : [
+    {
+      "duration" : "6s",
+      "durationInSeconds" : 6.6853309869766235,
+      "name" : "Plan A",
+      "nodeIdentifier" : "1",
+      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPlanA?config=Plan%20A",
+      "nodeType" : "Test Plan Configuration",
+      "result" : "Passed"
+    },
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "name" : "UITests.testPlanA()",
+              "nodeType" : "Source Code Reference",
+              "sourceLocation" : {
+                "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                "lineNumber" : 33
+              }
+            }
+          ],
+          "name" : "XCTAssertTrue failed",
+          "nodeType" : "Test Case Run",
+          "result" : "Failed",
+          "sourceLocation" : {
+            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+            "lineNumber" : 33
+          }
+        }
+      ],
+      "duration" : "7s",
+      "durationInSeconds" : 7.283935070037842,
+      "name" : "Plan B",
+      "nodeIdentifier" : "2",
+      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPlanA?config=Plan%20B",
+      "nodeType" : "Test Plan Configuration",
+      "result" : "Failed"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "00000000-0000-0000-0000-000000000101",
+      "name" : "Plan A",
+      "options" : {
+        "environmentVariableEntries" : [ { "key" : "PLAN", "value" : "A" } ]
+      }
+    },
+    {
+      "id" : "00000000-0000-0000-0000-000000000102",
+      "name" : "Plan B",
+      "options" : {
+        "environmentVariableEntries" : [ { "key" : "PLAN", "value" : "B" } ]
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:App.xcodeproj",
+        "identifier" : "1C87141839642C9E7D2C4E6F",
+        "name" : "UITests"
+      }
+    }
+  ],
+  "version" : 1
+}

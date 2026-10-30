@@ -1,0 +1,4 @@
+{
+  "replay": "xcodebuild/ and mobilebuildmcp/ each hold one run of five UI tests under a test plan of two configurations, from xcodebuild test and from MobileBuildMCP test_sim (whose MCP result is test_sim.txt): xcresulttool export attachments (every attachment; images cut to 16 points, recordings re-encoded small), get test-results tests, and each failed test's activities and test-details, with one numbering of ids across a folder; made on the Mac that generated them, tests read them and never run a UI test",
+  "mobilebuildmcp": "2.7.1"
+}

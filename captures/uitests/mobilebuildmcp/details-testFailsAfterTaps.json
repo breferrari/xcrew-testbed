@@ -1,0 +1,95 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00000000-0000-0000-0000-000000000011",
+      "deviceName" : "xcrew-testbed",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "duration" : "Average duration 5,2 seconds",
+  "durationInSeconds" : 5.184593498706818,
+  "hasMediaAttachments" : false,
+  "hasPerformanceMetrics" : false,
+  "startTime" : 1793372109.376,
+  "testDescription" : "Test case with 2 runs",
+  "testIdentifier" : "UITests/testFailsAfterTaps()",
+  "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testFailsAfterTaps",
+  "testName" : "testFailsAfterTaps()",
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Plan A"
+    },
+    {
+      "configurationId" : "2",
+      "configurationName" : "Plan B"
+    }
+  ],
+  "testResult" : "Failed",
+  "testRuns" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "name" : "UITests.testFailsAfterTaps()",
+              "nodeType" : "Source Code Reference",
+              "sourceLocation" : {
+                "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                "lineNumber" : 28
+              }
+            }
+          ],
+          "name" : "XCTAssertEqual failed: (\"Done\") is not equal to (\"Welcome\")",
+          "nodeType" : "Test Case Run",
+          "result" : "Failed",
+          "sourceLocation" : {
+            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+            "lineNumber" : 28
+          }
+        }
+      ],
+      "duration" : "5s",
+      "durationInSeconds" : 5.317613005638123,
+      "name" : "Plan A",
+      "nodeIdentifier" : "1",
+      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testFailsAfterTaps?config=Plan%20A",
+      "nodeType" : "Test Plan Configuration",
+      "result" : "Failed"
+    },
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "name" : "UITests.testFailsAfterTaps()",
+              "nodeType" : "Source Code Reference",
+              "sourceLocation" : {
+                "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                "lineNumber" : 28
+              }
+            }
+          ],
+          "name" : "XCTAssertEqual failed: (\"Done\") is not equal to (\"Welcome\")",
+          "nodeType" : "Test Case Run",
+          "result" : "Failed",
+          "sourceLocation" : {
+            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+            "lineNumber" : 28
+          }
+        }
+      ],
+      "duration" : "5s",
+      "durationInSeconds" : 5.051573991775513,
+      "name" : "Plan B",
+      "nodeIdentifier" : "2",
+      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testFailsAfterTaps?config=Plan%20B",
+      "nodeType" : "Test Plan Configuration",
+      "result" : "Failed"
+    }
+  ]
+}

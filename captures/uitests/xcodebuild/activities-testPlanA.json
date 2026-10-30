@@ -1,0 +1,346 @@
+{
+  "testIdentifier" : "UITests/testPlanA()",
+  "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPlanA",
+  "testName" : "testPlanA()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372023.407,
+          "title" : "Start Test at 2026-10-30 15:53:43.407"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372023.436,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372023.441,
+                  "title" : "Terminate dev.xcrew.testbed.App:25814"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372024.678,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372027.331,
+                  "title" : "Wait for dev.xcrew.testbed.App to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372023.441,
+              "title" : "Launch dev.xcrew.testbed.App"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372023.441,
+          "title" : "Open dev.xcrew.testbed.App"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372029.773,
+                  "title" : "Checking existence of `\"Plan A\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372029.773,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Plan A\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372028.702,
+          "title" : "Waiting 2.0s for \"Plan A\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372029.813,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00000000-0000-0000-0000-000000000013",
+        "deviceName" : "xcrew-testbed",
+        "modelName" : "iPhone 18 Pro Max",
+        "osBuildNumber" : "24B8117",
+        "osVersion" : "27.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Plan A"
+      }
+    },
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Screen Recording 2026-10-30 at 03.54.18 PM.mp4",
+              "payloadId" : "0~6w7mcLydigSqsQarOgARAzP1MDslXgdsV8JcuR1EcD9Z7XNyq6PjaNSvwhMCp6CdgOlLRGCObPqFI4Hz9u4kQw==",
+              "timestamp" : 1793372058.873,
+              "userInfos" : [
+                {
+                  "key" : "initialInterfaceOrientation",
+                  "value" : "1"
+                },
+                {
+                  "key" : "initialDeviceOrientation",
+                  "value" : "0"
+                },
+                {
+                  "key" : "scale",
+                  "value" : "3"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000015"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372058.873,
+              "title" : "kXCTAttachmentScreenRecording"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372058.852,
+          "title" : "Start Test at 2026-10-30 15:54:18.852"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372058.874,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372058.876,
+                  "title" : "Terminate dev.xcrew.testbed.App:26386"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372060.179,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372062.458,
+                  "title" : "Wait for dev.xcrew.testbed.App to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372058.875,
+              "title" : "Launch dev.xcrew.testbed.App"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372058.875,
+          "title" : "Open dev.xcrew.testbed.App"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"Plan A\" StaticText`_0_00000000-0000-0000-0000-000000000010.txt",
+              "payloadId" : "0~4Sw00YZ4UHhgYk2OE8yvtNK5L6hF7JzJj-2thvCv-tBruP7yvE_JVtkPcqMrfhamDr_ihF4Du_kwq0Ppfrgx2w==",
+              "timestamp" : 1793372064.971,
+              "uuid" : "00000000-0000-0000-0000-000000000018"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"Plan A\" StaticText`_0_00000000-0000-0000-0000-000000000011.txt",
+              "payloadId" : "0~4Sw00YZ4UHhgYk2OE8yvtNK5L6hF7JzJj-2thvCv-tBruP7yvE_JVtkPcqMrfhamDr_ihF4Du_kwq0Ppfrgx2w==",
+              "timestamp" : 1793372065.847,
+              "uuid" : "00000000-0000-0000-0000-000000000014"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Debug description for `\"Plan A\" StaticText`_0_00000000-0000-0000-0000-000000000010.txt",
+                  "payloadId" : "0~4Sw00YZ4UHhgYk2OE8yvtNK5L6hF7JzJj-2thvCv-tBruP7yvE_JVtkPcqMrfhamDr_ihF4Du_kwq0Ppfrgx2w==",
+                  "timestamp" : 1793372064.971,
+                  "uuid" : "00000000-0000-0000-0000-000000000018"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372064.912,
+                  "title" : "Checking existence of `\"Plan A\" StaticText`"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372064.971,
+                  "title" : "Debug description for `\"Plan A\" StaticText`"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372064.971,
+                  "title" : "Capturing element debug description"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372064.91,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Plan A\" StaticText`"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Debug description for `\"Plan A\" StaticText`_0_00000000-0000-0000-0000-000000000011.txt",
+                  "payloadId" : "0~4Sw00YZ4UHhgYk2OE8yvtNK5L6hF7JzJj-2thvCv-tBruP7yvE_JVtkPcqMrfhamDr_ihF4Du_kwq0Ppfrgx2w==",
+                  "timestamp" : 1793372065.847,
+                  "uuid" : "00000000-0000-0000-0000-000000000014"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372065.838,
+                  "title" : "Checking existence of `\"Plan A\" StaticText`"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372065.846,
+                  "title" : "Capturing element debug description"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372065.847,
+                  "title" : "Debug description for `\"Plan A\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372065.837,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Plan A\" StaticText`"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372065.847,
+              "title" : "Checking existence of `\"Plan A\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372063.828,
+          "title" : "Waiting 2.0s for \"Plan A\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000004.App",
+              "payloadId" : "0~vX6WvdIUjayCN9WhCznkKJxCSdy5qBXgfwlOYsUZgM-P-ncYWOOE5Jr2lTPGDkhPhGR5UH2Syh-MQLYEhstWVg==",
+              "timestamp" : 1793372065.862,
+              "uuid" : "00000000-0000-0000-0000-000000000023"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-30 at 03.54.25 PM",
+              "payloadId" : "0~bgguQbIAo2jA2TivpetSX7n0guXwvZ6_nbxGUz-IlDPA5q5aGeyEU23XODi8Cf1V0IgVgJnptlDXVtKgzObuSA==",
+              "timestamp" : 1793372065.862,
+              "uuid" : "00000000-0000-0000-0000-000000000003"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372065.855,
+              "title" : "Requesting snapshot of accessibility hierarchy for app with pid 26616"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372065.862,
+              "title" : "App UI hierarchy for dev.xcrew.testbed.App"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372065.862,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372065.854,
+          "title" : "Collecting debug information to assist test failure triage"
+        },
+        {
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "title" : "UITests.testPlanA()"
+            }
+          ],
+          "isAssociatedWithFailure" : true,
+          "startTime" : 1793372065.863,
+          "title" : "XCTAssertTrue failed"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372065.865,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00000000-0000-0000-0000-000000000013",
+        "deviceName" : "xcrew-testbed",
+        "modelName" : "iPhone 18 Pro Max",
+        "osBuildNumber" : "24B8117",
+        "osVersion" : "27.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "2",
+        "configurationName" : "Plan B"
+      }
+    }
+  ]
+}

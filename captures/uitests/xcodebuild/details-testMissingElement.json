@@ -1,0 +1,119 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00000000-0000-0000-0000-000000000013",
+      "deviceName" : "xcrew-testbed",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "duration" : "Average duration 7,4 seconds",
+  "durationInSeconds" : 7.445082008838654,
+  "hasMediaAttachments" : false,
+  "hasPerformanceMetrics" : false,
+  "startTime" : 1793372010.409,
+  "testDescription" : "Test case with 2 runs",
+  "testIdentifier" : "UITests/testMissingElement()",
+  "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testMissingElement",
+  "testName" : "testMissingElement()",
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Plan A"
+    },
+    {
+      "configurationId" : "2",
+      "configurationName" : "Plan B"
+    }
+  ],
+  "testResult" : "Failed",
+  "testRuns" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "details" : "0~YciA6KeaulhawODmCeNlvKLgiRML64gI5Pv3vzWarYZ_WwS3W9uMTCQ3cCCSJkH9nkC2sHNHrzEb0DOvF0a6jg==",
+              "name" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000009.App",
+              "nodeIdentifier" : "00000000-0000-0000-0000-000000000026",
+              "nodeType" : "Attachment"
+            },
+            {
+              "details" : "0~5hcr44p_12BO5QzqgZSduoP4puwCdjXpDLniZhRJb7KPUG9HFMGOWvwBJxzM20flm0cey2KQ-dMALXRGk07kzQ==",
+              "name" : "UI Snapshot 2026-10-30 at 03.53.37 PM",
+              "nodeIdentifier" : "00000000-0000-0000-0000-000000000024",
+              "nodeType" : "Attachment"
+            },
+            {
+              "name" : "UITests.testMissingElement()",
+              "nodeType" : "Source Code Reference",
+              "sourceLocation" : {
+                "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                "lineNumber" : 15
+              }
+            }
+          ],
+          "name" : "Failed to tap \"checkout\" Button: No matches found for Elements matching predicate '\"checkout\" IN identifiers' from input {(\n    Button, identifier: 'continue', label: 'Continue'\n)}",
+          "nodeType" : "Test Case Run",
+          "result" : "Failed",
+          "sourceLocation" : {
+            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+            "lineNumber" : 15
+          }
+        }
+      ],
+      "duration" : "7s",
+      "durationInSeconds" : 7.616837024688721,
+      "name" : "Plan A",
+      "nodeIdentifier" : "1",
+      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testMissingElement?config=Plan%20A",
+      "nodeType" : "Test Plan Configuration",
+      "result" : "Failed"
+    },
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "details" : "0~5ubh2YnZUiIewQlrbPSzL2j6BmBu8Qp0dv16AsUmxkwiA3G3FUtQFghZd5gHo_E8qa6rGaJaSCRfIRCuAvLB1A==",
+              "name" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000034.App",
+              "nodeIdentifier" : "00000000-0000-0000-0000-000000000020",
+              "nodeType" : "Attachment"
+            },
+            {
+              "details" : "0~DfRaMOQe25E3MhVZ8T1AApVl6xzvIgJ1hd1KXhbKPhaK9hDvMA0PqGH71Jq_kr7sRuA_3c2mExkvw5wpSkJmUA==",
+              "name" : "UI Snapshot 2026-10-30 at 03.54.13 PM",
+              "nodeIdentifier" : "00000000-0000-0000-0000-000000000032",
+              "nodeType" : "Attachment"
+            },
+            {
+              "name" : "UITests.testMissingElement()",
+              "nodeType" : "Source Code Reference",
+              "sourceLocation" : {
+                "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                "lineNumber" : 15
+              }
+            }
+          ],
+          "name" : "Failed to tap \"checkout\" Button: No matches found for Elements matching predicate '\"checkout\" IN identifiers' from input {(\n    Button, identifier: 'continue', label: 'Continue'\n)}",
+          "nodeType" : "Test Case Run",
+          "result" : "Failed",
+          "sourceLocation" : {
+            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+            "lineNumber" : 15
+          }
+        }
+      ],
+      "duration" : "7s",
+      "durationInSeconds" : 7.273326992988586,
+      "name" : "Plan B",
+      "nodeIdentifier" : "2",
+      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testMissingElement?config=Plan%20B",
+      "nodeType" : "Test Plan Configuration",
+      "result" : "Failed"
+    }
+  ]
+}

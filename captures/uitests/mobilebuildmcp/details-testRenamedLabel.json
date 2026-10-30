@@ -1,0 +1,95 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00000000-0000-0000-0000-000000000011",
+      "deviceName" : "xcrew-testbed",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "duration" : "Average duration 7,3 seconds",
+  "durationInSeconds" : 7.257830023765564,
+  "hasMediaAttachments" : false,
+  "hasPerformanceMetrics" : false,
+  "startTime" : 1793372133.937,
+  "testDescription" : "Test case with 2 runs",
+  "testIdentifier" : "UITests/testRenamedLabel()",
+  "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testRenamedLabel",
+  "testName" : "testRenamedLabel()",
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Plan A"
+    },
+    {
+      "configurationId" : "2",
+      "configurationName" : "Plan B"
+    }
+  ],
+  "testResult" : "Failed",
+  "testRuns" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "name" : "UITests.testRenamedLabel()",
+              "nodeType" : "Source Code Reference",
+              "sourceLocation" : {
+                "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                "lineNumber" : 20
+              }
+            }
+          ],
+          "name" : "XCTAssertTrue failed",
+          "nodeType" : "Test Case Run",
+          "result" : "Failed",
+          "sourceLocation" : {
+            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+            "lineNumber" : 20
+          }
+        }
+      ],
+      "duration" : "7s",
+      "durationInSeconds" : 7.199444055557251,
+      "name" : "Plan A",
+      "nodeIdentifier" : "1",
+      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testRenamedLabel?config=Plan%20A",
+      "nodeType" : "Test Plan Configuration",
+      "result" : "Failed"
+    },
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "name" : "UITests.testRenamedLabel()",
+              "nodeType" : "Source Code Reference",
+              "sourceLocation" : {
+                "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+                "lineNumber" : 20
+              }
+            }
+          ],
+          "name" : "XCTAssertTrue failed",
+          "nodeType" : "Test Case Run",
+          "result" : "Failed",
+          "sourceLocation" : {
+            "filePath" : "/testbed/captures/uitests/UITests/UITests.swift",
+            "lineNumber" : 20
+          }
+        }
+      ],
+      "duration" : "7s",
+      "durationInSeconds" : 7.316215991973877,
+      "name" : "Plan B",
+      "nodeIdentifier" : "2",
+      "nodeIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testRenamedLabel?config=Plan%20B",
+      "nodeType" : "Test Plan Configuration",
+      "result" : "Failed"
+    }
+  ]
+}
