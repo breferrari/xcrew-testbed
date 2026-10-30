@@ -3,6 +3,7 @@
 # repository root and under ios/. Runs on a Mac with Xcode 27.2 or later, Tuist, XcodeGen, MobileBuildMCP and Node
 # (brew install tuist xcodegen getsentry/xcodebuildmcp/mobilebuildmcp); CI never runs it, it reads what this wrote.
 # scripts/testbed/generate.sh [--build]   --build also builds each form for testing, to prove it's real
+# scripts/testbed/generate.sh concurrency   only the concurrency fixture and its capture, on a capture simulator never booted
 set -eu
 # No step reads a terminal: one that tried would stop the run, its simulator still there.
 exec < /dev/null
@@ -10,6 +11,8 @@ cd "$(dirname "$0")/.."
 testbed=.
 base=$testbed/base
 build=${1:-}
+# A step runs in a full run, and alone when it's the one named.
+runs() { case $build in "" | --build) return 0 ;; *) [ "$build" = "$1" ] ;; esac; }
 xcode=$(xcodebuild -version | head -1 | sed 's/Xcode //')
 tuist_version=$(tuist version | tail -1)
 xcodegen_version=$(xcodegen version | sed 's/Version: //')
@@ -194,9 +197,11 @@ form() {
   echo "$fixture"
 }
 
-for name in classic folders json xcodegen tuist tuist-ungenerated; do
-  for layout in root ios; do form "$name" "$layout"; done
-done
+if runs forms; then
+  for name in classic folders json xcodegen tuist tuist-ungenerated; do
+    for layout in root ios; do form "$name" "$layout"; done
+  done
+fi
 
 # Projects shaped to trip tools up, each with the expectation it must still meet.
 adversarial() {
@@ -235,7 +240,7 @@ SCRIPT
   echo "$fixture"
 }
 
-for name in project-swift-trap json-macro-copy; do adversarial "$name"; done
+if runs adversarial; then for name in project-swift-trap json-macro-copy; do adversarial "$name"; done; fi
 
 # A modular Tuist app, one project per module in a chain: App builds on Feature, which builds on Core, each with
 # its own tests. Across projects, a target depends on another through a proxy into that project.
@@ -284,7 +289,7 @@ let project = Project(
 EOF
 }
 
-modular
+if runs modular; then modular; fi
 
 # The field fixture: a project shaped like a large production app, with no identity.
 # A Tuist workspace of four modules in layers, App on Feature on Data on Core, one scheme per module, coverage on in
@@ -433,7 +438,130 @@ field_module() {
   perl -0pi -e 's/let project = Project\(\n    name: "([^"]+)",/let project = Project(\n    name: "$1",\n    options: .options(automaticSchemesOptions: .enabled(codeCoverageEnabled: true)),/' "$1/Modules/$2/Project.swift"
 }
 
-field
+if runs field; then field; fi
+
+# The strict-concurrency fixture: an XcodeGen project of two frameworks in the Swift 5 language mode with complete
+# concurrency checking, each source drawing diagnostics of named groups, and an app in the Swift 6 mode whose global
+# variable is an error. One warning outside concurrency (`NoUsage`) and one with no group (a `Sendable` struct's
+# non-Sendable property) are there too. The `Warnings` scheme builds the frameworks; `App` builds the app and fails.
+concurrency() {
+  fixture=$testbed/concurrency
+  rm -rf "${fixture:?}"
+  mkdir -p "$fixture/Kit" "$fixture/Feature" "$fixture/App"
+  cat > "$fixture/Kit/Kit.swift" <<'EOF'
+public var sharedCount = 0
+
+public final class Box {
+    public var value = 0
+    public init() {}
+}
+
+public struct Holder: Sendable {
+    public let box: Box
+}
+
+public func capture(_ box: Box) {
+    Task.detached {
+        print(box.value)
+    }
+}
+
+public actor Store {
+    public init() {}
+    public func keep(_ box: Box) {}
+}
+
+public func hand(_ box: Box, to store: Store) async {
+    await store.keep(box)
+    box.value = 1
+}
+
+@MainActor public final class Screen {
+    public init() {}
+    public func draw() {}
+}
+
+public func leftover() {
+    let unused = 1
+}
+EOF
+  cat > "$fixture/Feature/Feature.swift" <<'EOF'
+import Kit
+
+public var featureFlags: [String] = []
+
+public func later(_ box: Box) {
+    Task.detached {
+        box.value += 1
+    }
+}
+EOF
+  cat > "$fixture/App/App.swift" <<'EOF'
+import Feature
+import Kit
+import SwiftUI
+
+@main
+struct ConcurrencyApp: App {
+    var body: some Scene {
+        WindowGroup { Text("Concurrency") }
+    }
+}
+
+var appCount = 0
+EOF
+  cat > "$fixture/project.yml" <<'EOF'
+name: Concurrency
+options:
+  bundleIdPrefix: dev.xcrew.testbed
+  deploymentTarget:
+    iOS: "18.0"
+targets:
+  Kit:
+    type: framework
+    platform: iOS
+    sources: [Kit]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      SWIFT_VERSION: "5.0"
+      SWIFT_STRICT_CONCURRENCY: complete
+  Feature:
+    type: framework
+    platform: iOS
+    sources: [Feature]
+    dependencies:
+      - target: Kit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      SWIFT_VERSION: "5.0"
+      SWIFT_STRICT_CONCURRENCY: complete
+  App:
+    type: application
+    platform: iOS
+    sources: [App]
+    dependencies:
+      - target: Feature
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      SWIFT_VERSION: "6.0"
+schemes:
+  Warnings:
+    build:
+      targets:
+        Kit: all
+        Feature: all
+  App:
+    build:
+      targets:
+        App: all
+EOF
+  xcodegen generate --quiet --spec "$fixture/project.yml" --project "$fixture"
+  fixture_json "$fixture" pbxproj-groups xcodegen root
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
+if runs concurrency; then concurrency; fi
 
 # The captures' own simulator: an iPhone on the newest released iOS runtime, created for this run, booted once and reused
 # by every capture, so none boots another, and deleted at the end. A beta runtime's system apps can crash on boot, and
@@ -486,6 +614,8 @@ capture_simulator() {
   trap 'exit 130' INT
   trap 'exit 143' TERM
   trap 'exit 148' TSTP
+  # A capture that only builds names the simulator and never boots it.
+  if [ "${1:-}" = --no-boot ]; then return 0; fi
   xcrun simctl boot "$simulator_id"
   xcrun simctl bootstatus "$simulator_id" -b > /dev/null
   # A runtime's own services may crash in the half minute after a boot: wait them out, and stop before any test if so.
@@ -1269,6 +1399,51 @@ XCRUN
   echo "$out"
 }
 
+# The concurrency fixture's diagnostics, as each tool gives them: xcodebuild's own logs of the `Warnings` scheme and of
+# the `App` scheme, which fails, and MobileBuildMCP's build_sim of `Warnings` with the log it names. Only builds: the
+# capture simulator is named, not booted, and its state after build_sim is said; were it booted, its crashes count as
+# any capture's.
+concurrency_captures() {
+  out=$testbed/captures/concurrency
+  rm -rf "${out:?}"
+  mkdir -p "$out"
+  work=$(mktemp -d)/concurrency
+  cp -R "$testbed/concurrency" "$work"
+  derived=$(mktemp -d)
+  results=$(mktemp -d)
+  resolved=$(cd "$work" && pwd -P)
+  neutral() {
+    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
+      "$resolved" /testbed/concurrency "$work" /testbed/concurrency "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
+      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
+  }
+  for scheme in Warnings App; do
+    (cd "$work" && xcodebuild build -project Concurrency.xcodeproj -scheme "$scheme" -destination 'generic/platform=iOS Simulator' -derivedDataPath "$derived") > "$results/$scheme.log" 2>&1 || true
+  done
+  neutral < "$results/Warnings.log" | uuids_out > "$out/xcodebuild-warnings.log"
+  neutral < "$results/App.log" | uuids_out > "$out/xcodebuild-errors.log"
+  rm -rf "${derived:?}"
+  derived=$(mktemp -d)
+  mkdir -p "$work/.mobilebuildmcp"
+  printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'Warnings'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/Concurrency.xcodeproj" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
+  node scripts/mcp-call.mjs "$work" build_sim > "$results/build_sim.txt" || true
+  state=$(xcrun simctl list devices --json | node -e 'const d = JSON.parse(require("fs").readFileSync(0, "utf8")).devices; console.log(Object.values(d).flat().find(x => x.udid === process.argv[1])?.state ?? "gone")' "$simulator_id")
+  echo "generate.sh: the capture simulator was $state after build_sim" >&2
+  if [ "$state" != Shutdown ]; then crash_check; fi
+  neutral < "$results/build_sim.txt" | uuids_out > "$out/build_sim.txt"
+  log=$(grep -o '~/[^ ]*\.log' "$results/build_sim.txt" | head -1 | sed "s#^~#$HOME#")
+  if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/build_sim.log"; fi
+  rm -rf "${work:?}" "${derived:?}" "${results:?}"
+  printf '{\n  "replay": "xcodebuild-warnings.log and xcodebuild-errors.log are xcodebuild'"'"'s own logs of concurrency/'"'"'s Warnings and App schemes, for a generic iOS Simulator destination; build_sim.txt is MobileBuildMCP'"'"'s MCP result for Warnings and build_sim.log the log it names; tests read them and never build",\n  "simulator": "%s",\n  "mobilebuildmcp": "%s"\n}\n' "$state after build_sim, never booted by the capture" "$(mobilebuildmcp --version | tail -1)" > "$out/capture.json"
+  echo "$out"
+}
+
+if [ "$build" = concurrency ]; then
+  capture_simulator --no-boot
+  concurrency_captures
+  exit 0
+fi
+
 capture_simulator
 repetitions
 coverage
@@ -1276,5 +1451,6 @@ environment
 snapshots
 uitests
 field_captures
+concurrency_captures
 
 scripts/leaks.sh

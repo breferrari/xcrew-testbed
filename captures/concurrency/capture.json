@@ -1,0 +1,5 @@
+{
+  "replay": "xcodebuild-warnings.log and xcodebuild-errors.log are xcodebuild's own logs of concurrency/'s Warnings and App schemes, for a generic iOS Simulator destination; build_sim.txt is MobileBuildMCP's MCP result for Warnings and build_sim.log the log it names; tests read them and never build",
+  "simulator": "Shutdown after build_sim, never booted by the capture",
+  "mobilebuildmcp": "2.7.1"
+}

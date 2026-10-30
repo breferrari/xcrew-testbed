@@ -1,0 +1,32 @@
+
+🔨 Build
+
+Warnings (7):
+
+  ⚠ var 'sharedCount' is not concurrency-safe because it is nonisolated global shared mutable state; this is an error in the Swift 6 language mode [#MutableGlobalVariable]
+    /testbed/concurrency/Kit/Kit.swift:1
+
+  ⚠ stored property 'box' of 'Sendable'-conforming struct 'Holder' has non-Sendable type 'Box'; this is an error in the Swift 6 language mode
+    /testbed/concurrency/Kit/Kit.swift:9
+
+  ⚠ initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+    /testbed/concurrency/Kit/Kit.swift:34
+
+  ⚠ passing closure as a 'sending' parameter risks causing data races between code in the current isolation context and concurrent execution of the closure; this is an error in the Swift 6 language mode [#RegionIsolation::SendingClosureRisksDataRace]
+    /testbed/concurrency/Kit/Kit.swift:13
+
+  ⚠ sending 'box' risks causing data races; this is an error in the Swift 6 language mode [#RegionIsolation::SendingRisksDataRace]
+    /testbed/concurrency/Kit/Kit.swift:24
+
+  ⚠ var 'featureFlags' is not concurrency-safe because it is nonisolated global shared mutable state; this is an error in the Swift 6 language mode [#MutableGlobalVariable]
+    /testbed/concurrency/Feature/Feature.swift:3
+
+  ⚠ passing closure as a 'sending' parameter risks causing data races between code in the current isolation context and concurrent execution of the closure; this is an error in the Swift 6 language mode [#RegionIsolation::SendingClosureRisksDataRace]
+    /testbed/concurrency/Feature/Feature.swift:6
+
+✅ Build succeeded. (⏱️ 3.4s)
+  └ Files:
+     └── ~/Library/Developer/MobileBuildMCP/workspaces/concurrency-5d9cfbd38696/logs/build_sim_2026-10-30T23-44-07-016Z_pid77434_c88c3abb.log — Build Logs
+
+Next steps:
+1. Get built app path in simulator derived data: get_sim_app_path({ simulatorName: "xcrew-testbed", scheme: "Warnings", platform: "iOS Simulator", derivedDataPath: "/testbed/DerivedData" })
