@@ -4,6 +4,8 @@
 # (brew install tuist xcodegen getsentry/xcodebuildmcp/mobilebuildmcp); CI never runs it, it reads what this wrote.
 # scripts/testbed/generate.sh [--build]   --build also builds each form for testing, to prove it's real
 set -eu
+# No step reads a terminal: one that tried would stop the run, its simulator still there.
+exec < /dev/null
 cd "$(dirname "$0")/.."
 testbed=.
 base=$testbed/base
@@ -473,7 +475,13 @@ capture_simulator() {
   crash_marker=$(mktemp)
   # The reports a step expected (crash_check's argument), excused for the rest of the run and nothing else.
   expected_reports=$(mktemp)
+  # A run stopped any way still deletes its simulator: a signal exits, and exiting runs the cleanup. Job control's stop
+  # (SIGTSTP, as when a step reads a terminal it doesn't own) exits too, rather than leaving the run stopped for good.
   trap finish_simulator EXIT
+  trap 'exit 129' HUP
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+  trap 'exit 148' TSTP
   xcrun simctl boot "$simulator_id"
   xcrun simctl bootstatus "$simulator_id" -b > /dev/null
   # A runtime's own services may crash in the half minute after a boot: wait them out, and stop before any test if so.
