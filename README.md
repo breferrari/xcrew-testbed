@@ -25,6 +25,7 @@ forms/<fixture>/    one generated project per form and place
 adversarial/<name>/ projects shaped to trip tools up
 modular/<name>/     apps split into modules across projects
 field/              a large modular app's shape, with no identity
+concurrency/        two frameworks and an app drawing Swift concurrency diagnostics
 captures/<name>/    what tools answered about a real run, replayed by tests
 scripts/generate.sh regenerates every fixture from base/
 ```
@@ -36,6 +37,9 @@ scripts/generate.sh regenerates every fixture from base/
   - One scheme per module, with coverage on in each, and a UI-test target.
   - `.xcode-version` pinned a major version behind the Xcode that generated it, and a CI workflow that selects Xcode from that file.
   - Feature holds the scenarios' sources: an extension half tested, five probe tests (passing, failing, flaky every other run, skipped, expected to fail), a crash, and a line that compiles with a warning.
+- **`concurrency/`**: an XcodeGen project whose sources draw Swift concurrency diagnostics, each tagged with its compiler group.
+  - Kit and Feature are frameworks in the Swift 5 language mode with complete concurrency checking. The `Warnings` scheme builds them: global mutable state, closures and values sent across isolation, one warning outside concurrency (`NoUsage`), and one with no group.
+  - App is in the Swift 6 mode. Its global variable is an error, so the `App` scheme fails.
 - **`captures/`**: what tools answered about a real run, committed so tests replay it. Nothing nondeterministic runs outside the Mac that made it. What each one holds and shows: [captures/README.md](captures/README.md).
 
 Each fixture has a `fixture.json`: its project definition, the generator and its version, where the project sits, and the Xcode that made it.
@@ -50,6 +54,7 @@ scripts/generate.sh --build
 ```
 
 - **`--build`** also builds each form for testing, to prove it real.
+- **`scripts/generate.sh concurrency`** makes only `concurrency/` and its capture. That capture only builds: its simulator is created on a released runtime and never booted, and deleted at the end.
 - **`FIELD_CAPTURES`** names the field scenarios to take again (`coverage type-error`), keeping the others' captures. Unset, all of them are taken afresh.
 - **Expectations** survive: regenerating keeps each fixture's own.
 - **Object IDs** in the JSON forms change on every run, because Xcode's tool picks them at random.

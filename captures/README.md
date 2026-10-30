@@ -85,6 +85,25 @@ What they show:
 - **No locked build database.** A second build into the same DerivedData while another `xcodebuild` builds there succeeds, even with that `xcodebuild` stopped (SIGSTOP). The build runs in Xcode's build service, not in the `xcodebuild` process. So a locked build database seen in the field isn't reproduced here. It needs a stuck build service, which a capture must not cause, since Xcode itself shares it.
 - **The expected crash.** The crashing test crashes on purpose. Its capture step excuses exactly that one report, the test runner's with `testOutOfRange` in its crashing thread, for that step alone. Any other crash, before or after, stops the run as ever.
 
+## concurrency
+
+*Xcode 27.2, MobileBuildMCP 2.7.1, 2026-10-31. Builds only: the capture simulator was Shutdown after `build_sim`, never booted.*
+
+xcodebuild's own logs of `concurrency/`'s `Warnings` and `App` schemes, for a generic iOS Simulator destination, and MobileBuildMCP's `build_sim` of `Warnings` with the log it names.
+
+| File | What it holds |
+|---|---|
+| `xcodebuild-warnings.log` | the frameworks' seven warnings, each written two or four times |
+| `xcodebuild-errors.log` | the app's one error, in the Swift 6 language mode |
+| `build_sim.txt`, `build_sim.log` | the same seven warnings, as MobileBuildMCP lists them once each, and its log |
+
+What they show:
+
+- **Each diagnostic ends with its group**, as `[#MutableGlobalVariable]`. A group under another is written `[#RegionIsolation::SendingRisksDataRace]`, parent first.
+- **Not every concurrency diagnostic has a group.** A `Sendable` struct's non-Sendable stored property is reported with none.
+- **Errors carry their group too:** the app's `var 'appCount' is not concurrency-safe … [#MutableGlobalVariable]`.
+- **Logs repeat a diagnostic.** xcodebuild's log writes each warning two or four times. MobileBuildMCP's result lists it once.
+
 ## Neutralising
 
 - The captures' neutralisers rewrite a temporary folder of the Mac (`$TMPDIR`, with or without its `/private` prefix), which `leaks.sh` also fails on. The [README's Leaks section](../README.md#leaks) has what it looks for.

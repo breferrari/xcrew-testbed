@@ -1,0 +1,43 @@
+name: Concurrency
+options:
+  bundleIdPrefix: dev.xcrew.testbed
+  deploymentTarget:
+    iOS: "18.0"
+targets:
+  Kit:
+    type: framework
+    platform: iOS
+    sources: [Kit]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      SWIFT_VERSION: "5.0"
+      SWIFT_STRICT_CONCURRENCY: complete
+  Feature:
+    type: framework
+    platform: iOS
+    sources: [Feature]
+    dependencies:
+      - target: Kit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      SWIFT_VERSION: "5.0"
+      SWIFT_STRICT_CONCURRENCY: complete
+  App:
+    type: application
+    platform: iOS
+    sources: [App]
+    dependencies:
+      - target: Feature
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      SWIFT_VERSION: "6.0"
+schemes:
+  Warnings:
+    build:
+      targets:
+        Kit: all
+        Feature: all
+  App:
+    build:
+      targets:
+        App: all

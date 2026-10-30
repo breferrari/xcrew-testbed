@@ -1,0 +1,493 @@
+Command line invocation:
+    /Applications/Xcode-27.2.0.app/Contents/Developer/usr/bin/xcodebuild build -project Concurrency.xcodeproj -scheme App -destination "generic/platform=iOS Simulator" -derivedDataPath /testbed/DerivedData
+
+2026-10-31 00:44:01.288 xcodebuild[77094:2774178] [MT] IDESchemeActionsInvocationRecord: Device <DVTiOSDeviceSimulatorPlaceholder: 0x7b1438aa80 (Any iOS Simulator Device | undefined_arch)> is missing operatingSystemVersion, operatingSystemVersionWithBuildNumber.
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (3 targets)
+    Target 'App' in project 'Concurrency'
+        ➜ Explicit dependency on target 'Feature' in project 'Concurrency'
+    Target 'Feature' in project 'Concurrency'
+        ➜ Explicit dependency on target 'Kit' in project 'Concurrency'
+    Target 'Kit' in project 'Concurrency' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+ExecuteExternalTool /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch x86_64 -isysroot /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -x c -c /dev/null
+
+Build description signature: 273a98dc14872d24473469c6d4c686e2
+Build description path: /testbed/DerivedData/Build/Intermediates.noindex/XCBuildData/273a98dc14872d24473469c6d4c686e2.xcbuilddata
+ClangStatCache /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-6636dc27d5987ae8ce4688cdf207bdd4.sdkstatcache
+    cd /testbed/concurrency/Concurrency.xcodeproj
+    /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -o /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-6636dc27d5987ae8ce4688cdf207bdd4.sdkstatcache
+
+ProcessInfoPlistFile /testbed/DerivedData/Build/Products/Debug-iphonesimulator/Kit.framework/Info.plist /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/Kit.build/empty-Kit.plist (in target 'Kit' from project 'Concurrency')
+    cd /testbed/concurrency
+    builtin-infoPlistUtility /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/Kit.build/empty-Kit.plist -producttype com.apple.product-type.framework -expandbuildsettings -format binary -platform iphonesimulator -o /testbed/DerivedData/Build/Products/Debug-iphonesimulator/Kit.framework/Info.plist
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App-OutputFileMap.json (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App-OutputFileMap.json
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.LinkFileList (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.LinkFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.SwiftFileList (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.SwiftFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.SwiftConstValuesFileList (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App_const_extract_protocols.json (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App_const_extract_protocols.json
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App.SwiftFileList (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App.SwiftFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App_const_extract_protocols.json (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App_const_extract_protocols.json
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/empty-App.plist (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/empty-App.plist
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App.SwiftConstValuesFileList (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App.LinkFileList (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App.LinkFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App-OutputFileMap.json (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App-OutputFileMap.json
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.hmap (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.DependencyStaticMetadataFileList (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources/Entitlements-Simulated.plist (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources/Entitlements-Simulated.plist
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.DependencyMetadataFileList (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.DependencyMetadataFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-project-headers.hmap (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-project-headers.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-own-target-headers.hmap (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-own-target-headers.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-generated-files.hmap (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-generated-files.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-all-non-framework-target-headers.hmap (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-all-target-headers.hmap (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-all-target-headers.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-DebugDylibPath-normal-x86_64.txt (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-DebugDylibPath-normal-x86_64.txt
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-DebugDylibPath-normal-arm64.txt (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-DebugDylibPath-normal-arm64.txt
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-DebugDylibInstallName-normal-x86_64.txt (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-DebugDylibInstallName-normal-x86_64.txt
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-DebugDylibInstallName-normal-arm64.txt (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-DebugDylibInstallName-normal-arm64.txt
+
+MkDir /testbed/DerivedData/Build/Products/Debug-iphonesimulator/App.app/Frameworks (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    /bin/mkdir -p /testbed/DerivedData/Build/Products/Debug-iphonesimulator/App.app/Frameworks
+
+MkDir /testbed/DerivedData/Build/Products/Debug-iphonesimulator/App.app (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    /bin/mkdir -p /testbed/DerivedData/Build/Products/Debug-iphonesimulator/App.app
+
+ProcessInfoPlistFile /testbed/DerivedData/Build/Products/Debug-iphonesimulator/Feature.framework/Info.plist /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/Feature.build/empty-Feature.plist (in target 'Feature' from project 'Concurrency')
+    cd /testbed/concurrency
+    builtin-infoPlistUtility /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/Feature.build/empty-Feature.plist -producttype com.apple.product-type.framework -expandbuildsettings -format binary -platform iphonesimulator -o /testbed/DerivedData/Build/Products/Debug-iphonesimulator/Feature.framework/Info.plist
+
+ProcessProductPackaging "" /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.app-Simulated.xcent (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "FAKETEAMID.dev.xcrew.testbed.App";
+}
+    
+    builtin-productPackagingUtility -entitlements -format xml -o /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.app-Simulated.xcent
+
+ProcessProductPackagingDER /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.app-Simulated.xcent /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.app-Simulated.xcent.der (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    /usr/bin/derq query -f xml -i /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.app-Simulated.xcent -o /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.app-Simulated.xcent.der --raw
+
+SwiftDriver App normal arm64 com.apple.xcode.tools.swift.compiler (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    builtin-SwiftDriver -- /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name App -Onone @/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App.SwiftFileList -DDEBUG -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -target arm64-apple-ios18.0-simulator -g -module-cache-path /testbed/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /testbed/DerivedData/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /testbed/DerivedData/Build/Products/Debug-iphonesimulator -F /testbed/DerivedData/Build/Products/Debug-iphonesimulator -parse-as-library -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-6636dc27d5987ae8ce4688cdf207bdd4.sdkstatcache -output-file-map /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /testbed/DerivedData/ModuleCache.noindex -sdk-module-cache-path /testbed/DerivedData/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /testbed/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App_const_extract_protocols.json -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-generated-files.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-own-target-headers.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/Concurrency-3d509a7cf63869f424b6a0468b9288f8-VFS-iphonesimulator/all-product-headers.yaml -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-project-headers.hmap -Xcc -I/testbed/DerivedData/Build/Products/Debug-iphonesimulator/include -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources-normal/arm64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources/arm64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App-Swift.h -working-directory /testbed/concurrency -experimental-emit-module-separately -disable-cmo
+
+SwiftDriver App normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    builtin-SwiftDriver -- /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name App -Onone @/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.SwiftFileList -DDEBUG -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -target x86_64-apple-ios18.0-simulator -g -module-cache-path /testbed/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /testbed/DerivedData/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /testbed/DerivedData/Build/Products/Debug-iphonesimulator -F /testbed/DerivedData/Build/Products/Debug-iphonesimulator -parse-as-library -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-6636dc27d5987ae8ce4688cdf207bdd4.sdkstatcache -output-file-map /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /testbed/DerivedData/ModuleCache.noindex -sdk-module-cache-path /testbed/DerivedData/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /testbed/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App_const_extract_protocols.json -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-generated-files.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-own-target-headers.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/Concurrency-3d509a7cf63869f424b6a0468b9288f8-VFS-iphonesimulator/all-product-headers.yaml -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-project-headers.hmap -Xcc -I/testbed/DerivedData/Build/Products/Debug-iphonesimulator/include -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources-normal/x86_64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources/x86_64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App-Swift.h -working-directory /testbed/concurrency -experimental-emit-module-separately -disable-cmo
+
+Ld /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/Binary/__preview.dylib normal x86_64 (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target x86_64-apple-ios18.0-simulator -dynamiclib -isysroot /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -O0 -Xlinker -no_warn_duplicate_libraries -L/testbed/DerivedData/Build/Products/Debug-iphonesimulator -F/testbed/DerivedData/Build/Products/Debug-iphonesimulator -install_name @rpath/App.debug.dylib -Xlinker -dead_strip -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App_dependency_info.dat -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.app-Simulated.xcent -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __ents_der -Xlinker /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.app-Simulated.xcent.der -Xlinker -no_adhoc_codesign -o /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/Binary/__preview.dylib
+
+Ld /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/Binary/__preview.dylib normal arm64 (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios18.0-simulator -dynamiclib -isysroot /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -O0 -Xlinker -no_warn_duplicate_libraries -L/testbed/DerivedData/Build/Products/Debug-iphonesimulator -F/testbed/DerivedData/Build/Products/Debug-iphonesimulator -install_name @rpath/App.debug.dylib -Xlinker -dead_strip -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App_dependency_info.dat -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.app-Simulated.xcent -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __ents_der -Xlinker /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App.app-Simulated.xcent.der -Xlinker -no_adhoc_codesign -o /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/Binary/__preview.dylib
+
+CreateUniversalBinary /testbed/DerivedData/Build/Products/Debug-iphonesimulator/App.app/__preview.dylib normal arm64\ x86_64 (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo -create /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/Binary/__preview.dylib /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/Binary/__preview.dylib -output /testbed/DerivedData/Build/Products/Debug-iphonesimulator/App.app/__preview.dylib
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdbool-9SK9WPL4J0JH3OCT7F7VV3ALE.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_AvailabilityInternal-1SIFZVLYP6D2WSK3VQYGTF25B.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/SwiftShims-6HZN2XM3RPWOBUS8J32TFRFIG.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-CG1AO0KFVRPJ5BVGYMAY650JG.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/ptrcheck-4J6J7T1I72ATL5NXMK4TM7QLW.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdarg-1VUJ06O4GA0W8J7O9D0PFC7O5.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/DeveloperToolsSupport-114DBVD52DRIXM1U30SZL1755.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_float-2IG6RK5HXXILZNPVRGA3W3AQA.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stddef-466V48MSAWWMJ9ARLKZ2OMXPG.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/ptrauth-5HFU0AQVMGIVLFYAZZKM89W6G.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_float-9DTJLCDC5V8T9SYOAYBDDZ7P9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/ptrcheck-6QI31P4YRGCOB9X1TKDFD7418.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-6NHHE3OY5DEI91SKDMEA7AEV9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdarg-952WHI7J9F08EOPF9WH77DXR7.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stddef-AU500BHX1K1KSZ6W1GF66WOW8.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/SwiftShims-5F7UQVQ1E12KZW1S8IIH49H.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/ptrauth-8MVJT0YIANVQCO2FK2LMUSJC0.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_DarwinFoundation1-2LUOW3S760ZYOGRC8RLOVH320.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_AvailabilityInternal-J02P79MWCF8OJVKJOARIGV4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdbool-C91SB7S9RKLXF1EXHGGBMJ1HB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/DeveloperToolsSupport-7JWOA3LBH1X6XY80C9D3N9L4Y.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_limits-A8IHO1M1KW39ARFUXJ576U3JT.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_DarwinFoundation2-2UAA5AU516TN3ILIF5362AAIR.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_DarwinFoundation1-6NUG84KFXR1Q93H7NOZ0HYRBL.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_DarwinFoundation2-JC7K4RG526N14TF4V1PCNZTT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_limits-DZPS47TI16ZNR5TK5D2WDTXFZ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_tgmath-AT20C34LDQQ9RNWF42HBTNIAZ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/sys_types-2NT5QERFMCIDFJSXKHMTQ9QOM.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/string_h-9CMKSMGMFF1GSKE63DOI16LUW.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdint-BHP46N89IWTFJ4Q81ZVISH0C.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdatomic-4F5U0MBXZDUZ54X412HU52B40.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_DarwinFoundation3-8BO5RLEMHOJRSKLXT13V0YBJR.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_tgmath-AK82FN31L70E2ID3QQEKDK8ML.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdint-343H8K2GQ8K7LWMDKMSGPYP2Q.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/string_h-CBLGX8RV4OGFU0JB465E0WL9A.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/sys_types-73PZTPOLQ6VEH7X5XFO1ZAB0S.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdatomic-9MD1NA26GF7PBKO6091UD9PV.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_intrinsics-46MGU31IY1KRAG7M1ZPYBLP1T.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_DarwinFoundation3-AV5J9L6NRKVKU7HGPZ82TNIKF.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_inttypes-BFPZM2R0ONNCZKVNLXPRR1WEH.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_intrinsics-2X2CDSTL3KGO7PSOE3T97H8QU.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Darwin-BD4NI94ULWWUAR6RA2TWERJMT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_Builtin_inttypes-4W0H499R1CQKH901CWSZYITZZ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Darwin-4GKR69OQM0EDXC8JMFB4PXOZE.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/simd-2OIIQH9D4RBY9903D2XDABWIV.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/MachO-18JUSHZ3ZPPRGNSKV4ONPO06B.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/ObjectiveC-9QNZ3R1795RX8EH1L9UZ08JUG.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/simd-CB6YUKLYDRZ5M7T0ZIHMNXNWW.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/os_object-8U8IIW4IJZXMFTNO5NFUT9HFX.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/MachO-5R1L55RVDYFW72GADKHLG2L07.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/ObjectiveC-A4LQ8LXLMYYR6W7NRNX0MH2BN.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/os_workgroup-7F95G9E6HQR2JHITOGJL86ENU.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/os_object-15XPZ5GVBMLA9B305J94AQCO9.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Dispatch-A94NX0V5F4FR0KOG7YEJTU4JR.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/os_workgroup-2NG8MQZKHNXCJUTRSJHK726D6.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Spatial-AR9AAMRHMQ73LU2BIR31X6W13.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/XPC-2K94R25E2YUS4XNDCANRL219S.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreFoundation-1GLISVPQILBTB04GU7E78AK8H.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Dispatch-AM78J7QAZDH9KFCKA3WNMMPLY.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/os-5WB5C8D0ZZC8AW5393QQ2AZ49.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Spatial-4M8Y6FLY49QB4JDXDC0RXNNLK.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreAudioTypes-D7EU7EV26CXVCRY54X4R8PTGI.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CFNetwork-ER2P64XZQO354LVTYEGDGAI9M.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Security-CGOOE6FZI6IIEMW1SLEBUPKVV.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreGraphics-21Y3WVJ1ZQGSOF05LVNTXL2PX.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreFoundation-7N1XURSDHXEB78ALJ0QBNTJKB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/XPC-459VJVDCICY8TSWZT9WH0ZZCS.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreAudio-G3QD3UU978PA778D2PZXPL46.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/os-9SRBOWYHJLNBWD9WCXYVHM16R.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Foundation-445YGYKGXZK5898OVYSWSENEY.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/ImageIO-24GQ6SLY7NXX5VDS2IUKUJNLC.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreText-OOJ0KYTUKBSN9FEZXBQNGU4U.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CFNetwork-7D2RDGFTCI1H2WJO36K1UUZAO.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreAudioTypes-9FKB4Z6PVRG8N5VQWM96MZDWT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Security-8UNZWEXHZ8WGX9F8TEGJGZGGQ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreGraphics-4BAFT5GIFY1H2K5UPHC5GL8DQ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreAudio-YHA4HPEVNWDS0AA02KTRILQ5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Foundation-C20POVE0DE4JPI9UGQE6GQVT4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/ImageIO-B23MKGOFF3KHU3FELS1ELP2RP.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreText-D61R71BN29LZHJPJ1NX6KP9K.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/UniformTypeIdentifiers-4XR584CLP873IQKLG09DNUR27.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_LocationEssentials-CCS463FLC33BHU6ULEMXD5B68.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/UIUtilities-6GDF9WNNCMSJWIGOZL33951QP.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/UserNotifications-9PUOTCIAXK56H5NSBJGK4JGUP.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/DataDetection-BIFHJS5I0UZCVY6245XSBX93Q.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreData-19JQQY2XZ2EI3AU503FGD6EY5.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/OSLog-F4YKNFDTOCU29THLP6PCW04TQ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/FileProvider-8SN3LDR91IXTM1J2K5KGUXD7P.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreTransferable-81YK7Y66UP4RZDWNB92L6L6FJ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Accessibility-COTHO0SJYTGTQ5QM5KMDL607N.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/IOSurface-CN0KE9SYB4EV5IS0P55H7CITJ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/OpenGLES-A3KSSQERU6E5Y9S5PE03IYTQR.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Symbols-DA50BHTG85P5TKC62R7FD9SYF.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreLocation-3XMLYHR9QGJPJLM2RV7IM3EO2.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/_LocationEssentials-9VUEQXNHQFPZBUEMMEU4VCS8X.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/OpenGLES-7LQQ0UQQO8UTJH5QSFK67ZM19.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Accessibility-8PY0VXXIQF06IKWZHU9BM1UNA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/UniformTypeIdentifiers-7KV0PR0YKYFBDTH3ANU170UUS.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/UIUtilities-3907MTZIW49TVS9UGVMJH5V57.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/IOSurface-368KLHEYQROSWEOXZUAF81SI8.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Metal-6IOY6QE582U7P3DJ79VAURX5Q.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Symbols-UFRBSUUIT7MBQFDX06D7AUTG.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/UserNotifications-22Z9PBU300885I3VHEL9WVHS6.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreMotion-8LV7QCACH3J5ITVADMQUNC9P0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreLocation-8RFJZEZ5PCNIGTXLROP9SD3DB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/OSLog-46GWP3ZUMPB4PFAA090BSP9BA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/FileProvider-KHFRST46M254E0T5TTQFK927.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreData-1LXHXU22RMXWL8SFS3ZOC5R14.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/DataDetection-86WQBLA9FZKDEH77E4HC85F27.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/Metal-6MTN76UKYWQRONK0C3TDOBMTA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreTransferable-86NCMDJBRO476ORP0YU4F8JVO.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreMotion-D984457UVNV2C5GA1V638G0UF.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreVideo-1YAIW9JAPI1K7AB0N17F7ZAOY.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreVideo-9TLZHPEKX67AOOR31A4FHO9YL.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/QuartzCore-7XAEZMCYXY2MRCFGXX6ERFTT2.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreMedia-8SJMPZ8MD5CGSEVWL9Q9S5LBJ.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreImage-CTNFJVM6IDOCFPPC3GRHYE85E.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreImage-1DOFBJ9QAL3H69WFGY9F5C4EQ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/CoreMedia-5QXFBBOVB658IO09GVD78Y2VW.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/QuartzCore-AIHY2QNECXX9W7514CYMW295N.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/SwiftUICore-ANGF23DX2KRUG7XVIPHAL9MN4.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/UIKit-7P7CAR96OG55G362BTM177PQ8.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/SwiftUICore-4K3UHTO7HZ8PUG6MDS1QML6GA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/UIKit-DXC31BKXVRC88XG994963KXS4.pcm
+
+SwiftExplicitDependencyGeneratePcm x86_64 /testbed/DerivedData/SDKExplicitPrecompiledModules/SwiftUI-A88N2S0LZI7VA2GHPT0BBUPB6.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /testbed/DerivedData/SDKExplicitPrecompiledModules/SwiftUI-BIBGLSGJWT5A9ZRY25TUY3LU5.pcm
+
+SwiftEmitModule normal x86_64 Emitting\ module\ for\ App (in target 'App' from project 'Concurrency')
+
+SwiftCompile normal x86_64 (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    
+
+/testbed/concurrency/App/App.swift:12:5: error: var 'appCount' is not concurrency-safe because it is nonisolated global shared mutable state [#MutableGlobalVariable]
+10 | }
+11 | 
+12 | var appCount = 0
+   |     |- error: var 'appCount' is not concurrency-safe because it is nonisolated global shared mutable state [#MutableGlobalVariable]
+   |     |- note: convert 'appCount' to a 'let' constant to make 'Sendable' shared state immutable
+   |     |- note: add '@MainActor' to make var 'appCount' part of global actor 'MainActor'
+   |     `- note: disable concurrency-safety checks if accesses are protected by an external synchronization mechanism
+13 | 
+
+[#MutableGlobalVariable]: <https://docs.swift.org/compiler/documentation/diagnostics/mutable-global-variable>
+Failed frontend command:
+/Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /testbed/concurrency/App/App.swift -target x86_64-apple-ios18.0-simulator -disable-cross-import-overlay-search -load-resolved-plugin /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libFoundationMacros.dylib\#/Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#FoundationMacros -load-resolved-plugin /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libObservationMacros.dylib\#/Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#ObservationMacros -load-resolved-plugin /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libPreviewsMacros.dylib\#/Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#PreviewsMacros -load-resolved-plugin /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftMacros.dylib\#/Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftMacros -load-resolved-plugin /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftUIMacros.dylib\#/Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftUIMacros -disable-implicit-swift-modules -Xcc -fno-implicit-modules -Xcc -fno-implicit-module-maps -explicit-swift-module-map-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App-dependencies-1.json -enable-objc-interop -sdk /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -I /testbed/DerivedData/Build/Products/Debug-iphonesimulator -F /testbed/DerivedData/Build/Products/Debug-iphonesimulator -module-cache-path /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -no-color-diagnostics -Xcc -fno-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -swift-version 6 -Onone -D DEBUG -serialize-debugging-options -enable-experimental-feature DebugDescriptionMacro -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /testbed/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /testbed/concurrency -enable-anonymous-context-mangled-names -file-compilation-dir /testbed/concurrency -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -Xcc -ivfsstatcache -Xcc /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-6636dc27d5987ae8ce4688cdf207bdd4.sdkstatcache -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-generated-files.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-own-target-headers.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/Concurrency-3d509a7cf63869f424b6a0468b9288f8-VFS-iphonesimulator/all-product-headers.yaml -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/App-project-headers.hmap -Xcc -I/testbed/DerivedData/Build/Products/Debug-iphonesimulator/include -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources-normal/x86_64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources/x86_64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/DerivedSources -Xcc -DDEBUG\=1 -no-auto-bridging-header-chaining -module-name App -const-gather-protocols-file /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App_const_extract_protocols.json -disable-clang-spi -clang-target x86_64-apple-ios27.2-simulator -target-sdk-version 27.2 -target-sdk-name iphonesimulator27.2 -in-process-plugin-server-path /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -emit-module-doc-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.swiftdoc -emit-module-source-info-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.swiftsourceinfo -emit-objc-header-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App-Swift.h -serialize-diagnostics-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App-primary-emit-module.dia -emit-dependencies-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App-primary-emit-module.d -parse-as-library -o /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.swiftmodule -emit-abi-descriptor-path /testbed/DerivedData/Build/Intermediates.noindex/Concurrency.build/Debug-iphonesimulator/App.build/Objects-normal/x86_64/App.abi.json
+SwiftCompile normal x86_64 Compiling\ App.swift /testbed/concurrency/App/App.swift (in target 'App' from project 'Concurrency')
+
+SwiftCompile normal x86_64 /testbed/concurrency/App/App.swift (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    builtin-SwiftPerFileCompile App.swift
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ App (in target 'App' from project 'Concurrency')
+
+SwiftCompile normal arm64 (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    
+
+SwiftCompile normal arm64 Compiling\ App.swift /testbed/concurrency/App/App.swift (in target 'App' from project 'Concurrency')
+
+SwiftCompile normal arm64 /testbed/concurrency/App/App.swift (in target 'App' from project 'Concurrency')
+    cd /testbed/concurrency
+    builtin-SwiftPerFileCompile App.swift
+
+PruneExplicitPrecompiledModules /testbed/DerivedData/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /testbed/DerivedData/SDKExplicitPrecompiledModules
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	SwiftCompile normal x86_64 (in target 'App' from project 'Concurrency')
+	SwiftEmitModule normal x86_64 Emitting\ module\ for\ App (in target 'App' from project 'Concurrency')
+	Building project Concurrency with scheme App
+(3 failures)
