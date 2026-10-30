@@ -1126,7 +1126,7 @@ EOF
 # They run on a copy of field/, so a scenario's edit never reaches the fixture. Tests replay them.
 # - probes: the five probe tests, five times each, relaunched every time (scenario B)
 # - crash: the crashing test, with its crash log (C)
-# - coverage: one test run with coverage on, and the half-tested file's line counts (A)
+# - coverage: one test run with coverage on, the half-tested file's line counts, and each target's counts (A)
 # - empty-filter: a selection matching no test (D)
 # - type-error: a build failing on a plain type error, with the pinned Xcode not the one building (E)
 # FIELD_CAPTURES names the scenarios to take again (`coverage type-error`), keeping the others' captures; unset,
@@ -1190,6 +1190,8 @@ field_captures() {
       # xccov answers for a file only as its own list spells it.
       greeting=$(node -e 'console.log(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).find(f => f.endsWith("/Greeting.swift")) ?? "")' "$results/files.json")
       xcrun xccov view --archive --file "$greeting" --json "$bundle" | neutral > "$out/coverage.Greeting.json"
+      # Each target's files and line counts: which are test bundles, and which the run reached.
+      xcrun xccov view --report --json "$bundle" | neutral > "$out/coverage.report.json"
     fi
   fi
   if takes empty-filter; then call empty-filter test_sim '{"extraArgs":["-only-testing:FeatureTests/NoSuchTests"]}'; fi
