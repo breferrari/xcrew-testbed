@@ -1,0 +1,707 @@
+Command line invocation:
+    /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/usr/bin/xcodebuild -project /testbed/captures/environment/App.xcodeproj -scheme App -skipMacroValidation -destination "platform=iOS Simulator,name=iPhone 17,OS=latest" -collect-test-diagnostics never -derivedDataPath /testbed/DerivedData build
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'App' in project 'App' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ClangStatCache /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B5109a-1534f2eb405b31c55e9e74f1e9d39821.sdkstatcache
+    cd /testbed/captures/environment/App.xcodeproj
+    /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -o /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B5109a-1534f2eb405b31c55e9e74f1e9d39821.sdkstatcache
+
+SwiftDriver App normal arm64 com.apple.xcode.tools.swift.compiler (in target 'App' from project 'App')
+    cd /testbed/captures/environment
+    builtin-SwiftDriver -- /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name App -Onone @/testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -target arm64-apple-ios18.0-simulator -g -module-cache-path /testbed/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /testbed/DerivedData/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /testbed/DerivedData/Build/Products/Debug-iphonesimulator -F /testbed/DerivedData/Build/Products/Debug-iphonesimulator -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B5109a-1534f2eb405b31c55e9e74f1e9d39821.sdkstatcache -output-file-map /testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /testbed/DerivedData/ModuleCache.noindex -sdk-module-cache-path /testbed/DerivedData/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /testbed/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App_const_extract_protocols.json -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/App-generated-files.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/App-own-target-headers.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/App-all-target-headers.hmap -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/App-project-headers.hmap -Xcc -I/testbed/DerivedData/Build/Products/Debug-iphonesimulator/include -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/DerivedSources-normal/arm64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/DerivedSources/arm64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /testbed/DerivedData/Build/Intermediates.noindex/App.build/Debug-iphonesimulator/App.build/Objects-normal/arm64/App-Swift.h -working-directory /testbed/captures/environment -experimental-emit-module-separately -disable-cmo
+error: Clang dependency scanning failure: While building module 'Dispatch' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/dispatch/dispatch.h:28:2: fatal error: malformed or corrupted precompiled file: 'can't skip to bit 95328 from 96'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/dispatch/dispatch.h:28:2: note: after modifying system headers, please delete the module cache at '/testbed/DerivedData/ModuleCache.noindex/2LDDELW6LDLFF'
+module-include.input:1:1: fatal error: could not build module 'Dispatch'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'IOSurface' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/IOSurface.framework/Headers/IOSurfaceBase.h:45:2: fatal error: malformed or corrupted precompiled file: 'can't skip to bit 95328 from 96'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/IOSurface.framework/Headers/IOSurfaceBase.h:45:2: note: after modifying system headers, please delete the module cache at '/testbed/DerivedData/ModuleCache.noindex/2LDDELW6LDLFF'
+module-include.input:1:1: fatal error: could not build module 'IOSurface'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'ObjectiveC' imported from module-include.input:1:
+In file included from <module-includes>:5:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/objc/objc-auto.h:36:2: fatal error: malformed or corrupted precompiled file: 'can't skip to bit 95328 from 96'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/objc/objc-auto.h:36:2: note: after modifying system headers, please delete the module cache at '/testbed/DerivedData/ModuleCache.noindex/2LDDELW6LDLFF'
+module-include.input:1:1: fatal error: could not build module 'ObjectiveC'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'CoreAudio' imported from module-include.input:1:
+While building module 'CoreAudioTypes' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudio.framework/Headers/CoreAudioTypes.h:4:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudioTypes.framework/Headers/CoreAudioBaseTypes.h:18:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h:76:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFPropertyList.h:18:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFStream.h:20:10: fatal error: could not build module 'Dispatch'
+While building module 'CoreAudio' imported from module-include.input:1:
+While building module 'CoreAudioTypes' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudio.framework/Headers/CoreAudioTypes.h:4:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudioTypes.framework/Headers/CoreAudioTypes.h:8:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudioTypes.framework/Headers/CoreAudioBaseTypes.h:18:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreAudio' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudio.framework/Headers/CoreAudioTypes.h:4:10: fatal error: could not build module 'CoreAudioTypes'
+module-include.input:1:2: fatal error: could not build module 'CoreAudio'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'Foundation' imported from module-include.input:1:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h:6:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h:54:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h:75:2: fatal error: malformed or corrupted precompiled file: 'can't skip to bit 95328 from 96'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h:75:2: note: after modifying system headers, please delete the module cache at '/testbed/DerivedData/ModuleCache.noindex/2LDDELW6LDLFF'
+While building module 'Foundation' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h:6:10: fatal error: could not build module 'CoreFoundation'
+While building module 'Foundation' imported from module-include.input:1:
+While building module 'Security' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLCredential.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/Security.h:27:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/SecBase.h:28:10: fatal error: could not build module 'CoreFoundation'
+While building module 'Foundation' imported from module-include.input:1:
+While building module 'CFNetwork' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLError.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/CFNetwork.h:18:10: fatal error: could not build module 'CoreFoundation'
+module-include.input:1:3: fatal error: could not build module 'Foundation'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'CoreText' imported from module-include.input:1:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h:14:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h:54:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h:75:2: fatal error: malformed or corrupted precompiled file: 'can't skip to bit 95328 from 96'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h:75:2: note: after modifying system headers, please delete the module cache at '/testbed/DerivedData/ModuleCache.noindex/2LDDELW6LDLFF'
+While building module 'CoreText' imported from module-include.input:1:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CoreText.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFont.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h:20:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h:14:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreText' imported from module-include.input:1:
+While building module 'CoreGraphics' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h:22:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CoreGraphics.h:8:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGBase.h:12:10: fatal error: could not build module 'CoreFoundation'
+module-include.input:1:1: fatal error: could not build module 'CoreText'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'CoreTransferable' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreTransferable.framework/Headers/CoreTransferable.h:3:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h:6:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreTransferable' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreTransferable.framework/Headers/CoreTransferable.h:3:
+While building module 'Security' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLCredential.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/Security.h:27:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/SecBase.h:28:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreTransferable' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreTransferable.framework/Headers/CoreTransferable.h:3:
+While building module 'CFNetwork' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLError.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/CFNetwork.h:18:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreTransferable' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreTransferable.framework/Headers/CoreTransferable.h:3:
+While building module 'XPC' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSXPCConnection.h:14:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/xpc/xpc.h:7:10: fatal error: could not build module 'Dispatch'
+While building module 'CoreTransferable' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreTransferable.framework/Headers/CoreTransferable.h:3:9: fatal error: could not build module 'Foundation'
+module-include.input:1:3: fatal error: could not build module 'CoreTransferable'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:16:
+While building module 'Dispatch' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFStream.h:20:
+While building module 'os_object' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/dispatch/dispatch.h:63:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/os/object.h:114:9: fatal error: could not build module 'ObjectiveC'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/dispatch/dispatch.h:63:10: fatal error: could not build module 'os_object'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:16:
+While building module 'Dispatch' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFStream.h:20:
+While building module 'os_workgroup' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/dispatch/dispatch.h:64:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/os/workgroup.h:29:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/os/workgroup_base.h:19:10: fatal error: could not build module 'os_object'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:16:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h:76:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFPropertyList.h:18:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFStream.h:20:10: fatal error: could not build module 'Dispatch'
+While building module 'QuartzCore' imported from module-include.input:1:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/QuartzCore.h:17:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CoreAnimation.h:9:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:16:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'CoreGraphics' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:19:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CoreGraphics.h:8:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGBase.h:12:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CATransform3D.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h:6:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CATransform3D.h:12:
+While building module 'Security' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLCredential.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/Security.h:27:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/SecBase.h:28:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CATransform3D.h:12:
+While building module 'CFNetwork' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLError.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/CFNetwork.h:18:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CATransform3D.h:12:
+While building module 'XPC' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSXPCConnection.h:14:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/xpc/xpc.h:6:10: fatal error: could not build module 'os_object'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'OpenGLES' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CAEAGLLayer.h:11:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/OpenGLES.framework/Headers/EAGL.h:8:10: fatal error: could not build module 'Foundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Metal' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CAMetalLayer.h:12:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Metal.framework/Headers/Metal.h:9:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Metal.framework/Headers/MTLTypes.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Metal' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CAMetalLayer.h:12:
+While building module 'IOSurface' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Metal.framework/Headers/MTLTexture.h:15:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/IOSurface.framework/Headers/IOSurfaceBase.h:47:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'CoreVideo' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CARenderer.h:35:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CoreVideo.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVReturn.h:21:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVBase.h:24:10: fatal error: could not build module 'CoreFoundation'
+module-include.input:1:3: fatal error: could not build module 'QuartzCore'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'UIUtilities' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKitDefines.h:10:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/SubFrameworks/UIUtilities.framework/Headers/UICoordinateSpace.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreGraphics' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/NSTextAttachment.h:10:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CoreGraphics.h:8:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGBase.h:12:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreText' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/NSAdaptiveImageGlyph.h:10:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CoreText.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFont.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h:20:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h:14:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CoreImage.h:9:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CoreImageDefines.h:17:10: fatal error: could not build module 'CoreGraphics'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+While building module 'CoreVideo' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CIImage.h:15:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CoreVideo.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVReturn.h:21:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVBase.h:24:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+While building module 'CoreVideo' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CIImage.h:15:
+While building module 'IOSurface' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVPixelBufferIOSurface.h:24:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/IOSurface.framework/Headers/IOSurfaceBase.h:47:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+While building module 'CoreVideo' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CIImage.h:15:
+While building module 'OpenGLES' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVOpenGLESTexture.h:23:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/OpenGLES.framework/Headers/EAGL.h:8:10: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+While building module 'CoreVideo' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CIImage.h:15:
+While building module 'Metal' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVMetalTextureCache.h:41:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Metal.framework/Headers/Metal.h:9:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Metal.framework/Headers/MTLTypes.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+While building module 'ImageIO' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CIImage.h:16:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/ImageIO.framework/Headers/ImageIO.h:10:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/ImageIO.framework/Headers/ImageIOBase.h:16:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'QuartzCore' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIView.h:10:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/QuartzCore.h:17:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CoreAnimation.h:9:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:16:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreLocation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIView.h:25:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CoreLocation.h:18:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CLErrorDomain.h:10:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreLocation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIView.h:25:
+While building module '_LocationEssentials' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CLLocation.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/_LocationEssentials.framework/Headers/LocationEssentials.h:12:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/_LocationEssentials.framework/Headers/CLLocationEssentials.h:12:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreMotion' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIView.h:27:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CoreMotion.h:13:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMAccelerometer.h:9:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'Symbols' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIImageView.h:14:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Symbols.framework/Headers/Symbols.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'FileProvider' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/NSFileProviderExtension.h:15:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/FileProvider.framework/Headers/FileProvider.h:16:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/FileProvider.framework/Headers/NSFileProviderDomain.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'UserNotifications' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UNNotificationResponse+UIKitAdditions.h:10:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UserNotifications.framework/Headers/UserNotifications.h:8:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UserNotifications.framework/Headers/NSString+UserNotifications.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:9: fatal error: could not build module 'UIKit'
+module-include.input:1:5: fatal error: could not build module 'SwiftUI'
+ (in target 'App' from project 'App')
+error: Unable to resolve module dependency: 'CoreTransferable' (in target 'App' from project 'App')
+    note: A dependency of Swift module 'CoreTransferable': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/CoreTransferable.swiftmodule/arm64-apple-ios-simulator.swiftmodule'
+    note: A dependency of Swift module 'SwiftUICore': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/SwiftUICore.swiftmodule/arm64-apple-ios-simulator.swiftmodule'
+    note: A dependency of Swift module 'CoreTransferable': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/CoreTransferable.swiftmodule/arm64-apple-ios-simulator.swiftmodule'
+    note: A dependency of Swift module 'SwiftUI': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/SwiftUI.swiftmodule/arm64-apple-ios-simulator.swiftmodule'
+    note: A dependency of main module 'App'
+    note: A dependency of Swift module 'CoreTransferable': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/CoreTransferable.swiftmodule/arm64-apple-ios-simulator.swiftmodule'
+    note: A dependency of Swift module 'SwiftUI': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/SwiftUI.swiftmodule/arm64-apple-ios-simulator.swiftmodule'
+    note: A dependency of main module 'App'
+error: Unable to resolve module dependency: 'SwiftUI' (in target 'App' from project 'App')
+    note: A dependency of Swift module 'SwiftUI': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/SwiftUI.swiftmodule/arm64-apple-ios-simulator.swiftmodule'
+    note: A dependency of main module 'App'
+error: Clang dependency scanning failure: module-include.input:1:4: fatal error: could not build module 'XPC'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: module-include.input:1:6: fatal error: could not build module 'ImageIO'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'CoreMotion' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMAccelerometer.h:9:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h:6:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreMotion' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMAccelerometer.h:9:
+While building module 'Security' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLCredential.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/Security.h:27:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/SecBase.h:28:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreMotion' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMAccelerometer.h:9:
+While building module 'CFNetwork' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLError.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/CFNetwork.h:18:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreMotion' imported from module-include.input:1:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CoreMotion.h:13:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMAccelerometer.h:9:9: fatal error: could not build module 'Foundation'
+While building module 'CoreMotion' imported from module-include.input:1:
+While building module 'CoreLocation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMOdometer.h:12:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CoreLocation.h:18:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CLErrorDomain.h:10:9: fatal error: could not build module 'Foundation'
+While building module 'CoreMotion' imported from module-include.input:1:
+While building module 'CoreLocation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMOdometer.h:12:
+While building module '_LocationEssentials' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CLLocation.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/_LocationEssentials.framework/Headers/LocationEssentials.h:12:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/_LocationEssentials.framework/Headers/CLLocationEssentials.h:12:9: fatal error: could not build module 'Foundation'
+module-include.input:1:2: fatal error: could not build module 'CoreMotion'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'Dispatch' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/dispatch/dispatch.h:28:2: fatal error: malformed or corrupted precompiled file: 'can't skip to bit 95328 from 96'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/dispatch/dispatch.h:28:2: note: after modifying system headers, please delete the module cache at '/testbed/DerivedData/ModuleCache.noindex/2LDDELW6LDLFF'
+module-include.input:1:1: fatal error: could not build module 'Dispatch'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'IOSurface' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/IOSurface.framework/Headers/IOSurfaceBase.h:45:2: fatal error: malformed or corrupted precompiled file: 'can't skip to bit 95328 from 96'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/IOSurface.framework/Headers/IOSurfaceBase.h:45:2: note: after modifying system headers, please delete the module cache at '/testbed/DerivedData/ModuleCache.noindex/2LDDELW6LDLFF'
+module-include.input:1:1: fatal error: could not build module 'IOSurface'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'ObjectiveC' imported from module-include.input:1:
+In file included from <module-includes>:5:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/objc/objc-auto.h:36:2: fatal error: malformed or corrupted precompiled file: 'can't skip to bit 95328 from 96'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/objc/objc-auto.h:36:2: note: after modifying system headers, please delete the module cache at '/testbed/DerivedData/ModuleCache.noindex/2LDDELW6LDLFF'
+module-include.input:1:1: fatal error: could not build module 'ObjectiveC'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'CoreAudio' imported from module-include.input:1:
+While building module 'CoreAudioTypes' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudio.framework/Headers/CoreAudioTypes.h:4:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudioTypes.framework/Headers/CoreAudioBaseTypes.h:18:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h:76:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFPropertyList.h:18:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFStream.h:20:10: fatal error: could not build module 'Dispatch'
+While building module 'CoreAudio' imported from module-include.input:1:
+While building module 'CoreAudioTypes' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudio.framework/Headers/CoreAudioTypes.h:4:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudioTypes.framework/Headers/CoreAudioTypes.h:8:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudioTypes.framework/Headers/CoreAudioBaseTypes.h:18:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreAudio' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreAudio.framework/Headers/CoreAudioTypes.h:4:10: fatal error: could not build module 'CoreAudioTypes'
+module-include.input:1:2: fatal error: could not build module 'CoreAudio'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'Foundation' imported from module-include.input:1:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h:6:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h:54:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h:75:2: fatal error: malformed or corrupted precompiled file: 'can't skip to bit 95328 from 96'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h:75:2: note: after modifying system headers, please delete the module cache at '/testbed/DerivedData/ModuleCache.noindex/2LDDELW6LDLFF'
+While building module 'Foundation' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h:6:10: fatal error: could not build module 'CoreFoundation'
+While building module 'Foundation' imported from module-include.input:1:
+While building module 'Security' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLCredential.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/Security.h:27:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/SecBase.h:28:10: fatal error: could not build module 'CoreFoundation'
+While building module 'Foundation' imported from module-include.input:1:
+While building module 'CFNetwork' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLError.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/CFNetwork.h:18:10: fatal error: could not build module 'CoreFoundation'
+module-include.input:1:3: fatal error: could not build module 'Foundation'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'CoreText' imported from module-include.input:1:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h:14:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h:54:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h:75:2: fatal error: malformed or corrupted precompiled file: 'can't skip to bit 95328 from 96'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h:75:2: note: after modifying system headers, please delete the module cache at '/testbed/DerivedData/ModuleCache.noindex/2LDDELW6LDLFF'
+While building module 'CoreText' imported from module-include.input:1:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CoreText.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFont.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h:20:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h:14:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreText' imported from module-include.input:1:
+While building module 'CoreGraphics' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h:22:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CoreGraphics.h:8:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGBase.h:12:10: fatal error: could not build module 'CoreFoundation'
+module-include.input:1:1: fatal error: could not build module 'CoreText'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'CoreTransferable' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreTransferable.framework/Headers/CoreTransferable.h:3:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h:6:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreTransferable' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreTransferable.framework/Headers/CoreTransferable.h:3:
+While building module 'Security' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLCredential.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/Security.h:27:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/SecBase.h:28:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreTransferable' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreTransferable.framework/Headers/CoreTransferable.h:3:
+While building module 'CFNetwork' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLError.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/CFNetwork.h:18:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreTransferable' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreTransferable.framework/Headers/CoreTransferable.h:3:
+While building module 'XPC' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSXPCConnection.h:14:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/xpc/xpc.h:7:10: fatal error: could not build module 'Dispatch'
+While building module 'CoreTransferable' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreTransferable.framework/Headers/CoreTransferable.h:3:9: fatal error: could not build module 'Foundation'
+module-include.input:1:3: fatal error: could not build module 'CoreTransferable'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:16:
+While building module 'Dispatch' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFStream.h:20:
+While building module 'os_object' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/dispatch/dispatch.h:63:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/os/object.h:114:9: fatal error: could not build module 'ObjectiveC'
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/dispatch/dispatch.h:63:10: fatal error: could not build module 'os_object'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:16:
+While building module 'Dispatch' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFStream.h:20:
+While building module 'os_workgroup' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/dispatch/dispatch.h:64:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/os/workgroup.h:29:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/os/workgroup_base.h:19:10: fatal error: could not build module 'os_object'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'CoreFoundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:16:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h:76:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFPropertyList.h:18:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFStream.h:20:10: fatal error: could not build module 'Dispatch'
+While building module 'QuartzCore' imported from module-include.input:1:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/QuartzCore.h:17:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CoreAnimation.h:9:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:16:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'CoreGraphics' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:19:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CoreGraphics.h:8:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGBase.h:12:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CATransform3D.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h:6:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CATransform3D.h:12:
+While building module 'Security' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLCredential.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/Security.h:27:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/SecBase.h:28:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CATransform3D.h:12:
+While building module 'CFNetwork' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLError.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/CFNetwork.h:18:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CATransform3D.h:12:
+While building module 'XPC' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSXPCConnection.h:14:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/usr/include/xpc/xpc.h:6:10: fatal error: could not build module 'os_object'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'OpenGLES' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CAEAGLLayer.h:11:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/OpenGLES.framework/Headers/EAGL.h:8:10: fatal error: could not build module 'Foundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Metal' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CAMetalLayer.h:12:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Metal.framework/Headers/Metal.h:9:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Metal.framework/Headers/MTLTypes.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'Metal' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CAMetalLayer.h:12:
+While building module 'IOSurface' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Metal.framework/Headers/MTLTexture.h:15:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/IOSurface.framework/Headers/IOSurfaceBase.h:47:10: fatal error: could not build module 'CoreFoundation'
+While building module 'QuartzCore' imported from module-include.input:1:
+While building module 'CoreVideo' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CARenderer.h:35:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CoreVideo.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVReturn.h:21:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVBase.h:24:10: fatal error: could not build module 'CoreFoundation'
+module-include.input:1:3: fatal error: could not build module 'QuartzCore'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'UIUtilities' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKitDefines.h:10:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/SubFrameworks/UIUtilities.framework/Headers/UICoordinateSpace.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreGraphics' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/NSTextAttachment.h:10:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CoreGraphics.h:8:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGBase.h:12:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreText' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/NSAdaptiveImageGlyph.h:10:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CoreText.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFont.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h:20:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h:14:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CoreImage.h:9:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CoreImageDefines.h:17:10: fatal error: could not build module 'CoreGraphics'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+While building module 'CoreVideo' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CIImage.h:15:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CoreVideo.h:20:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVReturn.h:21:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVBase.h:24:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+While building module 'CoreVideo' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CIImage.h:15:
+While building module 'IOSurface' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVPixelBufferIOSurface.h:24:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/IOSurface.framework/Headers/IOSurfaceBase.h:47:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+While building module 'CoreVideo' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CIImage.h:15:
+While building module 'OpenGLES' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVOpenGLESTexture.h:23:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/OpenGLES.framework/Headers/EAGL.h:8:10: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+While building module 'CoreVideo' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CIImage.h:15:
+While building module 'Metal' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreVideo.framework/Headers/CVMetalTextureCache.h:41:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Metal.framework/Headers/Metal.h:9:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Metal.framework/Headers/MTLTypes.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreImage' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIColor.h:13:
+While building module 'ImageIO' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CIImage.h:16:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/ImageIO.framework/Headers/ImageIO.h:10:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/ImageIO.framework/Headers/ImageIOBase.h:16:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'QuartzCore' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIView.h:10:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/QuartzCore.h:17:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CoreAnimation.h:9:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/CABase.h:16:10: fatal error: could not build module 'CoreFoundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreLocation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIView.h:25:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CoreLocation.h:18:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CLErrorDomain.h:10:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreLocation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIView.h:25:
+While building module '_LocationEssentials' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CLLocation.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/_LocationEssentials.framework/Headers/LocationEssentials.h:12:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/_LocationEssentials.framework/Headers/CLLocationEssentials.h:12:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'CoreMotion' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIView.h:27:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CoreMotion.h:13:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMAccelerometer.h:9:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'Symbols' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIImageView.h:14:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Symbols.framework/Headers/Symbols.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'FileProvider' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/NSFileProviderExtension.h:15:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/FileProvider.framework/Headers/FileProvider.h:16:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/FileProvider.framework/Headers/NSFileProviderDomain.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+While building module 'UIKit' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:
+While building module 'UserNotifications' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UNNotificationResponse+UIKitAdditions.h:10:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UserNotifications.framework/Headers/UserNotifications.h:8:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/UserNotifications.framework/Headers/NSString+UserNotifications.h:8:9: fatal error: could not build module 'Foundation'
+While building module 'SwiftUI' imported from module-include.input:1:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/SwiftUI.framework/Headers/SwiftUI.h:12:9: fatal error: could not build module 'UIKit'
+module-include.input:1:5: fatal error: could not build module 'SwiftUI'
+ (in target 'App' from project 'App')
+note: A dependency of Swift module 'CoreTransferable': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/CoreTransferable.swiftmodule/arm64-apple-ios-simulator.swiftmodule' (in target 'App' from project 'App')
+note: A dependency of Swift module 'SwiftUICore': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/SwiftUICore.swiftmodule/arm64-apple-ios-simulator.swiftmodule' (in target 'App' from project 'App')
+note: A dependency of Swift module 'CoreTransferable': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/CoreTransferable.swiftmodule/arm64-apple-ios-simulator.swiftmodule' (in target 'App' from project 'App')
+note: A dependency of Swift module 'SwiftUI': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/SwiftUI.swiftmodule/arm64-apple-ios-simulator.swiftmodule' (in target 'App' from project 'App')
+note: A dependency of main module 'App' (in target 'App' from project 'App')
+note: A dependency of Swift module 'CoreTransferable': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/CoreTransferable.swiftmodule/arm64-apple-ios-simulator.swiftmodule' (in target 'App' from project 'App')
+note: A dependency of Swift module 'SwiftUI': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/SwiftUI.swiftmodule/arm64-apple-ios-simulator.swiftmodule' (in target 'App' from project 'App')
+note: A dependency of main module 'App' (in target 'App' from project 'App')
+note: A dependency of Swift module 'SwiftUI': '/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/prebuilt-modules/27.2/SwiftUI.swiftmodule/arm64-apple-ios-simulator.swiftmodule' (in target 'App' from project 'App')
+note: A dependency of main module 'App' (in target 'App' from project 'App')
+error: Clang dependency scanning failure: module-include.input:1:4: fatal error: could not build module 'XPC'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: module-include.input:1:6: fatal error: could not build module 'ImageIO'
+ (in target 'App' from project 'App')
+error: Clang dependency scanning failure: While building module 'CoreMotion' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMAccelerometer.h:9:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h:6:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreMotion' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMAccelerometer.h:9:
+While building module 'Security' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLCredential.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/Security.h:27:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Security.framework/Headers/SecBase.h:28:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreMotion' imported from module-include.input:1:
+While building module 'Foundation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMAccelerometer.h:9:
+While building module 'CFNetwork' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSURLError.h:12:
+In file included from <module-includes>:1:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/CFNetwork.h:18:10: fatal error: could not build module 'CoreFoundation'
+While building module 'CoreMotion' imported from module-include.input:1:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CoreMotion.h:13:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMAccelerometer.h:9:9: fatal error: could not build module 'Foundation'
+While building module 'CoreMotion' imported from module-include.input:1:
+While building module 'CoreLocation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMOdometer.h:12:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CoreLocation.h:18:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CLErrorDomain.h:10:9: fatal error: could not build module 'Foundation'
+While building module 'CoreMotion' imported from module-include.input:1:
+While building module 'CoreLocation' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework/Headers/CMOdometer.h:12:
+While building module '_LocationEssentials' imported from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework/Headers/CLLocation.h:9:
+In file included from <module-includes>:1:
+In file included from /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/_LocationEssentials.framework/Headers/LocationEssentials.h:12:
+/Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/_LocationEssentials.framework/Headers/CLLocationEssentials.h:12:9: fatal error: could not build module 'Foundation'
+module-include.input:1:2: fatal error: could not build module 'CoreMotion'
+ (in target 'App' from project 'App')
+
+PruneExplicitPrecompiledModules /testbed/DerivedData/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /testbed/DerivedData/SDKExplicitPrecompiledModules
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	SwiftDriver App normal arm64 com.apple.xcode.tools.swift.compiler (in target 'App' from project 'App')
+	Building project App with scheme App
+(2 failures)

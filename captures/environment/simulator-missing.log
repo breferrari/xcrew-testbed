@@ -1,0 +1,26 @@
+Command line invocation:
+    /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/usr/bin/xcodebuild -project /testbed/captures/environment/App.xcodeproj -scheme App -skipMacroValidation -destination "platform=iOS Simulator,name=iPhone 1,OS=latest" -collect-test-diagnostics never -derivedDataPath /testbed/DerivedData build
+
+2026-10-30 08:37:12.733 xcodebuild[22713:51315622] Writing error result bundle to /var/folders/2q/qr9pfww52cl2hw4_hkr3lxvm0000gn/T/ResultBundle_2026-30-10_08-37-0012.xcresult
+xcodebuild: error: Unable to find a device matching the provided destination specifier:
+		{ platform:iOS Simulator, OS:latest, name:iPhone 1 }
+
+	The requested device could not be found because no available devices matched the request.
+
+	Destinations compatible with the "App" scheme:
+		{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
+		{ platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+		{ platform:iOS Simulator, arch:arm64, id:CB2A7EC7-C806-4AE6-A410-40C2C85CC5F6, OS:27.2, name:iPad (A16) }
+		{ platform:iOS Simulator, arch:arm64, id:9D5B56A5-AE52-4253-ABD8-6A5957B97048, OS:27.2, name:iPad Air 11-inch (M4) }
+		{ platform:iOS Simulator, arch:arm64, id:8DD8693B-12B3-4380-8EE7-6FE5A5541A72, OS:27.2, name:iPad Air 13-inch (M4) }
+		{ platform:iOS Simulator, arch:arm64, id:EA4F2EF8-F3EB-474B-B64A-DC4B8CC4282C, OS:27.2, name:iPad Pro 11-inch (M5) }
+		{ platform:iOS Simulator, arch:arm64, id:3EAB763F-63C5-487A-AFF8-FD4C81F31203, OS:27.2, name:iPad Pro 13-inch (M5) }
+		{ platform:iOS Simulator, arch:arm64, id:F0676272-61C5-44F6-A452-0F03192AC7F8, OS:27.2, name:iPad mini (A17 Pro) }
+		{ platform:iOS Simulator, arch:arm64, id:18BA4B25-8175-4F0F-B002-8AB49DA502E2, OS:27.2, name:iPhone 17 }
+		{ platform:iOS Simulator, arch:arm64, id:149F4A64-DDBA-4B84-ADE1-90227BE38D30, OS:27.2, name:iPhone 17e }
+		{ platform:iOS Simulator, arch:arm64, id:732BF761-D523-49A7-B774-9E79748FC355, OS:27.2, name:iPhone 18 Pro }
+		{ platform:iOS Simulator, arch:arm64, id:5481E8EF-1A33-41F7-9D6A-5590C81C48CF, OS:27.2, name:iPhone 18 Pro Max }
+		{ platform:iOS Simulator, arch:arm64, id:A707B995-8609-4E13-9487-53EBE9895860, OS:27.2, name:iPhone Air }
+		{ platform:iOS Simulator, arch:arm64, id:E4BFDE6F-A001-4FB0-8995-C763F5353B7B, OS:27.2, name:iPhone Duo }
+
+	Destinations incompatible with the "App" scheme:
