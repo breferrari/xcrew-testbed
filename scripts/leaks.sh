@@ -18,6 +18,12 @@ if grep -ralE '(/|\\/)var(/|\\/)folders(/|\\/)' forms adversarial modular field 
   echo "leaks.sh: the files above hold a temporary folder of this Mac" >&2
   found=1
 fi
+# Any user's home folder, not only this Mac's, as written or JSON-escaped, macOS's own `USER` placeholder included, and
+# any Linux one: a capture holds no one's, as xcrew's own privacy test checks every committed file.
+if grep -ralE '(/|\\/)(U[s]ers|h[o]me)(/|\\/)' forms adversarial modular field captures 2> /dev/null; then
+  echo "leaks.sh: the files above hold a user's home folder" >&2
+  found=1
+fi
 uuids=$(grep -raoE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' captures | grep -vE ':00000000-0000-0000-0000-[0-9]{12}$' | cut -d: -f1 | sort -u)
 if [ -n "$uuids" ]; then
   printf '%s\n' "$uuids"

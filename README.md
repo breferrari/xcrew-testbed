@@ -49,7 +49,7 @@ What the field captures show, with Xcode 27.2, iOS 27.2 (24B8117) and MobileBuil
 
 The crashing test crashes on purpose. Its capture step excuses exactly that one report, the test runner's with `testOutOfRange` in its crashing thread, for that step alone. Any other crash, before or after, stops the run as ever.
 
-`leaks.sh` also fails on a temporary folder of this Mac (`/var/folders/…`, `/private/var/folders/…`, as written or JSON-escaped, in any file), which is what the captures' neutralisers rewrite. Adding it found one in `captures/environment/simulator-missing.log`, where `xcodebuild` had written an error result bundle into the Mac's own temporary folder. That file is fixed, and both neutralisers now map that folder too.
+`leaks.sh` also fails on a temporary folder of this Mac (`/var/folders/…`, `/private/var/folders/…`, as written or JSON-escaped, in any file), which is what the captures' neutralisers rewrite. Adding it found one in `captures/environment/simulator-missing.log`, where `xcodebuild` had written an error result bundle into the Mac's own temporary folder. That file is fixed, and both neutralisers now map that folder too. It also fails on any user's home folder, not only this Mac's, and any Linux one, as xcrew's own privacy test checks every committed file: a crash log writes macOS's `USER` placeholder for one, which the field neutraliser now maps to `/testbed/user` like any other.
 
 ## Layout
 
