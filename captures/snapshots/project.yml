@@ -1,0 +1,42 @@
+name: App
+options:
+  bundleIdPrefix: dev.xcrew.testbed
+  deploymentTarget:
+    iOS: "18.0"
+packages:
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    exactVersion: 1.19.7
+  iOSSnapshotTestCase:
+    url: https://github.com/uber/ios-snapshot-test-case
+    exactVersion: 8.0.0
+targets:
+  App:
+    type: application
+    platform: iOS
+    sources: [App]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_ALLOWED: YES
+  SnapshotTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [SnapshotTests]
+    dependencies:
+      - target: App
+      - package: SnapshotTesting
+      - package: iOSSnapshotTestCase
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_ALLOWED: YES
+schemes:
+  App:
+    build:
+      targets:
+        App: all
+    test:
+      targets: [SnapshotTests]
+      environmentVariables:
+        FB_REFERENCE_IMAGE_DIR: $(SOURCE_ROOT)/SnapshotTests/ReferenceImages

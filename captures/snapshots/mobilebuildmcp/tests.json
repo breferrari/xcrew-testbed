@@ -1,0 +1,117 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00000000-0000-0000-0000-000000000001",
+      "deviceName" : "xcrew-testbed",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "name" : "failed - Snapshot does not match reference.\n\n@−\n\"file:///testbed/captures/snapshots/SnapshotTests/__Snapshots__/SnapshotTests/testSquare.1.png\"\n@+\n\"file:///testbed/user/Library/Developer/CoreSimulator/Devices/00000000-0000-0000-0000-000000000001/data/Containers/Data/Application/00000000-0000-0000-0000-000000000002/tmp/SnapshotTests/testSquare.1.png\"\n\nTo configure output for a custom diff tool, use 'withSnapshotTesting'. For example:\n\n    withSnapshotTesting(diffTool: .ksdiff) {\n      // ...\n    }\n\nNewly-taken snapshot does not match reference.",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/testbed/captures/snapshots/SnapshotTests/SnapshotTests.swift",
+                        "lineNumber" : 19
+                      }
+                    }
+                  ],
+                  "duration" : "0,063s",
+                  "durationInSeconds" : 0.06264805793762207,
+                  "name" : "testSquare()",
+                  "nodeIdentifier" : "PointFreeXCTests/testSquare()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/PointFreeXCTests/testSquare",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "PointFreeXCTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/PointFreeXCTests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            },
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "name" : "failed - Snapshot comparison failed: Optional(Error Domain=FBSnapshotTestControllerErrorDomain Code=4 \"Images different\" UserInfo={NSLocalizedFailureReason=image pixels differed by more than 0.00% from the reference image, FBDiffedImageKey=<UIImage:0x106184280 anonymous {4, 4} renderingMode=automatic(original)>, FBReferenceImageKey=<UIImage:0x106184460 anonymous {4, 4} renderingMode=automatic(original)>, FBCapturedImageKey=<UIImage:0x1061843c0 anonymous {4, 4} renderingMode=automatic(original)>, NSLocalizedDescription=Images different})",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/testbed/captures/snapshots/SnapshotTests/SnapshotTests.swift",
+                        "lineNumber" : 38
+                      }
+                    }
+                  ],
+                  "duration" : "0,0093s",
+                  "durationInSeconds" : 0.00925600528717041,
+                  "name" : "testSquare()",
+                  "nodeIdentifier" : "UberTests/testSquare()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/UberTests/testSquare",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "UberTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/UberTests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            },
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "name" : "Issue recorded: Snapshot does not match reference.\n\n@−\n\"file:///testbed/captures/snapshots/SnapshotTests/__Snapshots__/SnapshotTests/square.1.png\"\n@+\n\"file:///testbed/user/Library/Developer/CoreSimulator/Devices/00000000-0000-0000-0000-000000000001/data/Containers/Data/Application/00000000-0000-0000-0000-000000000002/tmp/SnapshotTests/square.1.png\"\n\nTo configure output for a custom diff tool, use 'withSnapshotTesting'. For example:\n\n    withSnapshotTesting(diffTool: .ksdiff) {\n      // ...\n    }\n\nNewly-taken snapshot does not match reference.",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/testbed/captures/snapshots/SnapshotTests/SnapshotTests.swift",
+                        "lineNumber" : 27
+                      }
+                    }
+                  ],
+                  "duration" : "0,0091s",
+                  "durationInSeconds" : 0.009082794189453125,
+                  "name" : "square()",
+                  "nodeIdentifier" : "PointFreeSwiftTests/square()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/PointFreeSwiftTests/square()",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "PointFreeSwiftTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/PointFreeSwiftTests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "SnapshotTests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests",
+          "nodeType" : "Unit test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "App",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000014",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "reference_0_00000000-0000-0000-0000-000000000016.png",
+        "timestamp" : 1793370579.752
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000012",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "failure_1_00000000-0000-0000-0000-000000000016.png",
+        "timestamp" : 1793370579.753
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000017",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "difference_2_00000000-0000-0000-0000-000000000016.png",
+        "timestamp" : 1793370579.753
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000003.txt",
+        "isAssociatedWithFailure" : true,
+        "suggestedHumanReadableName" : "Complete Issue Description.txt"
+      }
+    ],
+    "testIdentifier" : "PointFreeXCTests/testSquare()",
+    "testIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/PointFreeXCTests/testSquare"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000002.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Reference Image_0_00000000-0000-0000-0000-000000000007.png",
+        "timestamp" : 1793370579.779
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000001.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Failed Image_1_00000000-0000-0000-0000-000000000007.png",
+        "timestamp" : 1793370579.779
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000013.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Diffed Image_2_00000000-0000-0000-0000-000000000007.png",
+        "timestamp" : 1793370579.779
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000010.txt",
+        "isAssociatedWithFailure" : true,
+        "suggestedHumanReadableName" : "Complete Issue Description.txt"
+      }
+    ],
+    "testIdentifier" : "UberTests/testSquare()",
+    "testIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/UberTests/testSquare"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000005.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "difference_0_00000000-0000-0000-0000-000000000018.png",
+        "timestamp" : 1793370579.809
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000009.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "failure_0_00000000-0000-0000-0000-000000000008.png",
+        "timestamp" : 1793370579.809
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000015.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "reference_0_00000000-0000-0000-0000-000000000006.png",
+        "timestamp" : 1793370579.809
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000004.txt",
+        "isAssociatedWithFailure" : true,
+        "suggestedHumanReadableName" : "Complete Issue Description.txt"
+      }
+    ],
+    "testIdentifier" : "PointFreeSwiftTests/square()",
+    "testIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/PointFreeSwiftTests/square()"
+  }
+]

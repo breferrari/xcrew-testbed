@@ -284,6 +284,132 @@ EOF
 
 modular
 
+# The captures' own simulator: an iPhone on the newest released iOS runtime, created for this run, booted once and reused
+# by every capture, so none boots another, and deleted at the end. A beta runtime's system apps can crash on boot, and
+# a crash shows a dialog on the Mac, so no capture may cause one: the run fails when a crash report appeared during it.
+capture_simulator() {
+  chosen=$(node -e '
+    const { execFileSync } = require("child_process")
+    const list = kind => JSON.parse(execFileSync("xcrun", ["simctl", "list", kind, "--json"]))[kind]
+    // A released build has no letter after its number: 24B8117 is a release, 24B5110a a beta. A runtime made for one
+    // device carries it in its identifier (iOS-27-2-iPhone19-4) and comes with the Xcode made for that device, so
+    // only the plain ones count.
+    const released = list("runtimes").filter(r => r.platform === "iOS" && r.isAvailable && /^\d+[A-Z]\d+$/.test(r.buildversion) && /\.iOS-\d+(-\d+)*$/.test(r.identifier))
+    released.sort((a, b) => a.version.localeCompare(b.version, undefined, { numeric: true }))
+    // XCREW_TESTBED_RUNTIME names one, when the newest crashes its own services: it still has to be a released one.
+    const wanted = process.env.XCREW_TESTBED_RUNTIME
+    const runtime = wanted ? released.find(r => r.identifier === wanted) : released.pop()
+    // The newest iPhone it runs: the one first supported on the latest iOS, then by model number. A device that has a
+    // runtime of its own (iOS-27-2-iPhone19-4 belongs to iPhone19,4) runs best on that one, so it is left out.
+    const ownRuntime = new Set(list("runtimes").map(r => r.identifier.match(/\.iOS-\d+(?:-\d+)*-([A-Za-z]+\d+-\d+)$/)?.[1]).filter(Boolean))
+    const types = new Map(list("devicetypes").filter(t => !ownRuntime.has(t.modelIdentifier.replace(",", "-"))).map(t => [t.identifier, t]))
+    const model = t => (t.modelIdentifier.match(/\d+/g) ?? []).map(Number)
+    const iPhones = (runtime?.supportedDeviceTypes ?? []).filter(t => t.productFamily === "iPhone").map(t => types.get(t.identifier)).filter(Boolean)
+    iPhones.sort((a, b) => a.minRuntimeVersion - b.minRuntimeVersion || model(a)[0] - model(b)[0] || model(a)[1] - model(b)[1])
+    const iPhone = iPhones.pop()
+    if (runtime && iPhone) console.log(`${iPhone.identifier} ${runtime.identifier}`)
+  ')
+  if [ -z "$chosen" ] && [ -n "${XCREW_TESTBED_RUNTIME:-}" ]; then
+    echo "generate.sh: XCREW_TESTBED_RUNTIME names $XCREW_TESTBED_RUNTIME, which isn't an installed released iOS runtime" >&2
+    exit 1
+  fi
+  if [ -z "$chosen" ]; then
+    sdk=$(xcrun --sdk iphonesimulator --show-sdk-version)
+    if command -v xcodes > /dev/null; then
+      echo "generate.sh: no released iOS runtime is installed: xcodes runtimes install \"iOS $sdk\"" >&2
+    else
+      echo "generate.sh: no released iOS runtime is installed: add iOS $sdk in Xcode > Settings > Components" >&2
+    fi
+    exit 1
+  fi
+  simulator=xcrew-testbed
+  # shellcheck disable=SC2086 # two words: the device type and the runtime
+  simulator_id=$(xcrun simctl create "$simulator" $chosen)
+  crash_marker=$(mktemp)
+  trap finish_simulator EXIT
+  xcrun simctl boot "$simulator_id"
+  xcrun simctl bootstatus "$simulator_id" -b > /dev/null
+  # A runtime's own services may crash in the half minute after a boot: wait them out, and stop before any test if so.
+  sleep 30
+  crash_check
+}
+
+# Known Apple crashes of the runtime itself, which no capture causes: remove an entry once Apple fixes its runtime.
+# iOS 27.2 (24B8117) on macOS 27.2 (26B123), 2026-10-30 (README, "Known runtime crashes"):
+# - launching only Settings and Safari with simctl, nothing built, crashes AppIntentsLiveEntityService and
+#   SettingsSearchReindexService about 30 s later, each an EXC_BREAKPOINT in XPCPeerRequirement.hasEntitlement ->
+#   __XPC_API_MISUSE__;
+# - on a fresh simulator, during a test run, assetsd aborts on an exception PhotoLibraryServices throws while preparing
+#   its library (queue PLLibraryServicesStateNode, prep-pre-migration); nothing here uses Photos.
+# A report is known only when its process, exception, queue and frames all match an entry. An entry may be added only
+# for an Apple system process, with only Apple frames in the crashing thread, and with evidence that no capture's code
+# is involved. A third new process crashing means this is the wrong tool: let the simulator settle longer after boot.
+known_crash() {
+  node -e '
+    // frames are found in the crashing thread or, for an uncaught exception, in the backtrace that threw it.
+    const known = [
+      { process: "AppIntentsLiveEntityService", type: "EXC_BREAKPOINT", signal: "SIGTRAP", queue: "", frames: ["XPCPeerRequirement.hasEntitlement", "__XPC_API_MISUSE__"] },
+      { process: "SettingsSearchReindexService", type: "EXC_BREAKPOINT", signal: "SIGTRAP", queue: "", frames: ["XPCPeerRequirement.hasEntitlement", "__XPC_API_MISUSE__"] },
+      { process: "assetsd", type: "EXC_CRASH", signal: "SIGABRT", queue: "PLLibraryServicesStateNode", frames: ["prep-pre-migration", "objc_exception_throw", "PLLibraryServicesOperation"] },
+    ]
+    const text = require("fs").readFileSync(process.argv[1], "utf8")
+    const report = JSON.parse(text.slice(text.indexOf("\n") + 1))
+    const thread = (report.threads ?? []).find(t => t.triggered) ?? {}
+    const symbols = [thread.queue ?? "", ...[...(thread.frames ?? []), ...(report.lastExceptionBacktrace ?? [])].map(f => f.symbol ?? "")]
+    const matches = known.some(k => report.procName === k.process && report.exception?.type === k.type && report.exception?.signal === k.signal &&
+      (thread.queue ?? "").includes(k.queue) && k.frames.every(f => symbols.some(s => s.includes(f))))
+    process.exit(matches ? 0 : 1)
+  ' "$1" 2> /dev/null
+}
+
+# The reports since the run began that name the capture simulator and aren't a known crash; the known ones are listed.
+simulator_crashes() {
+  find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null | while IFS= read -r report; do
+    if [ -n "${shutdown_marker:-}" ] && [ "$report" -nt "$shutdown_marker" ] && grep -q -F '"signal":"SIGKILL"' "$report"; then continue; fi
+    grep -q -F "$simulator_id" "$report" || continue
+    if known_crash "$report"; then
+      echo "generate.sh: known Apple iOS 27.2 runtime crash, ignored: $report" >&2
+    else
+      echo "$report"
+    fi
+  done
+}
+
+# Stops the run at the first crash report that names the capture simulator; the trap still deletes it.
+crash_check() {
+  if simulator_crashes | grep -q .; then
+    echo "generate.sh: stopping: the capture simulator ($simulator_id) crashed" >&2
+    exit 1
+  fi
+}
+
+finish_simulator() {
+  status=$?
+  shutdown_marker=$(mktemp)
+  xcrun simctl shutdown "$simulator_id" 2> /dev/null || true
+  xcrun simctl delete "$simulator_id"
+  # The shutdown kills the simulator's services, and their SIGKILL reports land up to half a minute later: wait for
+  # them, and leave out only those, so a real crash during the shutdown still counts.
+  sleep 45
+  # A report of the capture simulator names its id, in its coalition or its paths; the Mac's own apps may crash too,
+  # which is no fault of the run.
+  ours=$(simulator_crashes)
+  others=$(find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null | while IFS= read -r report; do
+    grep -q -F "$simulator_id" "$report" || echo "$report"
+  done)
+  rm -f "$crash_marker" "$shutdown_marker"
+  if [ -n "$others" ]; then
+    echo "generate.sh: other crash reports appeared during the run, not the capture simulator's:" >&2
+    echo "$others" >&2
+  fi
+  if [ -n "$ours" ]; then
+    echo "generate.sh: the capture simulator ($simulator_id) crashed during the run:" >&2
+    echo "$ours" >&2
+    status=1
+  fi
+  exit "$status"
+}
+
 # A capture of a result bundle with repetitions: three tests run five times each, in a fresh process each time. One
 # passes every run, one fails every run, one fails on every other run, counted in a file in the app's sandbox that
 # outlives each process. Tests replay `tests.json`, xcresulttool's answer; nothing nondeterministic runs anywhere else.
@@ -314,7 +440,7 @@ EOF
   xcodegen_project "$fixture" group
   derived=$(mktemp -d)
   # The run fails by design: two of its tests fail.
-  (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,name=$simulator" -derivedDataPath "$derived" -resultBundlePath "$derived/Repetitions.xcresult" -only-testing:AppTests/RepetitionTests -test-iterations 5 -test-repetition-relaunch-enabled YES CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1) || true
+  (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -resultBundlePath "$derived/Repetitions.xcresult" -only-testing:AppTests/RepetitionTests -test-iterations 5 -test-repetition-relaunch-enabled YES CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1) || true
   # Failure messages name the test's source file by its absolute path: the fixture's folder becomes a neutral one.
   xcrun xcresulttool get test-results tests --path "$derived/Repetitions.xcresult" | sed "s#$(cd "$fixture" && pwd -P)#/testbed/captures/repetitions#g" | uuids_out > "$fixture/tests.json"
   rm -rf "$derived"
@@ -356,7 +482,7 @@ EOF
   xcodegen_project "$fixture" group
   derived=$(mktemp -d)
   bundle=$derived/Coverage.xcresult
-  (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,name=$simulator" -derivedDataPath "$derived" -resultBundlePath "$bundle" -only-testing:AppTests/PricingTests -enableCodeCoverage YES CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1)
+  (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -resultBundlePath "$bundle" -only-testing:AppTests/PricingTests -enableCodeCoverage YES CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1)
   written=$(cd "$fixture" && pwd)
   resolved=$(cd "$fixture" && pwd -P)
   neutral() {
@@ -436,9 +562,160 @@ environment() {
   echo "$fixture"
 }
 
-simulator=${XCREW_TESTBED_SIMULATOR:-iPhone 17}
+# Captures of snapshot tests that fail, with both libraries in wide use, pinned by exact version: swift-snapshot-testing
+# under XCTest and under Swift Testing, and iOSSnapshotTestCase. Each compares a 4-point square, recorded red and
+# rendered blue, so every comparison fails. Committed: the failed tests' attachments as `xcresulttool export
+# attachments` gives them (manifest.json and the files), once from `xcodebuild test` and once from MobileBuildMCP's
+# test_sim, with the test tree and MobileBuildMCP's MCP result. Tests replay them; nothing renders anywhere else.
+snapshots() {
+  fixture=$testbed/captures/snapshots
+  rm -rf "${fixture:?}"
+  sources "$fixture"
+  rm -rf "${fixture:?}/AppTests"
+  mkdir -p "$fixture/SnapshotTests"
+  cat > "$fixture/SnapshotTests/SnapshotTests.swift" <<'EOF'
+import SnapshotTesting
+import Testing
+import UIKit
+import XCTest
+import iOSSnapshotTestCase
+
+/// Whether this run records the references: the capture records them red, then compares a blue square against them.
+let recording = ProcessInfo.processInfo.environment["SNAPSHOT_RECORD"] != nil
+
+func squareView() -> UIView {
+    let view = UIView(frame: CGRect(x: 0, y: 0, width: 4, height: 4))
+    view.backgroundColor = recording ? .red : .blue
+    return view
+}
+
+final class PointFreeXCTests: XCTestCase {
+    func testSquare() {
+        withSnapshotTesting(record: recording ? .all : .never) {
+            assertSnapshot(of: squareView(), as: .image)
+        }
+    }
+}
+
+/// On the main actor: Swift Testing runs a test on the cooperative pool, and UIKit asserts when a view is made there.
+@MainActor @Suite(.snapshots(record: recording ? .all : .never)) struct PointFreeSwiftTests {
+    @Test func square() {
+        assertSnapshot(of: squareView(), as: .image)
+    }
+}
+
+final class UberTests: FBSnapshotTestCase {
+    override func setUp() {
+        super.setUp()
+        recordMode = recording
+    }
+
+    func testSquare() {
+        FBSnapshotVerifyView(squareView())
+    }
+}
+EOF
+  # Signed ad hoc, as a developer's simulator build is.
+  cat > "$fixture/project.yml" <<'EOF'
+name: App
+options:
+  bundleIdPrefix: dev.xcrew.testbed
+  deploymentTarget:
+    iOS: "18.0"
+packages:
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    exactVersion: 1.19.7
+  iOSSnapshotTestCase:
+    url: https://github.com/uber/ios-snapshot-test-case
+    exactVersion: 8.0.0
+targets:
+  App:
+    type: application
+    platform: iOS
+    sources: [App]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_ALLOWED: YES
+  SnapshotTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [SnapshotTests]
+    dependencies:
+      - target: App
+      - package: SnapshotTesting
+      - package: iOSSnapshotTestCase
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_ALLOWED: YES
+schemes:
+  App:
+    build:
+      targets:
+        App: all
+    test:
+      targets: [SnapshotTests]
+      environmentVariables:
+        FB_REFERENCE_IMAGE_DIR: $(SOURCE_ROOT)/SnapshotTests/ReferenceImages
+EOF
+  xcodegen generate --quiet --spec "$fixture/project.yml" --project "$fixture"
+  derived=$(mktemp -d)
+  results=$(mktemp -d)
+  resolved=$(cd "$fixture" && pwd -P)
+  neutral() {
+    perl -pe 'BEGIN { ($rf, $wf, $rd, $wd, $h) = @ARGV; @ARGV = () } s#\Q$rf\E#/testbed/captures/snapshots#g; s#\Q$wf\E#/testbed/captures/snapshots#g; s#\Q$rd\E#/testbed/DerivedData#g; s#\Q$wd\E#/testbed/DerivedData#g; s#\Q$h\E#/testbed/user#g' \
+      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME"
+  }
+  # Both runs fail by design: a test that records fails in both libraries, and so does every comparison after.
+  (cd "$fixture" && TEST_RUNNER_SNAPSHOT_RECORD=1 xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -quiet > /dev/null 2>&1) || true
+  crash_check
+  (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -resultBundlePath "$results/Snapshots.xcresult" -quiet > /dev/null 2>&1) || true
+  crash_check
+  exported() {
+    out=$fixture/$1
+    rm -rf "${out:?}"
+    mkdir -p "$out"
+    # Every attachment of the failed tests: the libraries' images aren't associated with the failure, so --only-failures
+    # would leave them out. Each test here fails, so none is a passing test's.
+    xcrun xcresulttool export attachments --path "$2" --output-path "$out" > /dev/null
+    if find "$out" -name '*.ips' | grep -q .; then echo "snapshots: a test crashed; see $2" >&2; exit 1; fi
+    # The files are named by ids the manifest holds: number them as uuids_out numbers the manifest, in the same order,
+    # so its exportedFileName still names them.
+    n=0
+    for id in $(grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' "$out/manifest.json" | tr 'a-f' 'A-F' | LC_ALL=C sort -u); do
+      n=$((n + 1))
+      for file in "$out/$id" "$out/$id".*; do
+        if [ -e "$file" ]; then mv "$file" "$out/$(printf '00000000-0000-0000-0000-%012d' "$n")${file#"$out/$id"}"; fi
+      done
+    done
+    for text in "$out"/manifest.json "$out"/*.txt; do
+      neutral < "$text" | uuids_out > "$results/text" && mv "$results/text" "$text"
+    done
+    xcrun xcresulttool get test-results tests --path "$2" | neutral | uuids_out > "$out/tests.json"
+  }
+  exported xcodebuild "$results/Snapshots.xcresult"
+  # The same tests through MobileBuildMCP, as Claude runs them.
+  mkdir -p "$fixture/.mobilebuildmcp"
+  printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'App'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/App.xcodeproj" "$simulator" "$derived" > "$fixture/.mobilebuildmcp/config.yaml"
+  node scripts/mcp-call.mjs "$fixture" test_sim > "$results/test_sim.txt"
+  crash_check
+  neutral < "$results/test_sim.txt" | uuids_out > "$fixture/test_sim.txt"
+  # MobileBuildMCP lists its files as a tree: the workspace's folder, then each file below it.
+  bundle=$(awk '/└── ~\/.*\/$/ { root = $NF } /result-bundles\/.*\.xcresult/ { for (i = 1; i <= NF; i++) if ($i ~ /\.xcresult$/) print root $i }' "$results/test_sim.txt" | head -1 | sed "s#^~#$HOME#")
+  exported mobilebuildmcp "$bundle"
+  rm -rf "${fixture:?}/.mobilebuildmcp" "${derived:?}" "${results:?}"
+  fixture_json "$fixture" pbxproj-groups xcodegen root
+  printf '{\n  "replay": "xcodebuild/ and mobilebuildmcp/ are xcresulttool export attachments (every attachment, since the images are not associated with the failure) and get test-results tests on one run each of three failing snapshot tests, from xcodebuild test and from MobileBuildMCP test_sim, whose MCP result is test_sim.txt; made on the Mac that generated them, tests read them and never render",\n  "swiftSnapshotTesting": "1.19.7",\n  "iOSSnapshotTestCase": "8.0.0",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$fixture/capture.json"
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
+capture_simulator
 repetitions
 coverage
 environment
+snapshots
 
 scripts/leaks.sh

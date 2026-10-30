@@ -13,7 +13,13 @@ One small app (a SwiftUI target and a unit-test target with a passing test, a se
 | Tuist | manifests and the generated workspace |
 | Tuist, not yet generated | manifests only |
 
-Each form sits at the repository root of its fixture and again under `ios/`. `adversarial/` holds projects shaped to trip tools up, such as a source file named `Project.swift`. `modular/` holds apps split into modules across projects: `tuist-modules` is a Tuist workspace of three module projects in a chain, App on Feature on Core, each with its own test target. `captures/` holds what tools answered about a real run, committed so tests replay it: `repetitions` is a result bundle's test tree after five runs of three tests, one passing every run, one failing every run and one failing on every other run. `coverage` is what `xccov` answered about one test run with coverage on: whether the bundle has coverage, the files it holds, and one file's per-line counts, where the test runs one branch of `price(for:)` and not the other. `environment` is what MobileBuildMCP answered, through MCP, about builds that fail on the Mac rather than in the code, each with the build log it names: a corrupt module in Clang's module cache, a corrupt one among the SDK's precompiled modules, and an iPhone simulator name no simulator has. Nothing nondeterministic runs outside the Mac that made it.
+Each form sits at the repository root of its fixture and again under `ios/`. `adversarial/` holds projects shaped to trip tools up, such as a source file named `Project.swift`. `modular/` holds apps split into modules across projects: `tuist-modules` is a Tuist workspace of three module projects in a chain, App on Feature on Core, each with its own test target. `captures/` holds what tools answered about a real run, committed so tests replay it: `repetitions` is a result bundle's test tree after five runs of three tests, one passing every run, one failing every run and one failing on every other run. `coverage` is what `xccov` answered about one test run with coverage on: whether the bundle has coverage, the files it holds, and one file's per-line counts, where the test runs one branch of `price(for:)` and not the other. `environment` is what MobileBuildMCP answered, through MCP, about builds that fail on the Mac rather than in the code, each with the build log it names: a corrupt module in Clang's module cache, a corrupt one among the SDK's precompiled modules, and an iPhone simulator name no simulator has. `snapshots` is three snapshot tests that fail, a square recorded red and rendered blue: swift-snapshot-testing under XCTest and under Swift Testing, and iOSSnapshotTestCase. It holds each failed test's attachments as `xcresulttool export attachments` gives them, from `xcodebuild test` and from MobileBuildMCP's `test_sim`. Nothing nondeterministic runs outside the Mac that made it.
+
+What the snapshot capture shows, with Xcode 27.2 and MobileBuildMCP 2.7.1:
+
+- Both libraries attach the reference, the failing render and the difference as images, and xcresulttool marks none of them as associated with the failure (`isAssociatedWithFailure: false`). Only the issue's text is. So `export attachments --only-failures` leaves the images out.
+- An image's suggested name is `<name>_<n>_<id>.png`: `reference`, `failure` and `difference` for swift-snapshot-testing, `Reference Image`, `Failed Image` and `Diffed Image` for iOSSnapshotTestCase. Under XCTest `<n>` counts 0, 1, 2 within one test; under Swift Testing each image is 0, in no set order.
+- swift-snapshot-testing's XCTest images are exported without a file extension, though each is a PNG and its suggested name ends `.png`.
 
 ## Layout
 
@@ -30,14 +36,36 @@ Each fixture has a `fixture.json`: its project definition, the generator and its
 
 ## Regenerating
 
-On a Mac with Xcode 27.2 or later and Node:
+On a Mac with Xcode 27.2 or later, Node, and a released iOS runtime (not a beta):
 
 ```sh
 brew install tuist xcodegen getsentry/xcodebuildmcp/mobilebuildmcp
 scripts/generate.sh --build
 ```
 
-`--build` also builds each form for testing, to prove it real. Regenerating keeps each fixture's expectations. It ends with `scripts/leaks.sh`, which fails when a fixture holds a path of the Mac that made it or the id of one of its devices or simulators; captures number those ids instead. The JSON forms' object IDs change on every run, because Xcode's tool picks them at random.
+`--build` also builds each form for testing, to prove it real. The captures run on a simulator of their own: an iPhone on the newest released iOS runtime, created for the run, booted once, and deleted at the end. A beta runtime's system apps can crash on boot, and nothing the captures do may crash anything on the Mac, so the run fails, naming them, when crash reports from that simulator appeared while it ran, except the known runtime crashes below, which it lists as ignored. Other reports that appear meanwhile, from the Mac's own apps, are listed without failing it. Regenerating keeps each fixture's expectations. It ends with `scripts/leaks.sh`, which fails when a fixture holds a path of the Mac that made it or the id of one of its devices or simulators; captures number those ids instead. The JSON forms' object IDs change on every run, because Xcode's tool picks them at random.
+
+## Known runtime crashes
+
+Crashes of Apple's runtime itself, which no capture causes. `generate.sh` lists them as "known Apple iOS 27.2 runtime crash, ignored" and goes on; `known_crash` holds them, and each entry goes once Apple's runtime no longer crashes.
+
+**iOS 27.2 (24B8117) on macOS 27.2 (26B123), Xcode 27.2, 2026-10-30.** On a fresh iPhone 18 Pro Max simulator, launching any app crashes AppIntentsLiveEntityService and SettingsSearchReindexService about 30 seconds later. Nothing needs building: launching only Settings and Safari does it. Each crash is an `EXC_BREAKPOINT` whose crashing thread is in `XPCPeerRequirement.hasEntitlement` → `__XPC_API_MISUSE__`, under `XPCSystem.Session.handleReceivedRequest`; launchd restarts the service, and it crashes again. They show no crash dialog on the Mac. The probe that showed it:
+
+| Time | Event |
+|---|---|
+| 15:15:58 | `simctl create`, then boot |
+| 15:16:52 | booted and 30 s passed: no crash |
+| 15:16:52 | `simctl launch com.apple.Preferences` |
+| 15:16:53 | `simctl launch com.apple.mobilesafari` |
+| 15:17:23 | SettingsSearchReindexService starts and crashes 0.2 s later |
+| 15:17:26 | AppIntentsLiveEntityService starts and crashes 0.3 s later |
+| 15:17:36 | AppIntentsLiveEntityService restarts and crashes again |
+
+The same crashes came under macOS 27.0.1, and after `xcodebuild test` launched an app whether it was signed ad hoc or not signed at all.
+
+**The same runtime, a fresh simulator, 2026-10-30.** During the snapshot capture's third test run (MobileBuildMCP's `test_sim`), assetsd, the Photos library service, started at 15:24:18 and aborted at 15:24:24 on an uncaught exception that PhotoLibraryServices threw in `PLLibraryServicesOperation` on the queue `PLLibraryServicesStateNode(…: prep-pre-migration)`: an `EXC_CRASH` with `SIGABRT`, about 3 seconds after the test run ended. Nothing the captures build uses Photos.
+
+An entry joins `known_crash` only for an Apple system process, with only Apple frames in its crashing thread, and with evidence that no capture's code is involved. If yet another Apple process crashes, the list is the wrong tool: let the fresh simulator settle longer after boot instead.
 
 ## How xcrew uses it
 
@@ -46,3 +74,5 @@ xcrew's CI checks this repository out at a pinned commit and checks each fixture
 ## Licence
 
 MIT. See [LICENSE](LICENSE).
+
+The snapshot capture's project depends on two packages, each pinned to an exact version and MIT-licensed: [swift-snapshot-testing](https://github.com/pointfreeco/swift-snapshot-testing) 1.19.7 (Point-Free) and [iOSSnapshotTestCase](https://github.com/uber/ios-snapshot-test-case) 8.0.0 (Uber). Neither is copied here; the project names them, and only the run that makes the capture fetches them.
