@@ -1,0 +1,269 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000030",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Synthesized Event 2026-10-30 at 03.55.14 PM",
+        "timestamp" : 1793372114.228
+      },
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000008",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Synthesized Event 2026-10-30 at 03.55.13 PM",
+        "timestamp" : 1793372113.894
+      },
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000021.mp4",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Screen Recording 2026-10-30 at 03.55.09 PM.mp4",
+        "timestamp" : 1793372109.393
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000014",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Synthesized Event 2026-10-30 at 03.55.49 PM",
+        "timestamp" : 1793372149.01
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000036",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Synthesized Event 2026-10-30 at 03.55.48 PM",
+        "timestamp" : 1793372148.678
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000032.mp4",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Screen Recording 2026-10-30 at 03.55.44 PM.mp4",
+        "timestamp" : 1793372144.445
+      }
+    ],
+    "testIdentifier" : "UITests/testFailsAfterTaps()",
+    "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testFailsAfterTaps"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000025.mp4",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Screen Recording 2026-10-30 at 03.55.14 PM.mp4",
+        "timestamp" : 1793372114.721
+      },
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000006.txt",
+        "isAssociatedWithFailure" : true,
+        "suggestedHumanReadableName" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000005.App",
+        "timestamp" : 1793372121.675
+      },
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000013",
+        "isAssociatedWithFailure" : true,
+        "suggestedHumanReadableName" : "UI Snapshot 2026-10-30 at 03.55.21 PM",
+        "timestamp" : 1793372121.675
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000039.mp4",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Screen Recording 2026-10-30 at 03.55.49 PM.mp4",
+        "timestamp" : 1793372149.517
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000037.txt",
+        "isAssociatedWithFailure" : true,
+        "suggestedHumanReadableName" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000010.App",
+        "timestamp" : 1793372156.747
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000012",
+        "isAssociatedWithFailure" : true,
+        "suggestedHumanReadableName" : "UI Snapshot 2026-10-30 at 03.55.56 PM",
+        "timestamp" : 1793372156.747
+      }
+    ],
+    "testIdentifier" : "UITests/testMissingElement()",
+    "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testMissingElement"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000026.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000027.App",
+        "timestamp" : 1793372169.444
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000018",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "UI Snapshot 2026-10-30 at 03.56.09 PM",
+        "timestamp" : 1793372169.444
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000001.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Debug description for `\"Plan A\" StaticText`_0_00000000-0000-0000-0000-000000000024.txt",
+        "timestamp" : 1793372169.427
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000004.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Debug description for `\"Plan A\" StaticText`_0_00000000-0000-0000-0000-000000000016.txt",
+        "timestamp" : 1793372168.505
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000035.mp4",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Screen Recording 2026-10-30 at 03.56.02 PM.mp4",
+        "timestamp" : 1793372162.501
+      }
+    ],
+    "testIdentifier" : "UITests/testPlanA()",
+    "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testPlanA"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000019.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000003.App",
+        "timestamp" : 1793372140.915
+      },
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000015",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "UI Snapshot 2026-10-30 at 03.55.40 PM",
+        "timestamp" : 1793372140.915
+      },
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000038.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000023.txt",
+        "timestamp" : 1793372140.902
+      },
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000020.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000034.txt",
+        "timestamp" : 1793372139.968
+      },
+      {
+        "configurationName" : "Plan A",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000007.mp4",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Screen Recording 2026-10-30 at 03.55.33 PM.mp4",
+        "timestamp" : 1793372133.971
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000028.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000009.App",
+        "timestamp" : 1793372176.848
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000033",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "UI Snapshot 2026-10-30 at 03.56.16 PM",
+        "timestamp" : 1793372176.848
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000022.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000002.txt",
+        "timestamp" : 1793372176.831
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000029.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Debug description for `\"Hello\" StaticText`_0_00000000-0000-0000-0000-000000000017.txt",
+        "timestamp" : 1793372175.903
+      },
+      {
+        "configurationName" : "Plan B",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000031.mp4",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Screen Recording 2026-10-30 at 03.56.09 PM.mp4",
+        "timestamp" : 1793372169.795
+      }
+    ],
+    "testIdentifier" : "UITests/testRenamedLabel()",
+    "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testRenamedLabel"
+  }
+]

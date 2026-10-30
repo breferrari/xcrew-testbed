@@ -1,0 +1,359 @@
+{
+  "testIdentifier" : "UITests/testMissingElement()",
+  "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testMissingElement",
+  "testName" : "testMissingElement()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Screen Recording 2026-10-30 at 03.55.14 PM.mp4",
+              "payloadId" : "0~50GEYAdanz3-fBQC2xf9VVsxA-Z9bYhwYpjlqu1wkSmlaSy4R0_nMqbS28PUG7iki6UcimO5cz7DS5Np4Fi2xQ==",
+              "timestamp" : 1793372114.721,
+              "userInfos" : [
+                {
+                  "key" : "scale",
+                  "value" : "3"
+                },
+                {
+                  "key" : "initialDeviceOrientation",
+                  "value" : "0"
+                },
+                {
+                  "key" : "initialInterfaceOrientation",
+                  "value" : "1"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000025"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372114.721,
+              "title" : "kXCTAttachmentScreenRecording"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372114.694,
+          "title" : "Start Test at 2026-10-30 15:55:14.694"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372114.722,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372114.724,
+                  "title" : "Terminate dev.xcrew.testbed.App:28311"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372115.987,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372118.251,
+                  "title" : "Wait for dev.xcrew.testbed.App to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372114.724,
+              "title" : "Launch dev.xcrew.testbed.App"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372114.724,
+          "title" : "Open dev.xcrew.testbed.App"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372119.58,
+              "title" : "Wait for dev.xcrew.testbed.App to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372120.63,
+                  "title" : "Find the \"checkout\" Button (retry 1)"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372121.659,
+                  "title" : "Find the \"checkout\" Button (retry 2)"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372119.582,
+              "title" : "Find the \"checkout\" Button"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372119.58,
+          "title" : "Tap \"checkout\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372121.669,
+          "title" : "Requesting snapshot of accessibility hierarchy for app with pid 28314"
+        },
+        {
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000005.App",
+              "payloadId" : "0~l_btbq72xjLzNXOKCpBfjYIPEy2iesyROqH15LfrqdxXjFUNMj7zI32Rs1y2sln_BEIAJb9n2NSIhPOX0Wi2fA==",
+              "timestamp" : 1793372121.675,
+              "uuid" : "00000000-0000-0000-0000-000000000006"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-30 at 03.55.21 PM",
+              "payloadId" : "0~DQMuxWK3Ycj5lOzFrrKrWIdlV40lSpN2EU1ITrP_XamkkXxKvI3Ji1nxghFKKRJU9xIF3_juOKFfNu_pw-ENMQ==",
+              "timestamp" : 1793372121.675,
+              "uuid" : "00000000-0000-0000-0000-000000000013"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372121.675,
+              "title" : "App UI hierarchy for dev.xcrew.testbed.App"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372121.675,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "title" : "UITests.testMissingElement()"
+            }
+          ],
+          "isAssociatedWithFailure" : true,
+          "startTime" : 1793372121.675,
+          "title" : "Failed to tap \"checkout\" Button: No matches found for Elements matching predicate '\"checkout\" IN identifiers' from input {(\n    Button, identifier: 'continue', label: 'Continue'\n)}"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372121.678,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "modelName" : "iPhone 18 Pro Max",
+        "osBuildNumber" : "24B8117",
+        "osVersion" : "27.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Plan A"
+      }
+    },
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Screen Recording 2026-10-30 at 03.55.49 PM.mp4",
+              "payloadId" : "0~PrdIYUTZGzyeXsI_OSoc84w7Lyw8FS0aBsouN2GQwMyEkgZkTf2sM-V5e4bx--OMMJ9iBRHJrYjOoykQrFnUUg==",
+              "timestamp" : 1793372149.517,
+              "userInfos" : [
+                {
+                  "key" : "scale",
+                  "value" : "3"
+                },
+                {
+                  "key" : "initialDeviceOrientation",
+                  "value" : "0"
+                },
+                {
+                  "key" : "initialInterfaceOrientation",
+                  "value" : "1"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000039"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372149.517,
+              "title" : "kXCTAttachmentScreenRecording"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372149.483,
+          "title" : "Start Test at 2026-10-30 15:55:49.483"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372149.519,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372149.523,
+                  "title" : "Terminate dev.xcrew.testbed.App:28685"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372150.847,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372153.296,
+                  "title" : "Wait for dev.xcrew.testbed.App to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372149.522,
+              "title" : "Launch dev.xcrew.testbed.App"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372149.522,
+          "title" : "Open dev.xcrew.testbed.App"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372154.645,
+              "title" : "Wait for dev.xcrew.testbed.App to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372155.703,
+                  "title" : "Find the \"checkout\" Button (retry 1)"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372156.727,
+                  "title" : "Find the \"checkout\" Button (retry 2)"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372154.649,
+              "title" : "Find the \"checkout\" Button"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372154.643,
+          "title" : "Tap \"checkout\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372156.739,
+          "title" : "Requesting snapshot of accessibility hierarchy for app with pid 28689"
+        },
+        {
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "App UI hierarchy for dev.xcrew.testbed_0_00000000-0000-0000-0000-000000000010.App",
+              "payloadId" : "0~Nnm84m97zgwDrSDBJ2xAFlddjgFou_Akg6FecP2iAYfKXshV-qtxWxyGR05s6a_Jki9BEERKTSEF3CiZoqbieg==",
+              "timestamp" : 1793372156.747,
+              "uuid" : "00000000-0000-0000-0000-000000000037"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-30 at 03.55.56 PM",
+              "payloadId" : "0~ftfeLn1ZRUIGP6xkAAfOeUnMeJYe4C3oGp3TcPGZ_OmCi_ljZe_cBx2BmHpQjef566qwQFegS3YGcLGoItSnCg==",
+              "timestamp" : 1793372156.747,
+              "uuid" : "00000000-0000-0000-0000-000000000012"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372156.747,
+              "title" : "App UI hierarchy for dev.xcrew.testbed.App"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372156.747,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "title" : "UITests.testMissingElement()"
+            }
+          ],
+          "isAssociatedWithFailure" : true,
+          "startTime" : 1793372156.747,
+          "title" : "Failed to tap \"checkout\" Button: No matches found for Elements matching predicate '\"checkout\" IN identifiers' from input {(\n    Button, identifier: 'continue', label: 'Continue'\n)}"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372156.751,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00000000-0000-0000-0000-000000000011",
+        "deviceName" : "xcrew-testbed",
+        "modelName" : "iPhone 18 Pro Max",
+        "osBuildNumber" : "24B8117",
+        "osVersion" : "27.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "2",
+        "configurationName" : "Plan B"
+      }
+    }
+  ]
+}

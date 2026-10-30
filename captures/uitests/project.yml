@@ -1,0 +1,33 @@
+name: App
+options:
+  bundleIdPrefix: dev.xcrew.testbed
+  deploymentTarget:
+    iOS: "18.0"
+targets:
+  App:
+    type: application
+    platform: iOS
+    sources: [App]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_ALLOWED: YES
+  UITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [UITests]
+    dependencies:
+      - target: App
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_ALLOWED: YES
+schemes:
+  App:
+    build:
+      targets:
+        App: all
+    test:
+      testPlans:
+        - path: App.xctestplan
+          defaultPlan: true

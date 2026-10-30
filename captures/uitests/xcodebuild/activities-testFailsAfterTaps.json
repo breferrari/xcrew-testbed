@@ -1,0 +1,559 @@
+{
+  "testIdentifier" : "UITests/testFailsAfterTaps()",
+  "testIdentifierURL" : "test://com.apple.xcode/App/UITests/UITests/testFailsAfterTaps",
+  "testName" : "testFailsAfterTaps()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Screen Recording 2026-10-30 at 03.53.22 PM.mp4",
+              "payloadId" : "0~St_8f8cWE059yKgXsj_qO-3smr1XKwIwLFp7YhXOFaTVFQFabYNX0_IaGvqQFed0oVNBG_ZMNqf_LoJBfwFlxQ==",
+              "timestamp" : 1793372002.291,
+              "userInfos" : [
+                {
+                  "key" : "initialDeviceOrientation",
+                  "value" : "0"
+                },
+                {
+                  "key" : "scale",
+                  "value" : "3"
+                },
+                {
+                  "key" : "initialInterfaceOrientation",
+                  "value" : "1"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000033"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372002.291,
+              "title" : "kXCTAttachmentScreenRecording"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372002.063,
+          "title" : "Start Test at 2026-10-30 15:53:22.063"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372002.292,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372004.832,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372007.436,
+                  "title" : "Wait for dev.xcrew.testbed.App to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372002.295,
+              "title" : "Launch dev.xcrew.testbed.App"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372002.295,
+          "title" : "Open dev.xcrew.testbed.App"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-10-30 at 03.53.29 PM",
+              "payloadId" : "0~XIcQxVQC7mjmaOefenApESkei7nb_wXKFV9oSqBV_itdO9dd_HO651YM3NlE5N_7GwV0Kt0WOeui__FwMhv2Xw==",
+              "timestamp" : 1793372009.383,
+              "userInfos" : [
+                {
+                  "key" : "Scale",
+                  "value" : "3"
+                },
+                {
+                  "key" : "DisplayID",
+                  "value" : "1"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000029"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372008.809,
+              "title" : "Wait for dev.xcrew.testbed.App to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372008.811,
+              "title" : "Find the \"continue\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372008.889,
+              "title" : "Check for interrupting elements affecting \"continue\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-10-30 at 03.53.29 PM",
+                  "payloadId" : "0~XIcQxVQC7mjmaOefenApESkei7nb_wXKFV9oSqBV_itdO9dd_HO651YM3NlE5N_7GwV0Kt0WOeui__FwMhv2Xw==",
+                  "timestamp" : 1793372009.383,
+                  "userInfos" : [
+                    {
+                      "key" : "Scale",
+                      "value" : "3"
+                    },
+                    {
+                      "key" : "DisplayID",
+                      "value" : "1"
+                    }
+                  ],
+                  "uuid" : "00000000-0000-0000-0000-000000000029"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372009.383,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372008.907,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372009.383,
+              "title" : "Wait for dev.xcrew.testbed.App to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372008.809,
+          "title" : "Tap \"continue\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-10-30 at 03.53.29 PM",
+              "payloadId" : "0~XIcQxVQC7mjmaOefenApESkei7nb_wXKFV9oSqBV_itdO9dd_HO651YM3NlE5N_7GwV0Kt0WOeui__FwMhv2Xw==",
+              "timestamp" : 1793372009.728,
+              "userInfos" : [
+                {
+                  "key" : "Scale",
+                  "value" : "3"
+                },
+                {
+                  "key" : "DisplayID",
+                  "value" : "1"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000035"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372009.386,
+              "title" : "Wait for dev.xcrew.testbed.App to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372009.387,
+              "title" : "Find the \"continue\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372009.405,
+              "title" : "Check for interrupting elements affecting \"continue\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-10-30 at 03.53.29 PM",
+                  "payloadId" : "0~XIcQxVQC7mjmaOefenApESkei7nb_wXKFV9oSqBV_itdO9dd_HO651YM3NlE5N_7GwV0Kt0WOeui__FwMhv2Xw==",
+                  "timestamp" : 1793372009.728,
+                  "userInfos" : [
+                    {
+                      "key" : "Scale",
+                      "value" : "3"
+                    },
+                    {
+                      "key" : "DisplayID",
+                      "value" : "1"
+                    }
+                  ],
+                  "uuid" : "00000000-0000-0000-0000-000000000035"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372009.728,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372009.431,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372009.729,
+              "title" : "Wait for dev.xcrew.testbed.App to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372009.386,
+          "title" : "Tap \"continue\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372009.733,
+          "title" : "Find the \"title\" StaticText"
+        },
+        {
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "title" : "UITests.testFailsAfterTaps()"
+            }
+          ],
+          "isAssociatedWithFailure" : true,
+          "startTime" : 1793372009.75,
+          "title" : "XCTAssertEqual failed: (\"Done\") is not equal to (\"Welcome\")"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372010.013,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00000000-0000-0000-0000-000000000013",
+        "deviceName" : "xcrew-testbed",
+        "modelName" : "iPhone 18 Pro Max",
+        "osBuildNumber" : "24B8117",
+        "osVersion" : "27.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Plan A"
+      }
+    },
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Screen Recording 2026-10-30 at 03.54.01 PM.mp4",
+              "payloadId" : "0~VKgwEjvejx7WN84cSTyjU3F2blFH5hlg0fwFCjw0s0jZwYzz-lipRSqz0wU2Vrr7SKSt1cMWAlVmGLsHJHwf2w==",
+              "timestamp" : 1793372041.324,
+              "userInfos" : [
+                {
+                  "key" : "initialInterfaceOrientation",
+                  "value" : "1"
+                },
+                {
+                  "key" : "initialDeviceOrientation",
+                  "value" : "0"
+                },
+                {
+                  "key" : "scale",
+                  "value" : "3"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000016"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372041.324,
+              "title" : "kXCTAttachmentScreenRecording"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372041.307,
+          "title" : "Start Test at 2026-10-30 15:54:01.306"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372041.324,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372041.553,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372043.843,
+                  "title" : "Wait for dev.xcrew.testbed.App to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372041.327,
+              "title" : "Launch dev.xcrew.testbed.App"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372041.327,
+          "title" : "Open dev.xcrew.testbed.App"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-10-30 at 03.54.05 PM",
+              "payloadId" : "0~mLXsm9TyCt60y8-evhteV7Bbk3-U2szA1lmhFc-X4WwoHQ-6923nzTG3qo8MhfxUFVeekPAXgeTWju98FBeo8w==",
+              "timestamp" : 1793372045.616,
+              "userInfos" : [
+                {
+                  "key" : "DisplayID",
+                  "value" : "1"
+                },
+                {
+                  "key" : "Scale",
+                  "value" : "3"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000007"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372045.213,
+              "title" : "Wait for dev.xcrew.testbed.App to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372045.22,
+              "title" : "Find the \"continue\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372045.264,
+              "title" : "Check for interrupting elements affecting \"continue\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-10-30 at 03.54.05 PM",
+                  "payloadId" : "0~mLXsm9TyCt60y8-evhteV7Bbk3-U2szA1lmhFc-X4WwoHQ-6923nzTG3qo8MhfxUFVeekPAXgeTWju98FBeo8w==",
+                  "timestamp" : 1793372045.616,
+                  "userInfos" : [
+                    {
+                      "key" : "DisplayID",
+                      "value" : "1"
+                    },
+                    {
+                      "key" : "Scale",
+                      "value" : "3"
+                    }
+                  ],
+                  "uuid" : "00000000-0000-0000-0000-000000000007"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372045.616,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372045.281,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372045.616,
+              "title" : "Wait for dev.xcrew.testbed.App to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372045.213,
+          "title" : "Tap \"continue\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-10-30 at 03.54.05 PM",
+              "payloadId" : "0~mLXsm9TyCt60y8-evhteV7Bbk3-U2szA1lmhFc-X4WwoHQ-6923nzTG3qo8MhfxUFVeekPAXgeTWju98FBeo8w==",
+              "timestamp" : 1793372045.947,
+              "userInfos" : [
+                {
+                  "key" : "DisplayID",
+                  "value" : "1"
+                },
+                {
+                  "key" : "Scale",
+                  "value" : "3"
+                }
+              ],
+              "uuid" : "00000000-0000-0000-0000-000000000022"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372045.619,
+              "title" : "Wait for dev.xcrew.testbed.App to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372045.622,
+              "title" : "Find the \"continue\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372045.637,
+              "title" : "Check for interrupting elements affecting \"continue\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-10-30 at 03.54.05 PM",
+                  "payloadId" : "0~mLXsm9TyCt60y8-evhteV7Bbk3-U2szA1lmhFc-X4WwoHQ-6923nzTG3qo8MhfxUFVeekPAXgeTWju98FBeo8w==",
+                  "timestamp" : 1793372045.947,
+                  "userInfos" : [
+                    {
+                      "key" : "DisplayID",
+                      "value" : "1"
+                    },
+                    {
+                      "key" : "Scale",
+                      "value" : "3"
+                    }
+                  ],
+                  "uuid" : "00000000-0000-0000-0000-000000000022"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793372045.947,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372045.65,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793372045.951,
+              "title" : "Wait for dev.xcrew.testbed.App to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372045.618,
+          "title" : "Tap \"continue\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372045.954,
+          "title" : "Find the \"title\" StaticText"
+        },
+        {
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "title" : "UITests.testFailsAfterTaps()"
+            }
+          ],
+          "isAssociatedWithFailure" : true,
+          "startTime" : 1793372045.964,
+          "title" : "XCTAssertEqual failed: (\"Done\") is not equal to (\"Welcome\")"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793372046.003,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00000000-0000-0000-0000-000000000013",
+        "deviceName" : "xcrew-testbed",
+        "modelName" : "iPhone 18 Pro Max",
+        "osBuildNumber" : "24B8117",
+        "osVersion" : "27.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "2",
+        "configurationName" : "Plan B"
+      }
+    }
+  ]
+}

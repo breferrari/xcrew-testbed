@@ -712,23 +712,24 @@ EOF
   echo "$fixture"
 }
 
-# Each uuid in a folder's text files and file names, numbered as uuids_out numbers them, but once across them all, so
-# an attachment's file, its manifest entry and its activity keep naming each other.
+# Each uuid in a folder's files and file names, numbered as uuids_out numbers them, but once across them all, so an
+# attachment's file, its manifest entry and its activity keep naming each other. Binary files count too: XCTest's
+# archived UI snapshots hold the device's id as text, and a number is as long as the id it replaces, so they stay valid.
 numbered() {
   perl -e '
     my $dir = shift;
     my $u = qr/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/;
     opendir(my $d, $dir) or die "$dir: $!"; my @files = grep { -f "$dir/$_" } readdir $d; closedir $d;
-    my (%seen, %text);
+    my (%seen, %body);
     for my $f (@files) {
       $seen{uc $_} = 1 for $f =~ /($u)/g;
-      next unless -T "$dir/$f";
-      open my $h, "<", "$dir/$f" or die; local $/; $text{$f} = <$h>; close $h;
-      $seen{uc $_} = 1 for $text{$f} =~ /($u)/g;
+      open my $h, "<:raw", "$dir/$f" or die; local $/; $body{$f} = <$h>; close $h;
+      $seen{uc $_} = 1 for $body{$f} =~ /($u)/g;
     }
     my $n = 0; my %id = map { $_ => sprintf("00000000-0000-0000-0000-%012d", ++$n) } sort keys %seen;
     for my $f (@files) {
-      if (exists $text{$f}) { (my $t = $text{$f}) =~ s/($u)/$id{uc $1}/g; open my $h, ">", "$dir/$f" or die; print $h $t; close $h }
+      (my $t = $body{$f}) =~ s/($u)/$id{uc $1}/g;
+      if ($t ne $body{$f}) { open my $h, ">:raw", "$dir/$f" or die; print $h $t; close $h }
       (my $g = $f) =~ s/($u)/$id{uc $1}/g;
       rename "$dir/$f", "$dir/$g" or die if $g ne $f;
     }

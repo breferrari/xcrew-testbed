@@ -1,0 +1,4 @@
+Query chain:
+ →Find: Target Application 'dev.xcrew.testbed.App'
+  ↪︎Find: Descendants matching type StaticText
+    ↪︎Find: Elements matching predicate '"Hello" IN identifiers'
