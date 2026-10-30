@@ -3,12 +3,12 @@
 
 Errors (2):
 
-  ✗ file '/testbed/DerivedData/SDKExplicitPrecompiledModules/SwiftShims-1GN4L4DWM2KPMIXBXP7DQ4TF0.pcm' is not a valid module file: file too small to contain precompiled file magic
+  ✗ file '/testbed/DerivedData/SDKExplicitPrecompiledModules/SwiftShims-AJ7JTYWMLFU4J1AJ05PEF6BDO.pcm' is not a valid module file: file too small to contain precompiled file magic
     truncated or malformed object (offset field plus size field of section 1 in LC_SEGMENT_64 command 0 extends past the end of the file)truncated or malformed object (offset field plus size field of section 1 in LC_SEGMENT_64 command 0 extends past the end of the file)<unknown>:0
 
   ✗ missing required module 'SwiftShims'
     <unknown>:0
 
-❌ Build failed. (⏱️ 1.6s)
+❌ Build failed. (⏱️ 1.7s)
   └ Files:
-     └── ~/Library/Developer/MobileBuildMCP/workspaces/environment-f963804cb4be/logs/build_sim_2026-10-30T07-36-09-448Z_pid22549_34d20516.log — Build Logs
+     └── ~/Library/Developer/MobileBuildMCP/workspaces/environment-f963804cb4be/logs/build_sim_2026-10-30T07-45-57-904Z_pid36199_db529ace.log — Build Logs

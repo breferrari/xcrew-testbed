@@ -2,7 +2,7 @@
   "devices" : [
     {
       "architecture" : "arm64",
-      "deviceId" : "18BA4B25-8175-4F0F-B002-8AB49DA502E2",
+      "deviceId" : "00000000-0000-0000-0000-000000000001",
       "deviceName" : "iPhone 17",
       "modelName" : "iPhone 17",
       "osBuildNumber" : "24B5110a",
@@ -20,11 +20,30 @@
                 {
                   "children" : [
                     {
-                      "duration" : "0,0021s",
-                      "durationInSeconds" : 0.0020759105682373047,
+                      "children" : [
+                        {
+                          "name" : "XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - fails on every other run",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/repetitions/AppTests/RepetitionTests.swift",
+                            "lineNumber" : 16
+                          }
+                        }
+                      ],
+                      "duration" : "0,25s",
+                      "durationInSeconds" : 0.2518119812011719,
                       "name" : "Repetition 1",
                       "nodeIdentifier" : "1",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=1",
+                      "nodeType" : "Repetition",
+                      "result" : "Failed"
+                    },
+                    {
+                      "duration" : "0,0018s",
+                      "durationInSeconds" : 0.0018290281295776367,
+                      "name" : "Repetition 2",
+                      "nodeIdentifier" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=2",
                       "nodeType" : "Repetition",
                       "result" : "Passed"
                     },
@@ -39,20 +58,20 @@
                           }
                         }
                       ],
-                      "duration" : "0,025s",
-                      "durationInSeconds" : 0.025169968605041504,
-                      "name" : "Repetition 2",
-                      "nodeIdentifier" : "2",
-                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=2",
+                      "duration" : "0,023s",
+                      "durationInSeconds" : 0.022931933403015137,
+                      "name" : "Repetition 3",
+                      "nodeIdentifier" : "3",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=3",
                       "nodeType" : "Repetition",
                       "result" : "Failed"
                     },
                     {
                       "duration" : "0,0016s",
-                      "durationInSeconds" : 0.0016230344772338867,
-                      "name" : "Repetition 3",
-                      "nodeIdentifier" : "3",
-                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=3",
+                      "durationInSeconds" : 0.00164794921875,
+                      "name" : "Repetition 4",
+                      "nodeIdentifier" : "4",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=4",
                       "nodeType" : "Repetition",
                       "result" : "Passed"
                     },
@@ -67,27 +86,18 @@
                           }
                         }
                       ],
-                      "duration" : "0,022s",
-                      "durationInSeconds" : 0.021858930587768555,
-                      "name" : "Repetition 4",
-                      "nodeIdentifier" : "4",
-                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=4",
-                      "nodeType" : "Repetition",
-                      "result" : "Failed"
-                    },
-                    {
-                      "duration" : "0,0019s",
-                      "durationInSeconds" : 0.001927018165588379,
+                      "duration" : "0,021s",
+                      "durationInSeconds" : 0.021330952644348145,
                       "name" : "Repetition 5",
                       "nodeIdentifier" : "5",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=5",
                       "nodeType" : "Repetition",
-                      "result" : "Passed"
+                      "result" : "Failed"
                     }
                   ],
-                  "details" : "3/5 (60%) passed, 2/5 (40%) failed",
-                  "duration" : "0,011s",
-                  "durationInSeconds" : 0.010530972480773925,
+                  "details" : "2/5 (40%) passed, 3/5 (60%) failed",
+                  "duration" : "0,06s",
+                  "durationInSeconds" : 0.059910368919372556,
                   "name" : "testFailsEveryOtherRun()",
                   "nodeIdentifier" : "RepetitionTests/testFailsEveryOtherRun()",
                   "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun",
@@ -107,8 +117,8 @@
                           }
                         }
                       ],
-                      "duration" : "0,23s",
-                      "durationInSeconds" : 0.2256159782409668,
+                      "duration" : "0,0017s",
+                      "durationInSeconds" : 0.001685023307800293,
                       "name" : "Repetition 1",
                       "nodeIdentifier" : "1",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun?i=1",
@@ -126,8 +136,8 @@
                           }
                         }
                       ],
-                      "duration" : "0,0021s",
-                      "durationInSeconds" : 0.0021370649337768555,
+                      "duration" : "0,025s",
+                      "durationInSeconds" : 0.02487194538116455,
                       "name" : "Repetition 2",
                       "nodeIdentifier" : "2",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun?i=2",
@@ -145,8 +155,8 @@
                           }
                         }
                       ],
-                      "duration" : "0,02s",
-                      "durationInSeconds" : 0.01979506015777588,
+                      "duration" : "0,0018s",
+                      "durationInSeconds" : 0.0018099546432495117,
                       "name" : "Repetition 3",
                       "nodeIdentifier" : "3",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun?i=3",
@@ -164,8 +174,8 @@
                           }
                         }
                       ],
-                      "duration" : "0,0019s",
-                      "durationInSeconds" : 0.0018880367279052734,
+                      "duration" : "0,021s",
+                      "durationInSeconds" : 0.020735979080200195,
                       "name" : "Repetition 4",
                       "nodeIdentifier" : "4",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun?i=4",
@@ -183,8 +193,8 @@
                           }
                         }
                       ],
-                      "duration" : "0,022s",
-                      "durationInSeconds" : 0.02157902717590332,
+                      "duration" : "0,0018s",
+                      "durationInSeconds" : 0.0017789602279663086,
                       "name" : "Repetition 5",
                       "nodeIdentifier" : "5",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun?i=5",
@@ -192,8 +202,8 @@
                       "result" : "Failed"
                     }
                   ],
-                  "duration" : "0,054s",
-                  "durationInSeconds" : 0.054203033447265625,
+                  "duration" : "0,01s",
+                  "durationInSeconds" : 0.010176372528076173,
                   "name" : "testFailsEveryRun()",
                   "nodeIdentifier" : "RepetitionTests/testFailsEveryRun()",
                   "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun",
@@ -203,8 +213,8 @@
                 {
                   "children" : [
                     {
-                      "duration" : "0,00044s",
-                      "durationInSeconds" : 0.0004400014877319336,
+                      "duration" : "0,00038s",
+                      "durationInSeconds" : 0.0003820657730102539,
                       "name" : "Repetition 1",
                       "nodeIdentifier" : "1",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun?i=1",
@@ -212,8 +222,8 @@
                       "result" : "Passed"
                     },
                     {
-                      "duration" : "0,00052s",
-                      "durationInSeconds" : 0.0005229711532592773,
+                      "duration" : "0,00071s",
+                      "durationInSeconds" : 0.0007109642028808594,
                       "name" : "Repetition 2",
                       "nodeIdentifier" : "2",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun?i=2",
@@ -221,8 +231,8 @@
                       "result" : "Passed"
                     },
                     {
-                      "duration" : "0,00043s",
-                      "durationInSeconds" : 0.00043201446533203125,
+                      "duration" : "0,00059s",
+                      "durationInSeconds" : 0.0005910396575927734,
                       "name" : "Repetition 3",
                       "nodeIdentifier" : "3",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun?i=3",
@@ -230,8 +240,8 @@
                       "result" : "Passed"
                     },
                     {
-                      "duration" : "0,00049s",
-                      "durationInSeconds" : 0.000491023063659668,
+                      "duration" : "0,00063s",
+                      "durationInSeconds" : 0.0006309747695922852,
                       "name" : "Repetition 4",
                       "nodeIdentifier" : "4",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun?i=4",
@@ -239,8 +249,8 @@
                       "result" : "Passed"
                     },
                     {
-                      "duration" : "0,00049s",
-                      "durationInSeconds" : 0.0004889965057373047,
+                      "duration" : "0,00045s",
+                      "durationInSeconds" : 0.0004520416259765625,
                       "name" : "Repetition 5",
                       "nodeIdentifier" : "5",
                       "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun?i=5",
@@ -248,8 +258,8 @@
                       "result" : "Passed"
                     }
                   ],
-                  "duration" : "0,00048s",
-                  "durationInSeconds" : 0.00047500133514404296,
+                  "duration" : "0,00055s",
+                  "durationInSeconds" : 0.0005534172058105468,
                   "name" : "testPassesEveryRun()",
                   "nodeIdentifier" : "RepetitionTests/testPassesEveryRun()",
                   "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun",
