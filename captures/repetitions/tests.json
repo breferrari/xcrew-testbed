@@ -1,0 +1,283 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "18BA4B25-8175-4F0F-B002-8AB49DA502E2",
+      "deviceName" : "iPhone 17",
+      "modelName" : "iPhone 17",
+      "osBuildNumber" : "24B5110a",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,0021s",
+                      "durationInSeconds" : 0.0020759105682373047,
+                      "name" : "Repetition 1",
+                      "nodeIdentifier" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=1",
+                      "nodeType" : "Repetition",
+                      "result" : "Passed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - fails on every other run",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/repetitions/AppTests/RepetitionTests.swift",
+                            "lineNumber" : 16
+                          }
+                        }
+                      ],
+                      "duration" : "0,025s",
+                      "durationInSeconds" : 0.025169968605041504,
+                      "name" : "Repetition 2",
+                      "nodeIdentifier" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=2",
+                      "nodeType" : "Repetition",
+                      "result" : "Failed"
+                    },
+                    {
+                      "duration" : "0,0016s",
+                      "durationInSeconds" : 0.0016230344772338867,
+                      "name" : "Repetition 3",
+                      "nodeIdentifier" : "3",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=3",
+                      "nodeType" : "Repetition",
+                      "result" : "Passed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - fails on every other run",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/repetitions/AppTests/RepetitionTests.swift",
+                            "lineNumber" : 16
+                          }
+                        }
+                      ],
+                      "duration" : "0,022s",
+                      "durationInSeconds" : 0.021858930587768555,
+                      "name" : "Repetition 4",
+                      "nodeIdentifier" : "4",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=4",
+                      "nodeType" : "Repetition",
+                      "result" : "Failed"
+                    },
+                    {
+                      "duration" : "0,0019s",
+                      "durationInSeconds" : 0.001927018165588379,
+                      "name" : "Repetition 5",
+                      "nodeIdentifier" : "5",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun?i=5",
+                      "nodeType" : "Repetition",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "details" : "3/5 (60%) passed, 2/5 (40%) failed",
+                  "duration" : "0,011s",
+                  "durationInSeconds" : 0.010530972480773925,
+                  "name" : "testFailsEveryOtherRun()",
+                  "nodeIdentifier" : "RepetitionTests/testFailsEveryOtherRun()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryOtherRun",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "children" : [
+                    {
+                      "children" : [
+                        {
+                          "name" : "failed - fails on every run",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/repetitions/AppTests/RepetitionTests.swift",
+                            "lineNumber" : 9
+                          }
+                        }
+                      ],
+                      "duration" : "0,23s",
+                      "durationInSeconds" : 0.2256159782409668,
+                      "name" : "Repetition 1",
+                      "nodeIdentifier" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun?i=1",
+                      "nodeType" : "Repetition",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "failed - fails on every run",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/repetitions/AppTests/RepetitionTests.swift",
+                            "lineNumber" : 9
+                          }
+                        }
+                      ],
+                      "duration" : "0,0021s",
+                      "durationInSeconds" : 0.0021370649337768555,
+                      "name" : "Repetition 2",
+                      "nodeIdentifier" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun?i=2",
+                      "nodeType" : "Repetition",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "failed - fails on every run",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/repetitions/AppTests/RepetitionTests.swift",
+                            "lineNumber" : 9
+                          }
+                        }
+                      ],
+                      "duration" : "0,02s",
+                      "durationInSeconds" : 0.01979506015777588,
+                      "name" : "Repetition 3",
+                      "nodeIdentifier" : "3",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun?i=3",
+                      "nodeType" : "Repetition",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "failed - fails on every run",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/repetitions/AppTests/RepetitionTests.swift",
+                            "lineNumber" : 9
+                          }
+                        }
+                      ],
+                      "duration" : "0,0019s",
+                      "durationInSeconds" : 0.0018880367279052734,
+                      "name" : "Repetition 4",
+                      "nodeIdentifier" : "4",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun?i=4",
+                      "nodeType" : "Repetition",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "failed - fails on every run",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/testbed/captures/repetitions/AppTests/RepetitionTests.swift",
+                            "lineNumber" : 9
+                          }
+                        }
+                      ],
+                      "duration" : "0,022s",
+                      "durationInSeconds" : 0.02157902717590332,
+                      "name" : "Repetition 5",
+                      "nodeIdentifier" : "5",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun?i=5",
+                      "nodeType" : "Repetition",
+                      "result" : "Failed"
+                    }
+                  ],
+                  "duration" : "0,054s",
+                  "durationInSeconds" : 0.054203033447265625,
+                  "name" : "testFailsEveryRun()",
+                  "nodeIdentifier" : "RepetitionTests/testFailsEveryRun()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testFailsEveryRun",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,00044s",
+                      "durationInSeconds" : 0.0004400014877319336,
+                      "name" : "Repetition 1",
+                      "nodeIdentifier" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun?i=1",
+                      "nodeType" : "Repetition",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00052s",
+                      "durationInSeconds" : 0.0005229711532592773,
+                      "name" : "Repetition 2",
+                      "nodeIdentifier" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun?i=2",
+                      "nodeType" : "Repetition",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00043s",
+                      "durationInSeconds" : 0.00043201446533203125,
+                      "name" : "Repetition 3",
+                      "nodeIdentifier" : "3",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun?i=3",
+                      "nodeType" : "Repetition",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00049s",
+                      "durationInSeconds" : 0.000491023063659668,
+                      "name" : "Repetition 4",
+                      "nodeIdentifier" : "4",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun?i=4",
+                      "nodeType" : "Repetition",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00049s",
+                      "durationInSeconds" : 0.0004889965057373047,
+                      "name" : "Repetition 5",
+                      "nodeIdentifier" : "5",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun?i=5",
+                      "nodeType" : "Repetition",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,00048s",
+                  "durationInSeconds" : 0.00047500133514404296,
+                  "name" : "testPassesEveryRun()",
+                  "nodeIdentifier" : "RepetitionTests/testPassesEveryRun()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests/testPassesEveryRun",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "RepetitionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests/RepetitionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "AppTests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/App/AppTests",
+          "nodeType" : "Unit test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "App",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}
