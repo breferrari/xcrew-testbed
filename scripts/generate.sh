@@ -1143,10 +1143,11 @@ field_captures() {
   results=$(mktemp -d)
   resolved=$(cd "$work" && pwd -P)
   # Each folder in every spelling a tool writes it: resolved (`/private/var/…`) and as written (`/var/…`), and each
-  # with JSON's escaped slashes, the resolved first since it holds the written one.
+  # with JSON's escaped slashes, the resolved first since it holds the written one. Then any user's home folder, as a
+  # crash log writes macOS's own `USER` placeholder for one.
   neutral() {
-    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g }' \
-      "$resolved" /testbed/field "$work" /testbed/field "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/home \
+    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
+      "$resolved" /testbed/field "$work" /testbed/field "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
       "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
   }
   mkdir -p "$work/.mobilebuildmcp"
