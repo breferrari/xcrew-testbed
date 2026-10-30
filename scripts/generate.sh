@@ -471,6 +471,8 @@ capture_simulator() {
   # shellcheck disable=SC2086 # two words: the device type and the runtime
   simulator_id=$(xcrun simctl create "$simulator" $chosen)
   crash_marker=$(mktemp)
+  # The reports a step expected (crash_check's argument), excused for the rest of the run and nothing else.
+  expected_reports=$(mktemp)
   trap finish_simulator EXIT
   xcrun simctl boot "$simulator_id"
   xcrun simctl bootstatus "$simulator_id" -b > /dev/null
@@ -512,6 +514,7 @@ simulator_crashes() {
   find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null | while IFS= read -r report; do
     if [ -n "${shutdown_marker:-}" ] && [ "$report" -nt "$shutdown_marker" ] && grep -q -F '"signal":"SIGKILL"' "$report"; then continue; fi
     grep -q -F "$simulator_id" "$report" || continue
+    if [ -n "${expected_reports:-}" ] && grep -q -x -F "$report" "$expected_reports"; then continue; fi
     if known_crash "$report"; then
       echo "generate.sh: known Apple iOS 27.2 runtime crash, ignored: $report" >&2
     else
@@ -522,10 +525,35 @@ simulator_crashes() {
 
 # Stops the run at the first crash report that names the capture simulator; the trap still deletes it.
 crash_check() {
-  if simulator_crashes | grep -q .; then
+  found=$(simulator_crashes)
+  # A step that crashes a test on purpose names the test: exactly one report of the test runner with that test in its
+  # crashing thread is excused, for that step alone. Any other crash, then or later, stops the run as ever.
+  if [ -n "${1:-}" ] && [ -n "$found" ]; then
+    matching=$(printf '%s\n' "$found" | while IFS= read -r report; do
+      if expected_crash "$report" "$1"; then echo "$report"; fi
+    done)
+    if [ "$(printf '%s' "$matching" | grep -c .)" = 1 ]; then
+      echo "generate.sh: the expected crash of $1, excused for this step: $matching" >&2
+      printf '%s\n' "$matching" >> "$expected_reports"
+      found=$(printf '%s\n' "$found" | grep -v -x -F "$matching" || true)
+    fi
+  fi
+  if [ -n "$found" ]; then
     echo "generate.sh: stopping: the capture simulator ($simulator_id) crashed" >&2
+    printf '%s\n' "$found" >&2
     exit 1
   fi
+}
+
+# Whether a crash report is the test runner's, with the test `$2` in its crashing thread's frames.
+expected_crash() {
+  node -e '
+    const text = require("fs").readFileSync(process.argv[1], "utf8")
+    const report = JSON.parse(text.slice(text.indexOf("\n") + 1))
+    const thread = (report.threads ?? []).find(t => t.triggered) ?? {}
+    const runner = /xctest|Runner/.test(report.procName ?? "")
+    process.exit(runner && (thread.frames ?? []).some(f => (f.symbol ?? "").includes(process.argv[2])) ? 0 : 1)
+  ' "$1" "$2" 2> /dev/null
 }
 
 finish_simulator() {
@@ -542,7 +570,7 @@ finish_simulator() {
   others=$(find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null | while IFS= read -r report; do
     grep -q -F "$simulator_id" "$report" || echo "$report"
   done)
-  rm -f "$crash_marker" "$shutdown_marker"
+  rm -f "$crash_marker" "$shutdown_marker" "$expected_reports"
   if [ -n "$others" ]; then
     echo "generate.sh: other crash reports appeared during the run, not the capture simulator's:" >&2
     echo "$others" >&2
@@ -655,10 +683,11 @@ environment() {
   derived=$(mktemp -d)
   results=$(mktemp -d)
   resolved=$(cd "$fixture" && pwd -P)
-  # The resolved spellings first, since each holds the written one (`/private/var/…` holds `/var/…`).
+  # The resolved spellings first, since each holds the written one (`/private/var/…` holds `/var/…`). The Mac's own
+  # temporary folder last: xcodebuild writes an error result bundle there.
   neutral() {
-    perl -pe 'BEGIN { ($rf, $wf, $rd, $wd, $h) = @ARGV; @ARGV = () } s#\Q$rf\E#/testbed/captures/environment#g; s#\Q$wf\E#/testbed/captures/environment#g; s#\Q$rd\E#/testbed/DerivedData#g; s#\Q$wd\E#/testbed/DerivedData#g; s#\Q$h\E#/testbed/home#g' \
-      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME"
+    perl -pe 'BEGIN { ($rf, $wf, $rd, $wd, $h, $rt, $wt) = @ARGV; @ARGV = () } s#\Q$rf\E#/testbed/captures/environment#g; s#\Q$wf\E#/testbed/captures/environment#g; s#\Q$rd\E#/testbed/DerivedData#g; s#\Q$wd\E#/testbed/DerivedData#g; s#\Q$h\E#/testbed/home#g; s#\Q$rt\E#/testbed/tmp#g; s#\Q$wt\E#/testbed/tmp#g' \
+      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME" "$(cd "${TMPDIR:-/tmp}" && pwd -P)" "${TMPDIR%/}"
   }
   configure() {
     mkdir -p "$fixture/.mobilebuildmcp"
@@ -1092,11 +1121,106 @@ EOF
   echo "$fixture"
 }
 
+# Captures of the field fixture's scenarios (the field acceptance plan in the xcrew spec), as MobileBuildMCP answers
+# them to Claude: its MCP results, the logs they name, and what xcresulttool and xccov answer about each run's bundle.
+# They run on a copy of field/, so a scenario's edit never reaches the fixture. Tests replay them.
+# - probes: the five probe tests, five times each, relaunched every time (scenario B)
+# - crash: the crashing test, with its crash log (C)
+# - coverage: one test run with coverage on, and the half-tested file's line counts (A)
+# - empty-filter: a selection matching no test (D)
+# - type-error: a build failing on a plain type error, with the pinned Xcode not the one building (E)
+# FIELD_CAPTURES names the scenarios to take again (`coverage type-error`), keeping the others' captures; unset,
+# all of them are taken afresh.
+field_captures() {
+  out=$testbed/captures/field
+  wanted=${FIELD_CAPTURES:-probes coverage empty-filter type-error crash}
+  if [ -z "${FIELD_CAPTURES:-}" ]; then rm -rf "${out:?}"; fi
+  mkdir -p "$out"
+  takes() { case " $wanted " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
+  work=$(mktemp -d)/field
+  cp -R "$testbed/field" "$work"
+  derived=$(mktemp -d)
+  results=$(mktemp -d)
+  resolved=$(cd "$work" && pwd -P)
+  # Each folder in every spelling a tool writes it: resolved (`/private/var/…`) and as written (`/var/…`), and each
+  # with JSON's escaped slashes, the resolved first since it holds the written one.
+  neutral() {
+    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g }' \
+      "$resolved" /testbed/field "$work" /testbed/field "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/home \
+      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
+  }
+  mkdir -p "$work/.mobilebuildmcp"
+  printf "schemaVersion: 1\nsessionDefaults:\n  workspacePath: '%s'\n  scheme: 'Feature'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/Field.xcworkspace" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
+  # One MobileBuildMCP call, its result kept as `<name>.txt` and the log it names as `<name>.log`.
+  call() {
+    node scripts/mcp-call.mjs "$work" "$2" "$3" > "$results/$1.txt" || true
+    # An expected crash's report lands a little after the process ends: wait for it, so this step's check sees it.
+    if [ -n "${4:-}" ]; then sleep 20; fi
+    crash_check "${4:-}"
+    neutral < "$results/$1.txt" | uuids_out > "$out/$1.txt"
+    log=$(grep -o '~/[^ ]*\.log' "$results/$1.txt" | head -1 | sed "s#^~#$HOME#")
+    if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/$1.log"; fi
+  }
+  # The bundle a test call names, and what xcresulttool says of it: its tests, and the details of each failed test.
+  bundle_of() {
+    awk '/└── ~\/.*\/$/ { root = $NF } /result-bundles\/.*\.xcresult/ { for (i = 1; i <= NF; i++) if ($i ~ /\.xcresult$/) print root $i }' "$results/$1.txt" | head -1 | sed "s#^~#$HOME#"
+  }
+  answers() {
+    bundle=$(bundle_of "$1")
+    [ -n "$bundle" ] || return 0
+    xcrun xcresulttool get test-results tests --path "$bundle" --compact | neutral | uuids_out > "$out/$1.tests.json"
+    xcrun xcresulttool get test-results summary --path "$bundle" --compact | neutral | uuids_out > "$out/$1.summary.json"
+    for test in $(node -e '
+      const walk = n => [...(n.nodeType === "Test Case" && n.result === "Failed" ? [n.nodeIdentifier] : []), ...(n.children ?? []).flatMap(walk)]
+      console.log(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).testNodes.flatMap(walk).join("\n"))
+    ' "$out/$1.tests.json"); do
+      name=$(printf '%s' "$test" | sed 's#/#.#g; s#()$##')
+      xcrun xcresulttool get test-results test-details --test-id "$test" --path "$bundle" --compact | neutral | uuids_out > "$out/$1.details.$name.json"
+    done
+  }
+  if takes probes; then call probes test_sim '{"extraArgs":["-only-testing:FeatureTests/ProbeTests","-test-iterations","5","-test-repetition-relaunch-enabled","YES"]}'
+  answers probes; fi
+  if takes coverage; then
+    call coverage test_sim '{"extraArgs":["-only-testing:FeatureTests/ProbeTests/testPasses"]}'
+    bundle=$(bundle_of coverage)
+    if [ -n "$bundle" ]; then
+      xcrun xccov view --archive --file-list --json "$bundle" > "$results/files.json"
+      neutral < "$results/files.json" > "$out/coverage.files.json"
+      # xccov answers for a file only as its own list spells it.
+      greeting=$(node -e 'console.log(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).find(f => f.endsWith("/Greeting.swift")) ?? "")' "$results/files.json")
+      xcrun xccov view --archive --file "$greeting" --json "$bundle" | neutral > "$out/coverage.Greeting.json"
+    fi
+  fi
+  if takes empty-filter; then call empty-filter test_sim '{"extraArgs":["-only-testing:FeatureTests/NoSuchTests"]}'; fi
+  if takes type-error; then
+    printf '\npublic let typeError: Int = "not a number"\n' >> "$work/Modules/Feature/Sources/Greeting.swift"
+    call type-error build_sim '{}'
+    cp "$testbed/field/Modules/Feature/Sources/Greeting.swift" "$work/Modules/Feature/Sources/Greeting.swift"
+  fi
+  # Last, so a surprise here costs no other capture; its one expected crash is excused for this call alone.
+  if takes crash; then
+  call crash test_sim '{"extraArgs":["-only-testing:FeatureTests/CrashTests"]}' testOutOfRange
+  answers crash
+  # The crash log the bundle attached, as xcrew reads it.
+  bundle=$(bundle_of crash)
+  if [ -n "$bundle" ]; then
+    mkdir -p "$results/crash-export"
+    xcrun xcresulttool export attachments --path "$bundle" --output-path "$results/crash-export" --only-failures > /dev/null
+    report=$(find "$results/crash-export" -name '*.ips' | head -1)
+    if [ -n "$report" ]; then neutral < "$report" | uuids_out > "$out/crash.ips"; fi
+  fi
+  fi
+  rm -rf "${work:?}" "${derived:?}" "${results:?}"
+  printf '{\n  "replay": "each <scenario>.txt is MobileBuildMCP'"'"'s MCP result on a copy of field/, the .log beside it the log it names, and .tests.json, .summary.json and .details.<test>.json what xcresulttool answered about its result bundle; crash.ips is the crashing test'"'"'s crash log, coverage.*.json what xccov answered; tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$out/capture.json"
+  echo "$out"
+}
+
 capture_simulator
 repetitions
 coverage
 environment
 snapshots
 uitests
+field_captures
 
 scripts/leaks.sh

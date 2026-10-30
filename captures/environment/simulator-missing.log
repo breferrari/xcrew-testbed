@@ -1,7 +1,7 @@
 Command line invocation:
     /Applications/Xcode-27.2.0-Beta.3.app/Contents/Developer/usr/bin/xcodebuild -project /testbed/captures/environment/App.xcodeproj -scheme App -skipMacroValidation -destination "platform=iOS Simulator,name=iPhone 1,OS=latest" -collect-test-diagnostics never -derivedDataPath /testbed/DerivedData build
 
-2026-10-30 08:47:01.663 xcodebuild[36364:51360453] Writing error result bundle to /var/folders/2q/qr9pfww52cl2hw4_hkr3lxvm0000gn/T/ResultBundle_2026-30-10_08-47-0001.xcresult
+2026-10-30 08:47:01.663 xcodebuild[36364:51360453] Writing error result bundle to /testbed/tmp/ResultBundle_2026-30-10_08-47-0001.xcresult
 xcodebuild: error: Unable to find a device matching the provided destination specifier:
 		{ platform:iOS Simulator, OS:latest, name:iPhone 1 }
 

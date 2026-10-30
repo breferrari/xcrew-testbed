@@ -1,0 +1,14 @@
+
+🧪 Test
+
+Warnings (1):
+
+  ⚠ initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+    /testbed/field/Modules/Feature/Sources/Legacy.swift:3
+
+✅ 1 test passed, 0 failed, 0 skipped (⏱️ 18.0s)
+  └ Files:
+     └── ~/Library/Developer/MobileBuildMCP/workspaces/field-05686ffe76ea/
+         ├── logs/test_sim_2026-10-30T17-14-33-183Z_pid34663_b1b64624.log — Build Logs
+         ├── result-bundles/test_sim_2026-10-30T17-14-33-183Z_pid34663_90276924.xcresult — Result Bundle
+         └── test-products/test_sim_2026-10-30T17-14-33-183Z_pid34663_52c0ffd8.xctestproducts — Test Products

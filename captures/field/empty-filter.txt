@@ -1,0 +1,9 @@
+
+🧪 Test
+
+✅ Test succeeded. (⏱️ 3.4s)
+  └ Files:
+     └── ~/Library/Developer/MobileBuildMCP/workspaces/field-6322edd19d73/
+         ├── logs/test_sim_2026-10-30T17-10-49-751Z_pid28763_64aeb859.log — Build Logs
+         ├── result-bundles/test_sim_2026-10-30T17-10-49-751Z_pid28763_03952416.xcresult — Result Bundle
+         └── test-products/test_sim_2026-10-30T17-10-49-751Z_pid28763_17f9bb51.xctestproducts — Test Products

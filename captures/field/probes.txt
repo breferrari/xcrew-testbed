@@ -1,0 +1,28 @@
+
+🧪 Test
+
+Warnings (1):
+
+  ⚠ initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+    /testbed/field/Modules/Feature/Sources/Legacy.swift:3
+
+Test Failures (4):
+
+  ✗ ProbeTests / testFails: XCTAssertEqual failed: ("Hello, Ada") is not equal to ("Hi, Ada")
+    /testbed/field/Modules/Feature/Tests/ProbeTests.swift:11
+
+  ✗ ProbeTests / testFlaky: XCTAssertEqual failed: ("1") is not equal to ("0") - run 1 is odd
+    /testbed/field/Modules/Feature/Tests/ProbeTests.swift:19
+
+  ✗ ProbeTests / testFlaky: XCTAssertEqual failed: ("1") is not equal to ("0") - run 3 is odd
+    /testbed/field/Modules/Feature/Tests/ProbeTests.swift:19
+
+  ✗ ProbeTests / testFlaky: XCTAssertEqual failed: ("1") is not equal to ("0") - run 5 is odd
+    /testbed/field/Modules/Feature/Tests/ProbeTests.swift:19
+
+❌ 2 tests failed, 1 passed, 1 skipped (⏱️ 19.8s)
+  └ Files:
+     └── ~/Library/Developer/MobileBuildMCP/workspaces/field-6322edd19d73/
+         ├── logs/test_sim_2026-10-30T17-10-20-125Z_pid28076_a7ec6a6a.log — Build Logs
+         ├── result-bundles/test_sim_2026-10-30T17-10-20-125Z_pid28076_d16645d9.xcresult — Result Bundle
+         └── test-products/test_sim_2026-10-30T17-10-20-125Z_pid28076_17449a3f.xctestproducts — Test Products

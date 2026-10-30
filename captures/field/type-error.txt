@@ -1,0 +1,13 @@
+
+🔨 Build
+
+Errors (2):
+
+  ✗ cannot convert value of type 'String' to specified type 'Int'
+    /testbed/field/Modules/Feature/Sources/Greeting.swift:15
+
+  ✗ |                             `- error: cannot convert value of type 'String' to specified type 'Int'
+
+❌ Build failed. (⏱️ 1.7s)
+  └ Files:
+     └── ~/Library/Developer/MobileBuildMCP/workspaces/field-6322edd19d73/logs/build_sim_2026-10-30T17-10-54-035Z_pid28895_784ffaf3.log — Build Logs

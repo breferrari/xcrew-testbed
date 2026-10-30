@@ -1,0 +1,4 @@
+{
+  "replay": "each <scenario>.txt is MobileBuildMCP's MCP result on a copy of field/, the .log beside it the log it names, and .tests.json, .summary.json and .details.<test>.json what xcresulttool answered about its result bundle; crash.ips is the crashing test's crash log, coverage.*.json what xccov answered; tests read them and never build",
+  "mobilebuildmcp": "2.7.1"
+}

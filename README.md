@@ -33,6 +33,24 @@ What the UI-test capture shows, with Xcode 27.2, iOS 27.2 (24B8117) and MobileBu
 
 The capture re-encodes the recordings at `avconvert`'s lowest preset to keep them small. They are real recordings, at a lower size.
 
+`captures/field` holds what MobileBuildMCP's `test_sim` and `build_sim` answered about the field fixture's scenarios, with what `xcresulttool` and `xccov` answered about each run's bundle. The scenarios are:
+- `probes`: the five probe tests, five times each, relaunched every time;
+- `crash`: the crashing test, with its crash log;
+- `coverage`: one test run with coverage on, and the half-tested file's line counts;
+- `empty-filter`: a selection matching no test;
+- `type-error`: a plain type error, with the pinned Xcode not the one building.
+
+What the field captures show, with Xcode 27.2, iOS 27.2 (24B8117) and MobileBuildMCP 2.7.1, on 2026-10-30:
+
+- On the repeated probes, MobileBuildMCP's text lists the flaky test once per failing run ("run 1 is odd", 3, 5) with no verdict, gives no skip reason, and doesn't count the expected failure. Its summary reads "2 tests failed, 1 passed, 1 skipped". The bundle's test list has each run.
+- On the crash, the error text ("Index out of range") appears only among the errors. The failure line names the test with no file:line ("Crash: xctest at CrashTests.testOutOfRange()").
+- A selection that matches no test reports "Test succeeded".
+- A second build into the same DerivedData while another `xcodebuild` builds there succeeds, even with that `xcodebuild` stopped (SIGSTOP). The build runs in Xcode's build service, not in the `xcodebuild` process. So the field report's locked build database isn't reproduced here: it needs a stuck build service, which a capture must not cause, since Xcode itself shares it.
+
+The crashing test crashes on purpose. Its capture step excuses exactly that one report, the test runner's with `testOutOfRange` in its crashing thread, for that step alone. Any other crash, before or after, stops the run as ever.
+
+`leaks.sh` also fails on a temporary folder of this Mac (`/var/folders/…`, `/private/var/folders/…`, as written or JSON-escaped, in any file), which is what the captures' neutralisers rewrite. Adding it found one in `captures/environment/simulator-missing.log`, where `xcodebuild` had written an error result bundle into the Mac's own temporary folder. That file is fixed, and both neutralisers now map that folder too.
+
 ## Layout
 
 ```
