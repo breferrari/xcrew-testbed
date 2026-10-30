@@ -37,7 +37,7 @@ brew install tuist xcodegen getsentry/xcodebuildmcp/mobilebuildmcp
 scripts/generate.sh --build
 ```
 
-`--build` also builds each form for testing, to prove it real. Regenerating keeps each fixture's expectations. The JSON forms' object IDs change on every run, because Xcode's tool picks them at random.
+`--build` also builds each form for testing, to prove it real. Regenerating keeps each fixture's expectations. It ends with `scripts/leaks.sh`, which fails when a fixture holds a path of the Mac that made it or the id of one of its devices or simulators; captures number those ids instead. The JSON forms' object IDs change on every run, because Xcode's tool picks them at random.
 
 ## How xcrew uses it
 
