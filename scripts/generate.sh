@@ -50,6 +50,13 @@ schemes:
 EOF
 }
 
+# Generates a Tuist project in `$1`. Tuist's own convenience scheme runs `tuist generate` from the absolute path it
+# was made in, so it never stays: a fixture holds no path of the Mac that made it.
+tuist_generate() {
+  (cd "$1" && tuist generate --no-open > /dev/null)
+  find "$1" -name 'Generate Project.xcscheme' -delete
+}
+
 tuist_manifests() {
   cat > "$1/Tuist.swift" <<'EOF'
 import ProjectDescription
@@ -154,9 +161,7 @@ form() {
       fixture_json "$fixture" pbxproj-groups xcodegen "$layout" ;;
     tuist)
       tuist_manifests "$project"
-      (cd "$project" && tuist generate --no-open > /dev/null)
-      # Tuist's own convenience scheme runs `tuist generate` from the absolute path it was made in.
-      rm "$project/App.xcworkspace/xcshareddata/xcschemes/Generate Project.xcscheme"
+      tuist_generate "$project"
       fixture_json "$fixture" pbxproj-groups tuist "$layout" ;;
     tuist-ungenerated)
       tuist_manifests "$project"
@@ -224,3 +229,58 @@ SCRIPT
 }
 
 for name in project-swift-trap json-macro-copy; do adversarial "$name"; done
+
+# A modular Tuist app, one project per module in a chain: App builds on Feature, which builds on Core, each with
+# its own tests. Across projects, a target depends on another through a proxy into that project.
+modular() {
+  fixture=$testbed/modular/tuist-modules
+  rm -rf "$fixture"
+  mkdir -p "$fixture"
+  cat > "$fixture/Tuist.swift" <<'EOF'
+import ProjectDescription
+
+let tuist = Tuist()
+EOF
+  cat > "$fixture/Workspace.swift" <<'EOF'
+import ProjectDescription
+
+let workspace = Workspace(name: "Modules", projects: ["Modules/*"])
+EOF
+  module "$fixture" Core framework ''
+  module "$fixture" Feature framework '.project(target: "Core", path: "../Core")'
+  module "$fixture" App app '.project(target: "Feature", path: "../Feature")'
+  tuist_generate "$fixture"
+  fixture_json "$fixture" pbxproj-groups tuist root
+  (cd "$fixture" && xcodebuild -list -workspace Modules.xcworkspace > /dev/null)
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
+# One module: its sources, its tests, and its Project.swift, depending on `$4` when given.
+module() {
+  root=$1/Modules/$2
+  mkdir -p "$root/Sources" "$root/Tests"
+  printf 'public enum %s {\n    public static let name = "%s"\n}\n' "$2" "$2" > "$root/Sources/$2.swift"
+  printf 'import Testing\n@testable import %s\n\n@Test func itIsNamed() {\n    #expect(%s.name == "%s")\n}\n' "$2" "$2" "$2" > "$root/Tests/$2Tests.swift"
+  dependencies=""
+  if [ -n "$4" ]; then dependencies=", dependencies: [$4]"; fi
+  cat > "$root/Project.swift" <<EOF
+import ProjectDescription
+
+let project = Project(
+    name: "$2",
+    targets: [
+        .target(name: "$2", destinations: .iOS, product: .$3, bundleId: "dev.xcrew.testbed.$2", deploymentTargets: .iOS("18.0"), infoPlist: .default, sources: ["Sources/**"]$dependencies),
+        .target(name: "$2Tests", destinations: .iOS, product: .unitTests, bundleId: "dev.xcrew.testbed.$2Tests", deploymentTargets: .iOS("18.0"), infoPlist: .default, sources: ["Tests/**"], dependencies: [.target(name: "$2")]),
+    ]
+)
+EOF
+}
+
+modular
+
+# No fixture may hold a path of the Mac that made it: a home folder, or this checkout.
+if grep -rIl -e "$HOME" -e "$(pwd -P)" forms adversarial modular; then
+  echo "generate.sh: the files above hold an absolute path of this Mac" >&2
+  exit 1
+fi

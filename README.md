@@ -13,7 +13,7 @@ One small app (a SwiftUI target and a unit-test target with a passing test, a se
 | Tuist | manifests and the generated workspace |
 | Tuist, not yet generated | manifests only |
 
-Each form sits at the repository root of its fixture and again under `ios/`. `adversarial/` holds projects shaped to trip tools up, such as a source file named `Project.swift`.
+Each form sits at the repository root of its fixture and again under `ios/`. `adversarial/` holds projects shaped to trip tools up, such as a source file named `Project.swift`. `modular/` holds apps split into modules across projects: `tuist-modules` is a Tuist workspace of three module projects in a chain, App on Feature on Core, each with its own test target.
 
 ## Layout
 
@@ -21,6 +21,7 @@ Each form sits at the repository root of its fixture and again under `ios/`. `ad
 base/               the app's sources and tests, shared by every fixture
 forms/<fixture>/    one generated project per form and place
 adversarial/<name>/ projects shaped to trip tools up
+modular/<name>/     apps split into modules across projects
 scripts/generate.sh regenerates every fixture from base/
 ```
 
