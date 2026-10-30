@@ -319,11 +319,63 @@ EOF
   echo "$fixture"
 }
 
+# A capture of a result bundle's coverage: one test runs one branch of `price(for:)` and leaves the other. Tests
+# replay xccov's answers: whether the bundle has coverage, the archive's file list, and the per-line counts of
+# Pricing.swift, its shape undocumented (`man xccov`). The archive names files as the build was started, so both
+# spellings of the fixture's folder, as written and resolved, become a neutral one, in JSON's escaped form too.
+coverage() {
+  fixture=$testbed/captures/coverage
+  rm -rf "$fixture"
+  sources "$fixture"
+  rm "$fixture/AppTests/SeededTests.swift"
+  cat > "$fixture/App/Pricing.swift" <<'EOF'
+/// A price in cents for a number of items, cheaper by the dozen.
+func price(for items: Int) -> Int {
+    // Ten percent off from twelve items.
+    if items >= 12 {
+        return items * 90
+    }
+    return items * 100
+}
+EOF
+  cat > "$fixture/AppTests/PricingTests.swift" <<'EOF'
+import XCTest
+@testable import App
+
+final class PricingTests: XCTestCase {
+    func testAFewItemsPayFullPrice() {
+        XCTAssertEqual(price(for: 2), 200)
+    }
+}
+EOF
+  xcodegen_project "$fixture" group
+  derived=$(mktemp -d)
+  bundle=$derived/Coverage.xcresult
+  (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,name=$simulator" -derivedDataPath "$derived" -resultBundlePath "$bundle" -only-testing:AppTests/PricingTests -enableCodeCoverage YES CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1)
+  written=$(cd "$fixture" && pwd)
+  resolved=$(cd "$fixture" && pwd -P)
+  neutral() {
+    perl -pe 'BEGIN { ($w, $r, $n) = @ARGV; @ARGV = (); ($we, $re, $ne) = map { (my $e = $_) =~ s#/#\\/#g; $e } $w, $r, $n } s#\Q$we\E#$ne#g; s#\Q$re\E#$ne#g; s#\Q$w\E#$n#g; s#\Q$r\E#$n#g' "$written" "$resolved" /testbed/captures/coverage
+  }
+  xcrun xcresulttool get content-availability --path "$bundle" > "$fixture/content-availability.json"
+  xcrun xccov view --archive --file-list --json "$bundle" | neutral > "$fixture/file-list.json"
+  pricing=$(xcrun xccov view --archive --file-list "$bundle" | grep '/App/Pricing.swift$')
+  xcrun xccov view --archive --file "$pricing" --json "$bundle" | neutral > "$fixture/Pricing.json"
+  rm -rf "$derived"
+  fixture_json "$fixture" pbxproj-groups xcodegen root
+  printf '{\n  "replay": "content-availability.json is xcresulttool get content-availability, file-list.json and Pricing.json are xccov view --archive --file-list --json and --file <App/Pricing.swift> --json, on one run made on the Mac that generated it; tests read them and never run PricingTests",\n  "xcodebuild": "-only-testing:AppTests/PricingTests -enableCodeCoverage YES"\n}\n' > "$fixture/capture.json"
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
 simulator=${XCREW_TESTBED_SIMULATOR:-iPhone 17}
 repetitions
+coverage
 
 # No fixture may hold a path of the Mac that made it: a home folder, or this checkout.
-if grep -rIl -e "$HOME" -e "$(pwd -P)" forms adversarial modular captures; then
+# JSON may write each slash escaped, as `\/`.
+escaped() { printf '%s' "$1" | sed 's#/#\\/#g'; }
+if grep -rIlF -e "$HOME" -e "$(pwd -P)" -e "$(escaped "$HOME")" -e "$(escaped "$(pwd -P)")" forms adversarial modular captures; then
   echo "generate.sh: the files above hold an absolute path of this Mac" >&2
   exit 1
 fi

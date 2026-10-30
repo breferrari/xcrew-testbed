@@ -13,7 +13,7 @@ One small app (a SwiftUI target and a unit-test target with a passing test, a se
 | Tuist | manifests and the generated workspace |
 | Tuist, not yet generated | manifests only |
 
-Each form sits at the repository root of its fixture and again under `ios/`. `adversarial/` holds projects shaped to trip tools up, such as a source file named `Project.swift`. `modular/` holds apps split into modules across projects: `tuist-modules` is a Tuist workspace of three module projects in a chain, App on Feature on Core, each with its own test target. `captures/` holds what tools answered about a real run, committed so tests replay it: `repetitions` is a result bundle's test tree after five runs of three tests, one passing every run, one failing every run and one failing on every other run. Nothing nondeterministic runs outside the Mac that made it.
+Each form sits at the repository root of its fixture and again under `ios/`. `adversarial/` holds projects shaped to trip tools up, such as a source file named `Project.swift`. `modular/` holds apps split into modules across projects: `tuist-modules` is a Tuist workspace of three module projects in a chain, App on Feature on Core, each with its own test target. `captures/` holds what tools answered about a real run, committed so tests replay it: `repetitions` is a result bundle's test tree after five runs of three tests, one passing every run, one failing every run and one failing on every other run. `coverage` is what `xccov` answered about one test run with coverage on: whether the bundle has coverage, the files it holds, and one file's per-line counts, where the test runs one branch of `price(for:)` and not the other. Nothing nondeterministic runs outside the Mac that made it.
 
 ## Layout
 
