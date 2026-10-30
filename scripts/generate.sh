@@ -288,20 +288,30 @@ modular
 # by every capture, so none boots another, and deleted at the end. A beta runtime's system apps can crash on boot, and
 # a crash shows a dialog on the Mac, so no capture may cause one: the run fails when a crash report appeared during it.
 capture_simulator() {
-  chosen=$(xcrun simctl list runtimes --json | node -e '
-    let text = ""
-    process.stdin.on("data", chunk => { text += chunk }).on("end", () => {
-      // A released build has no letter after its number: 24B91 is a release, 24B5110a a beta. A runtime made for one
-      // device carries it in its identifier (iOS-27-2-iPhone19-4) and comes with the Xcode made for that device, so only the
-      // plain ones count.
-      const released = JSON.parse(text).runtimes.filter(r => r.platform === "iOS" && r.isAvailable && /^\d+[A-Z]\d+$/.test(r.buildversion) && /\.iOS-\d+(-\d+)*$/.test(r.identifier))
-      released.sort((a, b) => a.version.localeCompare(b.version, undefined, { numeric: true }))
-      const runtime = released.pop()
-      const iPhone = runtime?.supportedDeviceTypes.filter(t => t.productFamily === "iPhone").pop()
-      if (runtime && iPhone) console.log(`${iPhone.identifier} ${runtime.identifier}`)
-    })')
+  chosen=$(node -e '
+    const { execFileSync } = require("child_process")
+    const list = kind => JSON.parse(execFileSync("xcrun", ["simctl", "list", kind, "--json"]))[kind]
+    // A released build has no letter after its number: 24B8117 is a release, 24B5110a a beta. A runtime made for one
+    // device carries it in its identifier (iOS-27-2-iPhone19-4) and comes with the Xcode made for that device, so
+    // only the plain ones count.
+    const released = list("runtimes").filter(r => r.platform === "iOS" && r.isAvailable && /^\d+[A-Z]\d+$/.test(r.buildversion) && /\.iOS-\d+(-\d+)*$/.test(r.identifier))
+    released.sort((a, b) => a.version.localeCompare(b.version, undefined, { numeric: true }))
+    const runtime = released.pop()
+    // The newest iPhone it runs: the one first supported on the latest iOS, then by model number.
+    const types = new Map(list("devicetypes").map(t => [t.identifier, t]))
+    const model = t => (t.modelIdentifier.match(/\d+/g) ?? []).map(Number)
+    const iPhones = (runtime?.supportedDeviceTypes ?? []).filter(t => t.productFamily === "iPhone").map(t => types.get(t.identifier)).filter(Boolean)
+    iPhones.sort((a, b) => a.minRuntimeVersion - b.minRuntimeVersion || model(a)[0] - model(b)[0] || model(a)[1] - model(b)[1])
+    const iPhone = iPhones.pop()
+    if (runtime && iPhone) console.log(`${iPhone.identifier} ${runtime.identifier}`)
+  ')
   if [ -z "$chosen" ]; then
-    echo "generate.sh: no released iOS runtime is installed; add one in Xcode > Settings > Components" >&2
+    sdk=$(xcrun --sdk iphonesimulator --show-sdk-version)
+    if command -v xcodes > /dev/null; then
+      echo "generate.sh: no released iOS runtime is installed: xcodes runtimes install \"iOS $sdk\"" >&2
+    else
+      echo "generate.sh: no released iOS runtime is installed: add iOS $sdk in Xcode > Settings > Components" >&2
+    fi
     exit 1
   fi
   simulator=xcrew-testbed
