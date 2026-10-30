@@ -1,0 +1,8 @@
+
+🐛 LLDB Command
+
+Errors (1):
+
+  ✗ DAP backend does not support LLDB command evaluation. Set MOBILEBUILDMCP_DEBUGGER_BACKEND=lldb-cli to use the CLI backend.
+
+❌ Failed to run LLDB command.
