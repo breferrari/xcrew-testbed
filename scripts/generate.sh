@@ -851,8 +851,10 @@ schemes:
         - path: App.xctestplan
           defaultPlan: true
 EOF
-  # The test plan names its target by the id XcodeGen gives it, which depends only on the spec: generate once to
-  # learn it, then again with the plan in place. Its settings are left at Xcode's defaults, which is what is captured.
+  # The test plan names its target by the id XcodeGen gives it, which depends only on the spec: generate once, with an
+  # empty plan since XcodeGen refuses a missing one, to learn it, then again with the plan in place. Its settings stay
+  # at Xcode's defaults, which is what is captured.
+  printf '{ "configurations" : [], "defaultOptions" : {}, "testTargets" : [], "version" : 1 }\n' > "$fixture/App.xctestplan"
   xcodegen generate --quiet --spec "$fixture/project.yml" --project "$fixture"
   target=$(perl -0ne 'print $1 if /(\w{24}) \/\* UITests \*\/ = \{\s*isa = PBXNativeTarget;/' "$fixture/App.xcodeproj/project.pbxproj")
   if [ -z "$target" ]; then echo "uitests: no UITests target in the generated project" >&2; exit 1; fi
