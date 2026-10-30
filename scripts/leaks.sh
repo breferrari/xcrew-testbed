@@ -8,8 +8,14 @@ set -eu
 cd "$(dirname "$0")/.."
 escaped() { printf '%s' "$1" | sed 's#/#\\/#g'; }
 found=0
-if grep -rIlF -e "$HOME" -e "$(pwd -P)" -e "$(escaped "$HOME")" -e "$(escaped "$(pwd -P)")" forms adversarial modular captures; then
+if grep -rIlF -e "$HOME" -e "$(pwd -P)" -e "$(escaped "$HOME")" -e "$(escaped "$(pwd -P)")" forms adversarial modular field captures; then
   echo "leaks.sh: the files above hold an absolute path of this Mac" >&2
+  found=1
+fi
+# A temporary folder of this Mac (`/var/folders/…`, `/private/var/folders/…`), as written or with JSON's escaped slashes,
+# in any file, binaries included: what a capture's neutraliser rewrites, so the two never disagree.
+if grep -ralE '(/|\\/)var(/|\\/)folders(/|\\/)' forms adversarial modular field captures 2> /dev/null; then
+  echo "leaks.sh: the files above hold a temporary folder of this Mac" >&2
   found=1
 fi
 uuids=$(grep -raoE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' captures | grep -vE ':00000000-0000-0000-0000-[0-9]{12}$' | cut -d: -f1 | sort -u)

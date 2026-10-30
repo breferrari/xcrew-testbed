@@ -1,0 +1,19 @@
+
+🧪 Test
+
+Errors (2):
+
+  ✗ Swift/ContiguousArrayBuffer.swift:695: Fatal error: Index out of range
+
+  ✗ 2026-10-30 18:11:11.785287+0100 xctest[29418:1065289] Swift/ContiguousArrayBuffer.swift:695: Fatal error: Index out of range
+
+Test Failures (1):
+
+  ✗ CrashTests / testOutOfRange(): Crash: xctest at CrashTests.testOutOfRange()
+
+❌ 1 test failed, 0 passed, 0 skipped (⏱️ 7.3s)
+  └ Files:
+     └── ~/Library/Developer/MobileBuildMCP/workspaces/field-6322edd19d73/
+         ├── logs/test_sim_2026-10-30T17-11-06-749Z_pid29308_9d05c4dd.log — Build Logs
+         ├── result-bundles/test_sim_2026-10-30T17-11-06-750Z_pid29308_97473835.xcresult — Result Bundle
+         └── test-products/test_sim_2026-10-30T17-11-06-750Z_pid29308_e2b5eeaa.xctestproducts — Test Products
