@@ -712,10 +712,243 @@ EOF
   echo "$fixture"
 }
 
+# Each uuid in a folder's text files and file names, numbered as uuids_out numbers them, but once across them all, so
+# an attachment's file, its manifest entry and its activity keep naming each other.
+numbered() {
+  perl -e '
+    my $dir = shift;
+    my $u = qr/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/;
+    opendir(my $d, $dir) or die "$dir: $!"; my @files = grep { -f "$dir/$_" } readdir $d; closedir $d;
+    my (%seen, %text);
+    for my $f (@files) {
+      $seen{uc $_} = 1 for $f =~ /($u)/g;
+      next unless -T "$dir/$f";
+      open my $h, "<", "$dir/$f" or die; local $/; $text{$f} = <$h>; close $h;
+      $seen{uc $_} = 1 for $text{$f} =~ /($u)/g;
+    }
+    my $n = 0; my %id = map { $_ => sprintf("00000000-0000-0000-0000-%012d", ++$n) } sort keys %seen;
+    for my $f (@files) {
+      if (exists $text{$f}) { (my $t = $text{$f}) =~ s/($u)/$id{uc $1}/g; open my $h, ">", "$dir/$f" or die; print $h $t; close $h }
+      (my $g = $f) =~ s/($u)/$id{uc $1}/g;
+      rename "$dir/$f", "$dir/$g" or die if $g ne $f;
+    }
+  ' "$1"
+}
+
+# A capture of failing UI tests, for reading what a run kept about the moment each one failed: the steps before it,
+# the screenshots and recording, and the app's accessibility hierarchy. One screen shows a title, a plan and a button.
+# One test taps a button that isn't there, one waits for a label the screen no longer has, one fails an assertion two
+# steps after its taps, one passes, and one fails under one of the test plan's two configurations only. Committed:
+# xcresulttool's test tree, each failed test's activities and details, and its attachments as `export attachments`
+# gives them, from `xcodebuild test` and from MobileBuildMCP's test_sim. Images are cut to 16 points and recordings
+# re-encoded at the lowest preset, so they stay small. Tests replay them; nothing runs a UI test anywhere else.
+uitests() {
+  fixture=$testbed/captures/uitests
+  rm -rf "${fixture:?}"
+  mkdir -p "$fixture/App" "$fixture/UITests"
+  cat > "$fixture/App/AppApp.swift" <<'EOF'
+import SwiftUI
+
+@main
+struct AppApp: App {
+    var body: some Scene {
+        WindowGroup { ContentView() }
+    }
+}
+EOF
+  cat > "$fixture/App/ContentView.swift" <<'EOF'
+import SwiftUI
+
+/// The plan the test plan's configuration names, passed on by the UI test.
+let plan = ProcessInfo.processInfo.environment["PLAN"] ?? "A"
+
+struct ContentView: View {
+    @State private var steps = 0
+
+    var body: some View {
+        VStack {
+            Text(steps == 0 ? "Welcome" : "Done").accessibilityIdentifier("title")
+            Text("Plan \(plan)").accessibilityIdentifier("plan")
+            Button("Continue") { steps += 1 }.accessibilityIdentifier("continue")
+        }
+    }
+}
+EOF
+  cat > "$fixture/UITests/UITests.swift" <<'EOF'
+import XCTest
+
+@MainActor
+final class UITests: XCTestCase {
+    func launch() -> XCUIApplication {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchEnvironment["PLAN"] = ProcessInfo.processInfo.environment["PLAN"]
+        app.launch()
+        return app
+    }
+
+    /// No element has this identifier.
+    func testMissingElement() {
+        launch().buttons["checkout"].tap()
+    }
+
+    /// The title once read "Hello"; it reads "Welcome" now.
+    func testRenamedLabel() {
+        XCTAssertTrue(launch().staticTexts["Hello"].waitForExistence(timeout: 2))
+    }
+
+    /// Both taps pass; the assertion after them fails.
+    func testFailsAfterTaps() {
+        let app = launch()
+        app.buttons["continue"].tap()
+        app.buttons["continue"].tap()
+        XCTAssertEqual(app.staticTexts["title"].label, "Welcome")
+    }
+
+    /// Passes under the test plan's "Plan A" and fails under "Plan B".
+    func testPlanA() {
+        XCTAssertTrue(launch().staticTexts["Plan A"].waitForExistence(timeout: 2))
+    }
+
+    func testPasses() {
+        XCTAssertTrue(launch().buttons["continue"].exists)
+    }
+}
+EOF
+  # Signed ad hoc, as a developer's simulator build is.
+  cat > "$fixture/project.yml" <<'EOF'
+name: App
+options:
+  bundleIdPrefix: dev.xcrew.testbed
+  deploymentTarget:
+    iOS: "18.0"
+targets:
+  App:
+    type: application
+    platform: iOS
+    sources: [App]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_ALLOWED: YES
+  UITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [UITests]
+    dependencies:
+      - target: App
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_ALLOWED: YES
+schemes:
+  App:
+    build:
+      targets:
+        App: all
+    test:
+      testPlans:
+        - path: App.xctestplan
+          defaultPlan: true
+EOF
+  # The test plan names its target by the id XcodeGen gives it, which depends only on the spec: generate once to
+  # learn it, then again with the plan in place. Its settings are left at Xcode's defaults, which is what is captured.
+  xcodegen generate --quiet --spec "$fixture/project.yml" --project "$fixture"
+  target=$(perl -0ne 'print $1 if /(\w{24}) \/\* UITests \*\/ = \{\s*isa = PBXNativeTarget;/' "$fixture/App.xcodeproj/project.pbxproj")
+  if [ -z "$target" ]; then echo "uitests: no UITests target in the generated project" >&2; exit 1; fi
+  cat > "$fixture/App.xctestplan" <<EOF
+{
+  "configurations" : [
+    {
+      "id" : "00000000-0000-0000-0000-000000000101",
+      "name" : "Plan A",
+      "options" : {
+        "environmentVariableEntries" : [ { "key" : "PLAN", "value" : "A" } ]
+      }
+    },
+    {
+      "id" : "00000000-0000-0000-0000-000000000102",
+      "name" : "Plan B",
+      "options" : {
+        "environmentVariableEntries" : [ { "key" : "PLAN", "value" : "B" } ]
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:App.xcodeproj",
+        "identifier" : "$target",
+        "name" : "UITests"
+      }
+    }
+  ],
+  "version" : 1
+}
+EOF
+  xcodegen generate --quiet --spec "$fixture/project.yml" --project "$fixture"
+  derived=$(mktemp -d)
+  results=$(mktemp -d)
+  resolved=$(cd "$fixture" && pwd -P)
+  neutral() {
+    perl -pe 'BEGIN { ($rf, $wf, $rd, $wd, $h) = @ARGV; @ARGV = () } s#\Q$rf\E#/testbed/captures/uitests#g; s#\Q$wf\E#/testbed/captures/uitests#g; s#\Q$rd\E#/testbed/DerivedData#g; s#\Q$wd\E#/testbed/DerivedData#g; s#\Q$h\E#/testbed/user#g' \
+      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME"
+  }
+  # Fails by design: four of the five tests fail under at least one configuration.
+  (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -resultBundlePath "$results/UITests.xcresult" -quiet > /dev/null 2>&1) || true
+  crash_check
+  kept() {
+    out=$fixture/$1
+    rm -rf "${out:?}"
+    mkdir -p "$out"
+    # Every attachment, as the snapshot capture found the failure flag unreliable for attachments.
+    xcrun xcresulttool export attachments --path "$2" --output-path "$out" > /dev/null
+    if find "$out" -name '*.ips' | grep -q .; then echo "uitests: a test crashed; see $2" >&2; exit 1; fi
+    xcrun xcresulttool get test-results tests --path "$2" > "$out/tests.json"
+    for test in $(node -e '
+      const walk = n => [...(n.nodeType === "Test Case" && n.result === "Failed" ? [n.nodeIdentifier] : []), ...(n.children ?? []).flatMap(walk)]
+      console.log(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).testNodes.flatMap(walk).join("\n"))
+    ' "$out/tests.json"); do
+      name=$(printf '%s' "$test" | sed 's#.*/##; s#()$##')
+      xcrun xcresulttool get test-results activities --test-id "$test" --path "$2" > "$out/activities-$name.json"
+      xcrun xcresulttool get test-results test-details --test-id "$test" --path "$2" > "$out/details-$name.json"
+    done
+    for file in "$out"/*; do
+      case $(file -b --mime-type "$file") in
+        image/*) sips -Z 16 "$file" > /dev/null ;;
+        video/*)
+          avconvert --preset PresetLowQuality --source "$file" --output "$results/small.mov" --replace > /dev/null
+          mv "$results/small.mov" "$file" ;;
+        text/* | application/json) neutral < "$file" > "$results/text" && mv "$results/text" "$file" ;;
+      esac
+    done
+    numbered "$out"
+  }
+  kept xcodebuild "$results/UITests.xcresult"
+  # The same tests through MobileBuildMCP, as Claude runs them.
+  mkdir -p "$fixture/.mobilebuildmcp"
+  printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'App'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/App.xcodeproj" "$simulator" "$derived" > "$fixture/.mobilebuildmcp/config.yaml"
+  node scripts/mcp-call.mjs "$fixture" test_sim > "$results/test_sim.txt"
+  crash_check
+  neutral < "$results/test_sim.txt" | uuids_out > "$fixture/test_sim.txt"
+  # MobileBuildMCP lists its files as a tree: the workspace's folder, then each file below it.
+  bundle=$(awk '/└── ~\/.*\/$/ { root = $NF } /result-bundles\/.*\.xcresult/ { for (i = 1; i <= NF; i++) if ($i ~ /\.xcresult$/) print root $i }' "$results/test_sim.txt" | head -1 | sed "s#^~#$HOME#")
+  kept mobilebuildmcp "$bundle"
+  rm -rf "${fixture:?}/.mobilebuildmcp" "${derived:?}" "${results:?}"
+  fixture_json "$fixture" pbxproj-groups xcodegen root
+  printf '{\n  "replay": "xcodebuild/ and mobilebuildmcp/ each hold one run of five UI tests under a test plan of two configurations, from xcodebuild test and from MobileBuildMCP test_sim (whose MCP result is test_sim.txt): xcresulttool export attachments (every attachment; images cut to 16 points, recordings re-encoded small), get test-results tests, and each failed test'"'"'s activities and test-details, with one numbering of ids across a folder; made on the Mac that generated them, tests read them and never run a UI test",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$fixture/capture.json"
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
 capture_simulator
 repetitions
 coverage
 environment
 snapshots
+uitests
 
 scripts/leaks.sh
