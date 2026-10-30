@@ -1,0 +1,4 @@
+{
+  "replay": "tests.json is xcresulttool get test-results tests on a run with -test-iterations 5 -test-repetition-relaunch-enabled YES, made on the Mac that generated it; tests read it and never run RepetitionTests",
+  "xcodebuild": "-only-testing:AppTests/RepetitionTests -test-iterations 5 -test-repetition-relaunch-enabled YES"
+}

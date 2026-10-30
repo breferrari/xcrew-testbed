@@ -279,8 +279,51 @@ EOF
 
 modular
 
+# A capture of a result bundle with repetitions: three tests run five times each, in a fresh process each time. One
+# passes every run, one fails every run, one fails on every other run, counted in a file in the app's sandbox that
+# outlives each process. Tests replay `tests.json`, xcresulttool's answer; nothing nondeterministic runs anywhere else.
+repetitions() {
+  fixture=$testbed/captures/repetitions
+  rm -rf "$fixture"
+  sources "$fixture"
+  cat > "$fixture/AppTests/RepetitionTests.swift" <<'EOF'
+import XCTest
+
+final class RepetitionTests: XCTestCase {
+    func testPassesEveryRun() {
+        XCTAssertTrue(true)
+    }
+
+    func testFailsEveryRun() {
+        XCTFail("fails on every run")
+    }
+
+    func testFailsEveryOtherRun() throws {
+        let counter = FileManager.default.temporaryDirectory.appending(path: "xcrew-testbed-repetitions")
+        let runs = (Int((try? String(contentsOf: counter, encoding: .utf8)) ?? "") ?? 0) + 1
+        try String(runs).write(to: counter, atomically: true, encoding: .utf8)
+        XCTAssertEqual(runs % 2, 0, "fails on every other run")
+    }
+}
+EOF
+  xcodegen_project "$fixture" group
+  derived=$(mktemp -d)
+  # The run fails by design: two of its tests fail.
+  (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,name=$simulator" -derivedDataPath "$derived" -resultBundlePath "$derived/Repetitions.xcresult" -only-testing:AppTests/RepetitionTests -test-iterations 5 -test-repetition-relaunch-enabled YES CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1) || true
+  # Failure messages name the test's source file by its absolute path: the fixture's folder becomes a neutral one.
+  xcrun xcresulttool get test-results tests --path "$derived/Repetitions.xcresult" | sed "s#$(cd "$fixture" && pwd -P)#/testbed/captures/repetitions#g" > "$fixture/tests.json"
+  rm -rf "$derived"
+  fixture_json "$fixture" pbxproj-groups xcodegen root
+  printf '{\n  "replay": "tests.json is xcresulttool get test-results tests on a run with -test-iterations 5 -test-repetition-relaunch-enabled YES, made on the Mac that generated it; tests read it and never run RepetitionTests",\n  "xcodebuild": "-only-testing:AppTests/RepetitionTests -test-iterations 5 -test-repetition-relaunch-enabled YES"\n}\n' > "$fixture/capture.json"
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
+simulator=${XCREW_TESTBED_SIMULATOR:-iPhone 17}
+repetitions
+
 # No fixture may hold a path of the Mac that made it: a home folder, or this checkout.
-if grep -rIl -e "$HOME" -e "$(pwd -P)" forms adversarial modular; then
+if grep -rIl -e "$HOME" -e "$(pwd -P)" forms adversarial modular captures; then
   echo "generate.sh: the files above hold an absolute path of this Mac" >&2
   exit 1
 fi
