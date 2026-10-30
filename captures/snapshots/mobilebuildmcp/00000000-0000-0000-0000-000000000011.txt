@@ -3,7 +3,7 @@ failed - Snapshot does not match reference.
 @−
 "file:///testbed/captures/snapshots/SnapshotTests/__Snapshots__/SnapshotTests/testSquare.1.png"
 @+
-"file:///testbed/home/Library/Developer/CoreSimulator/Devices/00000000-0000-0000-0000-000000000001/data/Containers/Data/Application/00000000-0000-0000-0000-000000000002/tmp/SnapshotTests/testSquare.1.png"
+"file:///testbed/user/Library/Developer/CoreSimulator/Devices/00000000-0000-0000-0000-000000000001/data/Containers/Data/Application/00000000-0000-0000-0000-000000000002/tmp/SnapshotTests/testSquare.1.png"
 
 To configure output for a custom diff tool, use 'withSnapshotTesting'. For example:
 
