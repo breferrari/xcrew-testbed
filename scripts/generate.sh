@@ -1127,13 +1127,15 @@ EOF
 # - probes: the five probe tests, five times each, relaunched every time (scenario B)
 # - crash: the crashing test, with its crash log (C)
 # - coverage: one test run with coverage on, the half-tested file's line counts, and each target's counts (A)
+# - lldb-expr: LLDB's `expr` on the running app under the default debugger backend (N)
+# - two-display: a two-display device's screenshot error, from MobileBuildMCP's tool and simctl's message, not a run (K)
 # - empty-filter: a selection matching no test (D)
 # - type-error: a build failing on a plain type error, with the pinned Xcode not the one building (E)
 # FIELD_CAPTURES names the scenarios to take again (`coverage type-error`), keeping the others' captures; unset,
 # all of them are taken afresh.
 field_captures() {
   out=$testbed/captures/field
-  wanted=${FIELD_CAPTURES:-probes coverage empty-filter type-error crash}
+  wanted=${FIELD_CAPTURES:-probes coverage empty-filter type-error crash lldb-expr two-display}
   if [ -z "${FIELD_CAPTURES:-}" ]; then rm -rf "${out:?}"; fi
   mkdir -p "$out"
   takes() { case " $wanted " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
@@ -1151,13 +1153,26 @@ field_captures() {
       "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
   }
   mkdir -p "$work/.mobilebuildmcp"
-  printf "schemaVersion: 1\nsessionDefaults:\n  workspacePath: '%s'\n  scheme: 'Feature'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/Field.xcworkspace" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
+  # The simulator, UI automation and debugging tools: the scenarios take a screenshot and attach LLDB, under
+  # MobileBuildMCP's default debugger backend, DAP.
+  printf "schemaVersion: 1\nenabledWorkflows: ['simulator', 'ui-automation', 'debugging']\nsessionDefaults:\n  workspacePath: '%s'\n  scheme: 'Feature'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/Field.xcworkspace" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
   # One MobileBuildMCP call, its result kept as `<name>.txt` and the log it names as `<name>.log`.
   call() {
     node scripts/mcp-call.mjs "$work" "$2" "$3" > "$results/$1.txt" || true
+    keep "$1" "${4:-}"
+  }
+  # Several calls in one MobileBuildMCP session, as a stateful tool needs, the last one's result kept: `calls <name>
+  # <tool> <arguments> [<tool> <arguments> …]`.
+  calls() {
+    name=$1
+    shift
+    node scripts/mcp-call.mjs "$work" "$@" > "$results/$name.txt" || true
+    keep "$name"
+  }
+  keep() {
     # An expected crash's report lands a little after the process ends: wait for it, so this step's check sees it.
-    if [ -n "${4:-}" ]; then sleep 20; fi
-    crash_check "${4:-}"
+    if [ -n "${2:-}" ]; then sleep 20; fi
+    crash_check "${2:-}"
     neutral < "$results/$1.txt" | uuids_out > "$out/$1.txt"
     log=$(grep -o '~/[^ ]*\.log' "$results/$1.txt" | head -1 | sed "s#^~#$HOME#")
     if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/$1.log"; fi
@@ -1194,6 +1209,30 @@ field_captures() {
       xcrun xccov view --report --json "$bundle" | neutral > "$out/coverage.report.json"
     fi
   fi
+  # N: LLDB's `expr` on the running app, under MobileBuildMCP's default debugger backend, which refuses it.
+  if takes lldb-expr; then
+    calls lldb-expr session_set_defaults '{"scheme":"App"}' build_run_sim '{}' debug_attach_sim '{"bundleId":"dev.xcrew.testbed.App"}' debug_lldb_command '{"command":"expr 1 + 1"}'
+  fi
+  # K: a screenshot of a device with two displays. Its device, the iPhone Duo, runs only on a runtime of its own, not
+  # a released one, so nothing boots: MobileBuildMCP's own screenshot tool runs against an `xcrun` that lists the
+  # device as booted and fails `simctl io … screenshot` with simctl's message, read from CoreSimulator's simctl
+  # (`Cannot choose between %lu displays. Specify one with --display:`, then a line per display, which only a run can
+  # fill and is left out). The live pass takes it for real.
+  if takes two-display; then
+    fake=$(mktemp -d)
+    cat > "$fake/xcrun" <<'XCRUN'
+#!/bin/sh
+case "$*" in
+  "simctl list devices -j"*) echo '{"devices":{"com.apple.CoreSimulator.SimRuntime.iOS-27-2-iPhone19-4":[{"udid":"00000000-0000-4000-8000-000000000001","name":"iPhone Duo","state":"Booted","isAvailable":true}]}}' ;;
+  "simctl io 00000000-0000-4000-8000-000000000001 screenshot "*) echo 'Cannot choose between 2 displays. Specify one with --display:' >&2; exit 1 ;;
+  *) exec /usr/bin/xcrun "$@" ;;
+esac
+XCRUN
+    chmod +x "$fake/xcrun"
+    PATH="$fake:$PATH" node scripts/mcp-call.mjs "$work" session_set_defaults '{"simulatorId":"00000000-0000-4000-8000-000000000001"}' screenshot '{}' > "$results/two-display.txt" || true
+    neutral < "$results/two-display.txt" | uuids_out > "$out/two-display.txt"
+    rm -rf "$fake"
+  fi
   if takes empty-filter; then call empty-filter test_sim '{"extraArgs":["-only-testing:FeatureTests/NoSuchTests"]}'; fi
   if takes type-error; then
     printf '\npublic let typeError: Int = "not a number"\n' >> "$work/Modules/Feature/Sources/Greeting.swift"
@@ -1214,7 +1253,7 @@ field_captures() {
   fi
   fi
   rm -rf "${work:?}" "${derived:?}" "${results:?}"
-  printf '{\n  "replay": "each <scenario>.txt is MobileBuildMCP'"'"'s MCP result on a copy of field/, the .log beside it the log it names, and .tests.json, .summary.json and .details.<test>.json what xcresulttool answered about its result bundle; crash.ips is the crashing test'"'"'s crash log, coverage.*.json what xccov answered; tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$out/capture.json"
+  printf '{\n  "replay": "each <scenario>.txt is MobileBuildMCP'"'"'s MCP result on a copy of field/, the .log beside it the log it names, and .tests.json, .summary.json and .details.<test>.json what xcresulttool answered about its result bundle; crash.ips is the crashing test'"'"'s crash log, coverage.*.json what xccov answered; tests read them and never build",\n  "two-display": "from source and the report, not a run: MobileBuildMCP'"'"'s own screenshot tool against an xcrun that fails simctl io … screenshot with simctl'"'"'s message from CoreSimulator'"'"'s simctl, its per-display lines left out; the field acceptance'"'"'s live pass takes it for real",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$out/capture.json"
   echo "$out"
 }
 

@@ -1,0 +1,8 @@
+
+📷 Screenshot
+
+Errors (1):
+
+  ✗ Failed to capture screenshot: Cannot choose between 2 displays. Specify one with --display:
+
+❌ Failed to capture screenshot.
