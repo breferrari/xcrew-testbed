@@ -1,0 +1,9 @@
+{
+  "hasCoverage" : true,
+  "hasDiagnostics" : true,
+  "hasTestResults" : true,
+  "logs" : [
+    "build",
+    "action"
+  ]
+}

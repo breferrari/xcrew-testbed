@@ -1,0 +1,4 @@
+{
+  "replay": "content-availability.json is xcresulttool get content-availability, file-list.json and Pricing.json are xccov view --archive --file-list --json and --file <App/Pricing.swift> --json, on one run made on the Mac that generated it; tests read them and never run PricingTests",
+  "xcodebuild": "-only-testing:AppTests/PricingTests -enableCodeCoverage YES"
+}
