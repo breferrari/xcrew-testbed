@@ -1,0 +1,6 @@
+{
+  "replay": "xcodebuild/ and mobilebuildmcp/ are xcresulttool export attachments --only-failures and get test-results tests on one run each of three failing snapshot tests, from xcodebuild test and from MobileBuildMCP test_sim, whose MCP result is test_sim.txt; made on the Mac that generated them, tests read them and never render",
+  "swiftSnapshotTesting": "1.19.7",
+  "iOSSnapshotTestCase": "8.0.0",
+  "mobilebuildmcp": "2.7.1"
+}

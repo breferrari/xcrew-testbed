@@ -1,0 +1,125 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000003",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "reference_0_00000000-0000-0000-0000-000000000010.png",
+        "timestamp" : 1793359093.653
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000008",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "failure_1_00000000-0000-0000-0000-000000000010.png",
+        "timestamp" : 1793359093.653
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000017",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "difference_2_00000000-0000-0000-0000-000000000010.png",
+        "timestamp" : 1793359093.653
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000011.txt",
+        "isAssociatedWithFailure" : true,
+        "suggestedHumanReadableName" : "Complete Issue Description.txt"
+      }
+    ],
+    "testIdentifier" : "PointFreeXCTests/testSquare()",
+    "testIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/PointFreeXCTests/testSquare"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000015.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Reference Image_0_00000000-0000-0000-0000-000000000001.png",
+        "timestamp" : 1793359093.884
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000006.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Failed Image_1_00000000-0000-0000-0000-000000000001.png",
+        "timestamp" : 1793359093.884
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000016.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Diffed Image_2_00000000-0000-0000-0000-000000000001.png",
+        "timestamp" : 1793359093.884
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000007.txt",
+        "isAssociatedWithFailure" : true,
+        "suggestedHumanReadableName" : "Complete Issue Description.txt"
+      }
+    ],
+    "testIdentifier" : "UberTests/testSquare()",
+    "testIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/UberTests/testSquare"
+  },
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000005.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "difference_0_00000000-0000-0000-0000-000000000009.png",
+        "timestamp" : 1793359093.916
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000012.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "failure_0_00000000-0000-0000-0000-000000000013.png",
+        "timestamp" : 1793359093.916
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000004.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "reference_0_00000000-0000-0000-0000-000000000014.png",
+        "timestamp" : 1793359093.915
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000002",
+        "deviceName" : "iPhone 17",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000018.txt",
+        "isAssociatedWithFailure" : true,
+        "suggestedHumanReadableName" : "Complete Issue Description.txt"
+      }
+    ],
+    "testIdentifier" : "PointFreeSwiftTests/square()",
+    "testIdentifierURL" : "test://com.apple.xcode/App/SnapshotTests/PointFreeSwiftTests/square()"
+  }
+]
