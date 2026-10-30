@@ -296,15 +296,23 @@ capture_simulator() {
     // only the plain ones count.
     const released = list("runtimes").filter(r => r.platform === "iOS" && r.isAvailable && /^\d+[A-Z]\d+$/.test(r.buildversion) && /\.iOS-\d+(-\d+)*$/.test(r.identifier))
     released.sort((a, b) => a.version.localeCompare(b.version, undefined, { numeric: true }))
-    const runtime = released.pop()
-    // The newest iPhone it runs: the one first supported on the latest iOS, then by model number.
-    const types = new Map(list("devicetypes").map(t => [t.identifier, t]))
+    // XCREW_TESTBED_RUNTIME names one, when the newest crashes its own services: it still has to be a released one.
+    const wanted = process.env.XCREW_TESTBED_RUNTIME
+    const runtime = wanted ? released.find(r => r.identifier === wanted) : released.pop()
+    // The newest iPhone it runs: the one first supported on the latest iOS, then by model number. A device that has a
+    // runtime of its own (iOS-27-2-iPhone19-4 belongs to iPhone19,4) runs best on that one, so it is left out.
+    const ownRuntime = new Set(list("runtimes").map(r => r.identifier.match(/\.iOS-\d+(?:-\d+)*-([A-Za-z]+\d+-\d+)$/)?.[1]).filter(Boolean))
+    const types = new Map(list("devicetypes").filter(t => !ownRuntime.has(t.modelIdentifier.replace(",", "-"))).map(t => [t.identifier, t]))
     const model = t => (t.modelIdentifier.match(/\d+/g) ?? []).map(Number)
     const iPhones = (runtime?.supportedDeviceTypes ?? []).filter(t => t.productFamily === "iPhone").map(t => types.get(t.identifier)).filter(Boolean)
     iPhones.sort((a, b) => a.minRuntimeVersion - b.minRuntimeVersion || model(a)[0] - model(b)[0] || model(a)[1] - model(b)[1])
     const iPhone = iPhones.pop()
     if (runtime && iPhone) console.log(`${iPhone.identifier} ${runtime.identifier}`)
   ')
+  if [ -z "$chosen" ] && [ -n "${XCREW_TESTBED_RUNTIME:-}" ]; then
+    echo "generate.sh: XCREW_TESTBED_RUNTIME names $XCREW_TESTBED_RUNTIME, which isn't an installed released iOS runtime" >&2
+    exit 1
+  fi
   if [ -z "$chosen" ]; then
     sdk=$(xcrun --sdk iphonesimulator --show-sdk-version)
     if command -v xcodes > /dev/null; then
@@ -321,6 +329,17 @@ capture_simulator() {
   trap finish_simulator EXIT
   xcrun simctl boot "$simulator_id"
   xcrun simctl bootstatus "$simulator_id" -b > /dev/null
+  # A runtime's own services may crash in the half minute after a boot: wait them out, and stop before any test if so.
+  sleep 30
+  crash_check
+}
+
+# Stops the run at the first crash report that names the capture simulator; the trap still deletes it.
+crash_check() {
+  if find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' -exec grep -l -F "$simulator_id" {} + 2> /dev/null | grep -q .; then
+    echo "generate.sh: stopping: the capture simulator ($simulator_id) crashed" >&2
+    exit 1
+  fi
 }
 
 finish_simulator() {
@@ -600,7 +619,9 @@ EOF
   }
   # Both runs fail by design: a test that records fails in both libraries, and so does every comparison after.
   (cd "$fixture" && TEST_RUNNER_SNAPSHOT_RECORD=1 xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1) || true
+  crash_check
   (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -resultBundlePath "$results/Snapshots.xcresult" CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1) || true
+  crash_check
   exported() {
     out=$fixture/$1
     rm -rf "${out:?}"
@@ -628,6 +649,7 @@ EOF
   mkdir -p "$fixture/.mobilebuildmcp"
   printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'App'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/App.xcodeproj" "$simulator" "$derived" > "$fixture/.mobilebuildmcp/config.yaml"
   node scripts/mcp-call.mjs "$fixture" test_sim > "$results/test_sim.txt"
+  crash_check
   neutral < "$results/test_sim.txt" | uuids_out > "$fixture/test_sim.txt"
   # MobileBuildMCP lists its files as a tree: the workspace's folder, then each file below it.
   bundle=$(awk '/└── ~\/.*\/$/ { root = $NF } /result-bundles\/.*\.xcresult/ { for (i = 1; i <= NF; i++) if ($i ~ /\.xcresult$/) print root $i }' "$results/test_sim.txt" | head -1 | sed "s#^~#$HOME#")
