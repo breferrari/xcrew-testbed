@@ -286,10 +286,10 @@ EOF
 
 modular
 
-# The field-acceptance fixture: a project shaped like the field report's (plans in the xcrew spec), with no identity.
+# The field fixture: a project shaped like a large production app, with no identity.
 # A Tuist workspace of four modules in layers, App on Feature on Data on Core, one scheme per module, coverage on in
 # every scheme, a UI-test target, `.xcode-version` pinned a major version behind the Xcode that generates it, and a CI
-# workflow that selects Xcode from that file. Feature's sources and tests are what the report's scenarios run: an
+# workflow that selects Xcode from that file. Feature's sources and tests are what the field scenarios run: an
 # extension half tested, five probe tests (passing, failing, flaky every other run, skipped, expected to fail), a crash,
 # and a line that compiles with a warning.
 field() {
@@ -1133,16 +1133,16 @@ EOF
   echo "$fixture"
 }
 
-# Captures of the field fixture's scenarios (the field acceptance plan in the xcrew spec), as MobileBuildMCP answers
+# Captures of the field fixture's scenarios, as MobileBuildMCP answers
 # them to Claude: its MCP results, the logs they name, and what xcresulttool and xccov answer about each run's bundle.
 # They run on a copy of field/, so a scenario's edit never reaches the fixture. Tests replay them.
-# - probes: the five probe tests, five times each, relaunched every time (scenario B)
-# - crash: the crashing test, with its crash log (C)
-# - coverage: one test run with coverage on, the half-tested file's line counts, and each target's counts (A)
-# - lldb-expr: LLDB's `expr` on the running app under the default debugger backend (N)
-# - two-display: a two-display device's screenshot error, from MobileBuildMCP's tool and simctl's message, not a run (K)
-# - empty-filter: a selection matching no test (D)
-# - type-error: a build failing on a plain type error, with the pinned Xcode not the one building (E)
+# - probes: the five probe tests, five times each, relaunched every time
+# - crash: the crashing test, with its crash log
+# - coverage: one test run with coverage on, the half-tested file's line counts, and each target's counts
+# - lldb-expr: LLDB's `expr` on the running app under the default debugger backend
+# - two-display: a two-display device's screenshot error, from MobileBuildMCP's tool and simctl's message, not a run
+# - empty-filter: a selection matching no test
+# - type-error: a build failing on a plain type error, with the pinned Xcode not the one building
 # FIELD_CAPTURES names the scenarios to take again (`coverage type-error`), keeping the others' captures; unset,
 # all of them are taken afresh.
 field_captures() {
@@ -1221,15 +1221,15 @@ field_captures() {
       xcrun xccov view --report --json "$bundle" | neutral > "$out/coverage.report.json"
     fi
   fi
-  # N: LLDB's `expr` on the running app, under MobileBuildMCP's default debugger backend, which refuses it.
+  # lldb-expr: LLDB's `expr` on the running app, under MobileBuildMCP's default debugger backend, which refuses it.
   if takes lldb-expr; then
     calls lldb-expr session_set_defaults '{"scheme":"App"}' build_run_sim '{}' debug_attach_sim '{"bundleId":"dev.xcrew.testbed.App"}' debug_lldb_command '{"command":"expr 1 + 1"}'
   fi
-  # K: a screenshot of a device with two displays. Its device, the iPhone Duo, runs only on a runtime of its own, not
+  # two-display: a screenshot of a device with two displays. Its device, the iPhone Duo, runs only on a runtime of its own, not
   # a released one, so nothing boots: MobileBuildMCP's own screenshot tool runs against an `xcrun` that lists the
   # device as booted and fails `simctl io … screenshot` with simctl's message, read from CoreSimulator's simctl
   # (`Cannot choose between %lu displays. Specify one with --display:`, then a line per display, which only a run can
-  # fill and is left out). The live pass takes it for real.
+  # fill and is left out). A real run needs a Mac with that device's runtime.
   if takes two-display; then
     fake=$(mktemp -d)
     cat > "$fake/xcrun" <<'XCRUN'
@@ -1265,7 +1265,7 @@ XCRUN
   fi
   fi
   rm -rf "${work:?}" "${derived:?}" "${results:?}"
-  printf '{\n  "replay": "each <scenario>.txt is MobileBuildMCP'"'"'s MCP result on a copy of field/, the .log beside it the log it names, and .tests.json, .summary.json and .details.<test>.json what xcresulttool answered about its result bundle; crash.ips is the crashing test'"'"'s crash log, coverage.*.json what xccov answered; tests read them and never build",\n  "two-display": "from source and the report, not a run: MobileBuildMCP'"'"'s own screenshot tool against an xcrun that fails simctl io … screenshot with simctl'"'"'s message from CoreSimulator'"'"'s simctl, its per-display lines left out; the field acceptance'"'"'s live pass takes it for real",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$out/capture.json"
+  printf '{\n  "replay": "each <scenario>.txt is MobileBuildMCP'"'"'s MCP result on a copy of field/, the .log beside it the log it names, and .tests.json, .summary.json and .details.<test>.json what xcresulttool answered about its result bundle; crash.ips is the crashing test'"'"'s crash log, coverage.*.json what xccov answered; tests read them and never build",\n  "two-display": "not a run: taken from MobileBuildMCP'"'"'s source and the reported error text, MobileBuildMCP'"'"'s own screenshot tool against an xcrun that fails simctl io … screenshot with simctl'"'"'s message from CoreSimulator'"'"'s simctl, its per-display lines left out; a real run needs a Mac with that device'"'"'s runtime",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$out/capture.json"
   echo "$out"
 }
 
