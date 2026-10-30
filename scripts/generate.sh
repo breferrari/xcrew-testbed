@@ -17,6 +17,11 @@ sources() {
   cp -R "$base/App" "$base/AppTests" "$1/"
 }
 
+# Each device or simulator id a capture names, numbered in sorted order: 00000000-0000-0000-0000-000000000001 and on.
+uuids_out() {
+  perl -0pe 'my $u = qr/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/; my %seen = map { uc($_) => 1 } /($u)/g; my $n = 0; my %id = map { $_ => sprintf("00000000-0000-0000-0000-%012d", ++$n) } sort keys %seen; s/($u)/$id{uc $1}/g'
+}
+
 xcodegen_spec() {
   cat > "$1/project.yml" <<EOF
 name: App
@@ -311,7 +316,7 @@ EOF
   # The run fails by design: two of its tests fail.
   (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,name=$simulator" -derivedDataPath "$derived" -resultBundlePath "$derived/Repetitions.xcresult" -only-testing:AppTests/RepetitionTests -test-iterations 5 -test-repetition-relaunch-enabled YES CODE_SIGNING_ALLOWED=NO -quiet > /dev/null 2>&1) || true
   # Failure messages name the test's source file by its absolute path: the fixture's folder becomes a neutral one.
-  xcrun xcresulttool get test-results tests --path "$derived/Repetitions.xcresult" | sed "s#$(cd "$fixture" && pwd -P)#/testbed/captures/repetitions#g" > "$fixture/tests.json"
+  xcrun xcresulttool get test-results tests --path "$derived/Repetitions.xcresult" | sed "s#$(cd "$fixture" && pwd -P)#/testbed/captures/repetitions#g" | uuids_out > "$fixture/tests.json"
   rm -rf "$derived"
   fixture_json "$fixture" pbxproj-groups xcodegen root
   printf '{\n  "replay": "tests.json is xcresulttool get test-results tests on a run with -test-iterations 5 -test-repetition-relaunch-enabled YES, made on the Mac that generated it; tests read it and never run RepetitionTests",\n  "xcodebuild": "-only-testing:AppTests/RepetitionTests -test-iterations 5 -test-repetition-relaunch-enabled YES"\n}\n' > "$fixture/capture.json"
@@ -407,8 +412,8 @@ environment() {
   capture() {
     build > "$results/$1.txt"
     log=$(grep -o '~/[^ ]*\.log' "$results/$1.txt" | head -1 | sed "s#^~#$HOME#")
-    neutral < "$results/$1.txt" > "$fixture/$1.txt"
-    neutral < "$log" | devices_out > "$fixture/$1.log"
+    neutral < "$results/$1.txt" | uuids_out > "$fixture/$1.txt"
+    neutral < "$log" | devices_out | uuids_out > "$fixture/$1.log"
   }
   configure "$simulator"
   build | grep -q 'Build succeeded'
@@ -436,10 +441,4 @@ repetitions
 coverage
 environment
 
-# No fixture may hold a path of the Mac that made it: a home folder, or this checkout.
-# JSON may write each slash escaped, as `\/`.
-escaped() { printf '%s' "$1" | sed 's#/#\\/#g'; }
-if grep -rIlF -e "$HOME" -e "$(pwd -P)" -e "$(escaped "$HOME")" -e "$(escaped "$(pwd -P)")" forms adversarial modular captures; then
-  echo "generate.sh: the files above hold an absolute path of this Mac" >&2
-  exit 1
-fi
+scripts/leaks.sh
