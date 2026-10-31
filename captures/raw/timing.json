@@ -1,0 +1,109 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "\n🧪 Test\n\nErrors (2):\n\n  ✗ Swift/ContiguousArrayBuffer.swift:695: Fatal error: Index out of range\n\n  ✗ 2026-10-31 05:52:33.940577+0100 xctest[36095:3895189] Swift/ContiguousArrayBuffer.swift:695: Fatal error: Index out of range\n\nWarnings (1):\n\n  ⚠ initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]\n    /testbed/field/Modules/Feature/Sources/Legacy.swift:3\n\nTest Failures (5):\n\n  ✗ CrashTests / testOutOfRange(): Crash: xctest at CrashTests.testOutOfRange()\n\n  ✗ ProbeTests / testFails: XCTAssertEqual failed: (\"Hello, Ada\") is not equal to (\"Hi, Ada\")\n    /testbed/field/Modules/Feature/Tests/ProbeTests.swift:11\n\n  ✗ ProbeTests / testFails(): XCTAssertEqual failed: (\"Hello, Ada\") is not equal to (\"Hi, Ada\")\n\n  ✗ ProbeTests / testFlaky: XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - run 1 is odd\n    /testbed/field/Modules/Feature/Tests/ProbeTests.swift:19\n\n  ✗ ProbeTests / testFlaky(): XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - run 1 is odd\n\nTest Results:\n  ✅ ProbeTests/testExpectedFailure (0.352s)\n  ❌ ProbeTests/testFails (0.004s)\n  ❌ ProbeTests/testFlaky (0.005s)\n  ✅ ProbeTests/testPasses (0.000s)\n  ⏭️ ProbeTests/testSkipped (0.009s)\n\n❌ 3 tests failed, 1 passed, 1 skipped (⏱️ 24.2s)\n  └ Files:\n     └── ~/Library/Developer/MobileBuildMCP/workspaces/field-f9da0a5d070a/\n         ├── logs/test_sim_2026-10-31T04-52-13-598Z_pid35682_c987cf7f.log — Build Logs\n         ├── result-bundles/test_sim_2026-10-31T04-52-13-599Z_pid35682_3475a406.xcresult — Result Bundle\n         └── test-products/test_sim_2026-10-31T04-52-13-599Z_pid35682_04a7243e.xctestproducts — Test Products\n"
+    }
+  ],
+  "structuredContent": {
+    "schema": "mobilebuildmcp.output.test-result",
+    "schemaVersion": "3",
+    "didError": true,
+    "error": "Tests failed",
+    "data": {
+      "summary": {
+        "status": "FAILED",
+        "durationMs": 24177,
+        "counts": {
+          "passed": 1,
+          "failed": 3,
+          "skipped": 1
+        },
+        "target": "simulator"
+      },
+      "artifacts": {
+        "buildLogPath": "~/Library/Developer/MobileBuildMCP/workspaces/field-f9da0a5d070a/logs/test_sim_2026-10-31T04-52-13-598Z_pid35682_c987cf7f.log",
+        "xcresultPath": "~/Library/Developer/MobileBuildMCP/workspaces/field-f9da0a5d070a/result-bundles/test_sim_2026-10-31T04-52-13-599Z_pid35682_3475a406.xcresult",
+        "testProductsPath": "~/Library/Developer/MobileBuildMCP/workspaces/field-f9da0a5d070a/test-products/test_sim_2026-10-31T04-52-13-599Z_pid35682_04a7243e.xctestproducts"
+      },
+      "diagnostics": {
+        "warnings": [
+          {
+            "message": "initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]",
+            "location": "/testbed/field/Modules/Feature/Sources/Legacy.swift:3"
+          }
+        ],
+        "errors": [
+          {
+            "message": "Swift/ContiguousArrayBuffer.swift:695: Fatal error: Index out of range"
+          },
+          {
+            "message": "2026-10-31 05:52:33.940577+0100 xctest[36095:3895189] Swift/ContiguousArrayBuffer.swift:695: Fatal error: Index out of range"
+          }
+        ],
+        "testFailures": [
+          {
+            "suite": "CrashTests",
+            "test": "testOutOfRange()",
+            "message": "Crash: xctest at CrashTests.testOutOfRange()"
+          },
+          {
+            "suite": "ProbeTests",
+            "test": "testFails",
+            "message": "XCTAssertEqual failed: (\"Hello, Ada\") is not equal to (\"Hi, Ada\")",
+            "location": "/testbed/field/Modules/Feature/Tests/ProbeTests.swift:11"
+          },
+          {
+            "suite": "ProbeTests",
+            "test": "testFails()",
+            "message": "XCTAssertEqual failed: (\"Hello, Ada\") is not equal to (\"Hi, Ada\")"
+          },
+          {
+            "suite": "ProbeTests",
+            "test": "testFlaky",
+            "message": "XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - run 1 is odd",
+            "location": "/testbed/field/Modules/Feature/Tests/ProbeTests.swift:19"
+          },
+          {
+            "suite": "ProbeTests",
+            "test": "testFlaky()",
+            "message": "XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - run 1 is odd"
+          }
+        ]
+      },
+      "testCases": [
+        {
+          "suite": "ProbeTests",
+          "test": "testExpectedFailure",
+          "status": "passed",
+          "durationMs": 352
+        },
+        {
+          "suite": "ProbeTests",
+          "test": "testFails",
+          "status": "failed",
+          "durationMs": 4
+        },
+        {
+          "suite": "ProbeTests",
+          "test": "testFlaky",
+          "status": "failed",
+          "durationMs": 5
+        },
+        {
+          "suite": "ProbeTests",
+          "test": "testPasses",
+          "status": "passed",
+          "durationMs": 0
+        },
+        {
+          "suite": "ProbeTests",
+          "test": "testSkipped",
+          "status": "skipped",
+          "durationMs": 9
+        }
+      ]
+    }
+  },
+  "isError": true
+}
