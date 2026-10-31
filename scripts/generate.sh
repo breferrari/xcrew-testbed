@@ -7,6 +7,7 @@
 # scripts/testbed/generate.sh raw           only the raw MobileBuildMCP captures, on the capture simulator
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
 # scripts/testbed/generate.sh self-test     checks the crash rules on made-up reports; boots nothing
+# scripts/testbed/generate.sh field-captures   only the field captures (FIELD_CAPTURES names which), on the capture simulator
 # scripts/testbed/generate.sh xcode-mcp     only the Xcode MCP's captures, never in a full run: it needs Xcode open
 set -eu
 # No step reads a terminal: one that tried would stop the run, its simulator still there.
@@ -1474,7 +1475,11 @@ XCRUN
     neutral < "$results/two-display.txt" | uuids_out > "$out/two-display.txt"
     rm -rf "$fake"
   fi
-  if takes empty-filter; then call empty-filter test_sim '{"extraArgs":["-only-testing:FeatureTests/NoSuchTests"]}'; fi
+  # With what its bundle says: the text writes "Test succeeded" with no count for no test run and for counts unknown alike.
+  if takes empty-filter; then
+    call empty-filter test_sim '{"extraArgs":["-only-testing:FeatureTests/NoSuchTests"]}'
+    answers empty-filter
+  fi
   if takes type-error; then
     printf '\npublic let typeError: Int = "not a number"\n' >> "$work/Modules/Feature/Sources/Greeting.swift"
     call type-error build_sim '{}'
@@ -1709,6 +1714,12 @@ crash_self_test() {
   [ "$failed" = 0 ] && echo "generate.sh self-test: the crash rules hold"
   return "$failed"
 }
+
+if [ "$build" = field-captures ]; then
+  capture_simulator
+  field_captures
+  exit 0
+fi
 
 if [ "$build" = self-test ]; then
   crash_self_test
