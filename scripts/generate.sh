@@ -9,7 +9,7 @@
 # scripts/testbed/generate.sh raw-build     only the raw MobileBuildMCP build capture, on a capture simulator never booted
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
 # scripts/testbed/generate.sh parallel      only the parallel fixture and its raw capture, on the capture simulator and its clones
-# scripts/testbed/generate.sh self-test     checks the crash rules on made-up reports; boots nothing
+# scripts/testbed/generate.sh self-test     checks the crash rules on made-up reports, and that a fixture's or an unknown name boots nothing; boots nothing
 # scripts/testbed/generate.sh field-captures   only the field captures (FIELD_CAPTURES names which), on the capture simulator
 # scripts/testbed/generate.sh xcode-mcp     only the Xcode MCP's captures, never in a full run: it needs Xcode open
 set -eu
@@ -19,8 +19,9 @@ cd "$(dirname "$0")/.."
 testbed=.
 base=$testbed/base
 build=${1:-}
-# A step runs in a full run, and alone when it's the one named.
-runs() { case $build in "" | --build) return 0 ;; *) [ "$build" = "$1" ] ;; esac; }
+# A step runs in a full run, and alone when it's the one named, which `named` notes.
+named=
+runs() { case $build in "" | --build) return 0 ;; *) [ "$build" = "$1" ] && named=1 ;; esac; }
 xcode=$(xcodebuild -version | head -1 | sed 's/Xcode //')
 tuist_version=$(tuist version | tail -1)
 xcodegen_version=$(xcodegen version | sed 's/Version: //')
@@ -2038,6 +2039,33 @@ crash_self_test() {
   return "$failed"
 }
 
+# A name that isn't a full run boots nothing: a fixture's makes that fixture and stops, and one that's no step's or
+# fixture's stops with a usage line, writing nothing. Each runs on a copy of scripts/ and base/, with an xcrun that
+# fails, and notes it in `asked`, when it's asked to create or boot a simulator.
+modes_self_test() {
+  copy=$(mktemp -d)
+  notes=$(mktemp -d)
+  cp -R scripts base "$copy/"
+  mkdir -p "$copy/bin"
+  printf '#!/bin/sh\ncase "$1 $2" in "simctl create" | "simctl boot") echo "$*" >> "%s/asked"; exit 1 ;; esac\nexec "%s" "$@"\n' "$notes" "$(command -v xcrun)" > "$copy/bin/xcrun"
+  chmod +x "$copy/bin/xcrun"
+  failed=0
+  if ! PATH="$copy/bin:$PATH" sh "$copy/scripts/generate.sh" swift-testing > "$notes/fixture.log" 2>&1; then
+    echo "generate.sh self-test: making the swift-testing fixture alone failed: $(tail -3 "$notes/fixture.log")" >&2
+    failed=1
+  fi
+  if [ -f "$notes/asked" ]; then echo "generate.sh self-test: a fixture's name asked for a simulator: $(cat "$notes/asked")" >&2; failed=1; fi
+  rm -f "$notes/asked"
+  touch "$notes/before"
+  if PATH="$copy/bin:$PATH" sh "$copy/scripts/generate.sh" no-such-name > /dev/null 2> "$notes/usage"; then echo "generate.sh self-test: an unknown name succeeded" >&2; failed=1; fi
+  grep -q "usage:" "$notes/usage" || { echo "generate.sh self-test: an unknown name gave no usage line" >&2; failed=1; }
+  if [ -f "$notes/asked" ]; then echo "generate.sh self-test: an unknown name asked for a simulator: $(cat "$notes/asked")" >&2; failed=1; fi
+  [ -z "$(find "$copy" -newer "$notes/before")" ] || { echo "generate.sh self-test: an unknown name wrote files" >&2; failed=1; }
+  rm -rf "${copy:?}" "${notes:?}"
+  [ "$failed" = 0 ] && echo "generate.sh self-test: a name that isn't a full run boots nothing"
+  return "$failed"
+}
+
 if [ "$build" = field-captures ]; then
   capture_simulator
   field_captures
@@ -2045,8 +2073,10 @@ if [ "$build" = field-captures ]; then
 fi
 
 if [ "$build" = self-test ]; then
+  # Called plainly, so `set -e` holds inside them: a failing setup step fails the self-test, not one of its cases.
   crash_self_test
-  exit $?
+  modes_self_test
+  exit 0
 fi
 
 if [ "$build" = shapes ]; then
@@ -2088,6 +2118,17 @@ if [ "$build" = concurrency ]; then
   concurrency_captures
   exit 0
 fi
+
+# Only a full run takes every capture. A fixture's name made that fixture above and stops here; any other name is no
+# step's or fixture's, and stops having changed nothing. So no name but a full run's boots a simulator from here.
+case $build in
+  "" | --build) ;;
+  *)
+    if [ -n "$named" ]; then exit 0; fi
+    echo "generate.sh: no step or fixture is named \"$build\"; usage: scripts/generate.sh [--build | <step> | <fixture>]: a step named at the top of this script, or a fixture, forms, adversarial, modular, field or swift-testing" >&2
+    exit 2
+    ;;
+esac
 
 capture_simulator
 repetitions

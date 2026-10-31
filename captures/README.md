@@ -172,6 +172,10 @@ During a test call the script reads both device sets each second: the default on
 
 The rule never goes by the process name, and any other SIGKILL counts as a crash. `scripts/generate.sh self-test` checks this on made-up reports. On 2026-10-31 every report the raw and shapes runs left was one of these: tccd, routined, siriactionsd, newsd, generativeexperiencesd and dtdeviceinfod. The empty-filter run's were tccd, routined, generativeexperiencesd and dmd; build_sim's, never booted, left none.
 
+## Which names take captures
+
+Only a full run, `scripts/generate.sh` or `--build`, takes every capture. A step's name takes only that step's captures. A fixture's name that's no step's makes only that fixture, and boots nothing. A name that's neither stops with a usage line, writing nothing. Before 2026-10-31 a fixture's name, or any other, made what it named and then went on to take every capture. `scripts/generate.sh self-test` runs a fixture's name and an unknown one on a copy, with an `xcrun` that fails when asked to create or boot a simulator.
+
 ## xcode-mcp
 
 Not taken yet: `scripts/generate.sh xcode-mcp` writes the Xcode MCP's raw answers to `initialize` and `tools/list` here, when run by hand with Xcode open on `field/`.
