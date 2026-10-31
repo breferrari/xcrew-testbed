@@ -144,13 +144,23 @@ What they show:
 - **MobileBuildMCP counts `❌ 1 test failed, 3 passed, 1 skipped`** for six tests. The parameterised test is one, not three. `knownIssue()` is in neither passed nor failed: Swift Testing writes it `━ Test knownIssue() passed after 0.001 seconds with 1 known issue`, not with `✔`.
 - **`Testing started` is written only after the tests.** In the ten copies, the tests had started from the seventh (`Test Suite 'All tests' started at` at line 495, `◇ Test run started.` at 498), and none holds `Testing started` or `** TEST EXECUTE`. In the finished log, `Testing started` is the last line, after `** TEST EXECUTE FAILED **`.
 
+### parallel
+
+`scripts/generate.sh parallel` runs `parallel/`'s bundle: `ProbeTests` with a pass, a failure and an `XCTSkip`, and `SlowTests` with a 5 s wait. The scheme runs them in parallel, at most two workers (`-parallel-testing-worker-count 2`), so at most three simulators. The step checks the run came to one failure (`testFails`), one skipped and `testWaits` passed, on the parallel runner, and stops otherwise. It writes `parallel.json`, `parallel.log`, `parallel-snapshots.json` and `parallel-midrun.log`, as shapes does. The mid-run copy is the last one with the tests' build done (`** TEST BUILD SUCCEEDED **`) or the tests started, and no verdict yet.
+
+Its files aren't committed yet: its run left a crash report from a system service in one of xcodebuild's clones that no known entry covers.
+
 ## Crash reports
 
-A capture simulator's services are killed when it shuts down, and each leaves a report. `shutdown_kill` excuses one only when all four hold:
-- it was written after `finish_simulator`'s shutdown began;
+A simulator's services are killed when it shuts down, and each leaves a report. `shutdown_kill` excuses one only when all four hold:
+- it was written after its simulator's shutdown began (below);
 - it's `EXC_CRASH` with `SIGKILL`;
 - it ended by `XPC_EXIT_REASON_SIGTERM_TIMEOUT` (launchd's SIGTERM, then SIGKILL when the service didn't exit);
-- it's in the capture simulator's own coalition, `com.apple.CoreSimulator.SimDevice.<id>`.
+- it's in the coalition of this run's capture simulator or one of its clones, `com.apple.CoreSimulator.SimDevice.<id>`.
+
+A shutdown begins at the simulator's first observed departure from Booted. For the capture simulator it begins at that or at `finish_simulator`'s shutdown, whichever is earlier.
+
+During a test call the script reads both device sets each second: the default one, and the testing set (`xcrun simctl --set testing list`), where xcodebuild makes a parallel run's clones. A clone is this run's when it appears there during the call. The first read that finds a simulator, once seen Booted, shut down or gone, marks its departure. xcodebuild shuts the capture simulator down to clone it, and shuts its clones down as the run ends, before `test_sim` returns. A departure is seen a second or more late, so a report written in that gap counts. A report counts as this run's when it names any of these ids. The cleanup lists the run's clones, and deletes one xcodebuild left only when it's named a clone of the capture simulator.
 
 The rule never goes by the process name, and any other SIGKILL counts as a crash. `scripts/generate.sh self-test` checks this on made-up reports. On 2026-10-31 every report the raw and shapes runs left was one of these: tccd, routined, siriactionsd, newsd, generativeexperiencesd and dtdeviceinfod. The empty-filter run's were tccd, routined, generativeexperiencesd and dmd; build_sim's, never booted, left none.
 

@@ -27,6 +27,7 @@ modular/<name>/     apps split into modules across projects
 field/              a large modular app's shape, with no identity
 concurrency/        two frameworks and an app drawing Swift concurrency diagnostics
 swift-testing/      a Swift Testing suite with each shape of result
+parallel/           an XCTest bundle its scheme runs in parallel
 captures/<name>/    what tools answered about a real run, replayed by tests
 scripts/generate.sh regenerates every fixture from base/
 ```
@@ -58,6 +59,7 @@ scripts/generate.sh --build
 - **`scripts/generate.sh raw`** takes only the raw MobileBuildMCP test captures, on the capture simulator. **`RAW_CAPTURES`** names the ones to take again (`empty-filter`), keeping the folder's others. Unset, all of them are taken afresh.
 - **`scripts/generate.sh raw-build`** takes only the raw `build_sim` capture. It only builds: its simulator is created on a released runtime, never booted, and deleted at the end.
 - **`scripts/generate.sh shapes`** makes only `swift-testing/` and its raw capture, on the capture simulator.
+- **`scripts/generate.sh parallel`** makes only `parallel/` and its raw capture, on the capture simulator and at most two clones xcodebuild makes of it.
 - **`scripts/generate.sh self-test`** checks the crash rules on made-up reports, and boots nothing.
 - **`scripts/generate.sh xcode-mcp`** takes the Xcode MCP's answers, and is never part of a full run. It needs the selected Xcode already open, by its own path, with `field/Field.xcworkspace` in it. Xcode then asks whether to let the caller in, which only the person at the Mac answers. It runs on this repository's fixture alone.
 - **`scripts/generate.sh concurrency`** makes only `concurrency/` and its capture. That capture only builds: its simulator is created on a released runtime and never booted, and deleted at the end.
