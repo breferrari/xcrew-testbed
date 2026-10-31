@@ -57,6 +57,7 @@ scripts/generate.sh --build
 
 - **`--build`** also builds each form for testing, to prove it real.
 - **`scripts/generate.sh raw`** takes only the raw MobileBuildMCP test captures, on the capture simulator. **`RAW_CAPTURES`** names the ones to take again (`empty-filter`), keeping the folder's others. Unset, all of them are taken afresh.
+- **`scripts/generate.sh raw-answers`** rereads the result bundles MobileBuildMCP kept for the committed raw captures and saves their answers, booting nothing. If any bundle is gone, or any answer fails, it writes nothing.
 - **`scripts/generate.sh raw-build`** takes only the raw `build_sim` capture. It only builds: its simulator is created on a released runtime, never booted, and deleted at the end.
 - **`scripts/generate.sh shapes`** makes only `swift-testing/` and its raw capture, on the capture simulator.
 - **`scripts/generate.sh parallel`** makes only `parallel/` and its raw capture, on the capture simulator and at most two clones xcodebuild makes of it.

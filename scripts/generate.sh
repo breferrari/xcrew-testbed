@@ -5,6 +5,7 @@
 # scripts/testbed/generate.sh [--build]   --build also builds each form for testing, to prove it's real
 # scripts/testbed/generate.sh concurrency   only the concurrency fixture and its capture, on a capture simulator never booted
 # scripts/testbed/generate.sh raw           only the raw MobileBuildMCP test captures (RAW_CAPTURES names which), on the capture simulator
+# scripts/testbed/generate.sh raw-answers   only the committed raw captures' bundle answers, from the bundles on this Mac; boots nothing
 # scripts/testbed/generate.sh raw-build     only the raw MobileBuildMCP build capture, on a capture simulator never booted
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
 # scripts/testbed/generate.sh parallel      only the parallel fixture and its raw capture, on the capture simulator and its clones
@@ -32,6 +33,15 @@ sources() {
 # Each device or simulator id a capture names, numbered in sorted order: 00000000-0000-0000-0000-000000000001 and on.
 uuids_out() {
   perl -0pe 'my $u = qr/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/; my %seen = map { uc($_) => 1 } /($u)/g; my $n = 0; my %id = map { $_ => sprintf("00000000-0000-0000-0000-%012d", ++$n) } sort keys %seen; s/($u)/$id{uc $1}/g'
+}
+
+# Each folder in every spelling a tool writes it, `<from> <to>` pairs, the resolved spelling first since it holds the
+# written one, each also with JSON's escaped slashes; then this Mac's home and temporary folder, and any user's home
+# folder, as a crash log writes macOS's own `USER` placeholder for one. A pair whose folder is empty, as TMPDIR is when
+# unset, is skipped: it would match between every character.
+neutralise() {
+  perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { next unless length $from; (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
+    "$@" "$HOME" /testbed/user "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
 }
 
 xcodegen_spec() {
@@ -1494,14 +1504,7 @@ field_captures() {
   derived=$(mktemp -d)
   results=$(mktemp -d)
   resolved=$(cd "$work" && pwd -P)
-  # Each folder in every spelling a tool writes it: resolved (`/private/var/…`) and as written (`/var/…`), and each
-  # with JSON's escaped slashes, the resolved first since it holds the written one. Then any user's home folder, as a
-  # crash log writes macOS's own `USER` placeholder for one.
-  neutral() {
-    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
-      "$resolved" /testbed/field "$work" /testbed/field "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
-      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
-  }
+  neutral() { neutralise "$resolved" /testbed/field "$work" /testbed/field "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData; }
   mkdir -p "$work/.mobilebuildmcp"
   # The simulator, UI automation and debugging tools: the scenarios take a screenshot and attach LLDB, under
   # MobileBuildMCP's default debugger backend, DAP.
@@ -1527,22 +1530,14 @@ field_captures() {
     log=$(grep -o '~/[^ ]*\.log' "$results/$1.txt" | head -1 | sed "s#^~#$HOME#")
     if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/$1.log"; fi
   }
-  # The bundle a test call names, and what xcresulttool says of it: its tests, and the details of each failed test.
+  # The bundle a test call names.
   bundle_of() {
     awk '/└── ~\/.*\/$/ { root = $NF } /result-bundles\/.*\.xcresult/ { for (i = 1; i <= NF; i++) if ($i ~ /\.xcresult$/) print root $i }' "$results/$1.txt" | head -1 | sed "s#^~#$HOME#"
   }
   answers() {
     bundle=$(bundle_of "$1")
     [ -n "$bundle" ] || return 0
-    xcrun xcresulttool get test-results tests --path "$bundle" --compact | neutral | uuids_out > "$out/$1.tests.json"
-    xcrun xcresulttool get test-results summary --path "$bundle" --compact | neutral | uuids_out > "$out/$1.summary.json"
-    for test in $(node -e '
-      const walk = n => [...(n.nodeType === "Test Case" && n.result === "Failed" ? [n.nodeIdentifier] : []), ...(n.children ?? []).flatMap(walk)]
-      console.log(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).testNodes.flatMap(walk).join("\n"))
-    ' "$out/$1.tests.json"); do
-      name=$(printf '%s' "$test" | sed 's#/#.#g; s#()$##')
-      xcrun xcresulttool get test-results test-details --test-id "$test" --path "$bundle" --compact | neutral | uuids_out > "$out/$1.details.$name.json"
-    done
+    bundle_answers "$bundle" "$1"
   }
   if takes probes; then call probes test_sim '{"extraArgs":["-only-testing:FeatureTests/ProbeTests","-test-iterations","5","-test-repetition-relaunch-enabled","YES"]}'
   answers probes; fi
@@ -1624,11 +1619,7 @@ concurrency_captures() {
   derived=$(mktemp -d)
   results=$(mktemp -d)
   resolved=$(cd "$work" && pwd -P)
-  neutral() {
-    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
-      "$resolved" /testbed/concurrency "$work" /testbed/concurrency "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
-      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
-  }
+  neutral() { neutralise "$resolved" /testbed/concurrency "$work" /testbed/concurrency "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData; }
   for scheme in Warnings App; do
     (cd "$work" && xcodebuild build -project Concurrency.xcodeproj -scheme "$scheme" -destination 'generic/platform=iOS Simulator' -derivedDataPath "$derived") > "$results/$scheme.log" 2>&1 || true
   done
@@ -1652,7 +1643,39 @@ concurrency_captures() {
 
 # What captures/raw holds, for every step that writes there.
 raw_manifest() {
-  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, and <name>.log the log it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
+  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
+}
+
+# Result bundle `$1`'s answers to what xcrew asks it, as `<name>` (`$2`) in `$out`, through the calling step's `neutral`:
+# `<name>.tests.json` and `<name>.summary.json`, and `<name>.details.<Class.test>.json` for each test that failed or
+# failed as expected, an XCTest expected failure or a Swift Testing known issue. Each answer must be JSON, or the step
+# stops. xcresulttool writes a duration in the Mac's locale ("0,00013 seconds" where a comma is the decimal mark), and
+# it's kept as written.
+bundle_answers() {
+  bundle_answer "$1" "$out/$2.tests.json" tests
+  bundle_answer "$1" "$out/$2.summary.json" summary
+  failed=$(node -e '
+    const walk = n => [...(n.nodeType === "Test Case" && ["Failed", "Expected Failure"].includes(n.result) ? [n.nodeIdentifier] : []), ...(n.children ?? []).flatMap(walk)]
+    console.log(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).testNodes.flatMap(walk).join("\n"))
+  ' "$out/$2.tests.json")
+  printf '%s\n' "$failed" | while IFS= read -r test; do
+    [ -n "$test" ] || continue
+    bundle_answer "$1" "$out/$2.details.$(printf '%s' "$test" | sed 's#/#.#g; s#()$##').json" test-details --test-id "$test"
+  done
+}
+
+# One xcresulttool answer about bundle `$1`, neutralised into `$2`: `get test-results <the rest>`. Stops the step when
+# xcresulttool fails or its answer isn't JSON.
+bundle_answer() {
+  answer=$(xcrun xcresulttool get test-results "$3" ${4:+"$4"} ${5:+"$5"} --path "$1" --compact) || { echo "generate.sh: xcresulttool couldn't answer $3 for $1" >&2; exit 1; }
+  printf '%s\n' "$answer" | neutral | uuids_out > "$2"
+  node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$2" 2> /dev/null || { echo "generate.sh: $2 isn't JSON" >&2; exit 1; }
+}
+
+# The result bundle a raw capture's JSON names, written from `~`, when it's on this Mac.
+raw_bundle() {
+  bundle=$(grep -o '~/[^ "\\]*\.xcresult' "$1" | head -1 | sed "s#^~#$HOME#")
+  if [ -n "$bundle" ] && [ -d "$bundle" ]; then echo "$bundle"; fi
 }
 
 # Raw MobileBuildMCP results, whole as JSON-RPC answers them (`content` and `structuredContent`), with the log each names:
@@ -1669,11 +1692,7 @@ raw_captures() {
   derived=$(mktemp -d)
   results=$(mktemp -d)
   resolved=$(cd "$work" && pwd -P)
-  neutral() {
-    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
-      "$resolved" /testbed/field "$work" /testbed/field "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
-      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
-  }
+  neutral() { neutralise "$resolved" /testbed/field "$work" /testbed/field "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData; }
   configure() {
     mkdir -p "$work/.mobilebuildmcp"
     printf '%s' "$1" > "$work/.mobilebuildmcp/config.yaml"
@@ -1685,12 +1704,14 @@ raw_captures() {
     neutral < "$results/$1.json" | uuids_out > "$out/$1.json"
     log=$(grep -o '~/[^ "\\]*\.log' "$results/$1.json" | head -1 | sed "s#^~#$HOME#")
     if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/$1.log"; fi
+    bundle=$(raw_bundle "$results/$1.json")
+    if [ -n "$bundle" ]; then bundle_answers "$bundle" "$1"; fi
   }
   # test_sim takes its scheme from the session defaults, never as an argument ("scheme is required" otherwise).
   defaults() {
     printf "schemaVersion: 1\nsessionDefaults:\n  workspacePath: '%s'\n  scheme: '%s'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/Field.xcworkspace" "$1" "$simulator" "$derived"
   }
-  for name in $wanted; do rm -f "$out/$name.json" "$out/$name.log"; done
+  for name in $wanted; do rm -f "$out/$name.json" "$out/$name.log" "$out/$name.tests.json" "$out/$name.summary.json" "$out/$name".details.*.json; done
   if takes serial; then
     configure "$(defaults Feature)"
     raw serial '{"extraArgs":["-only-testing:FeatureTests/ProbeTests","-parallel-testing-enabled","NO"]}'
@@ -1724,11 +1745,7 @@ raw_build_capture() {
   derived=$(mktemp -d)
   results=$(mktemp -d)
   resolved=$(cd "$work" && pwd -P)
-  neutral() {
-    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
-      "$resolved" /testbed/concurrency "$work" /testbed/concurrency "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
-      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
-  }
+  neutral() { neutralise "$resolved" /testbed/concurrency "$work" /testbed/concurrency "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData; }
   mkdir -p "$work/.mobilebuildmcp"
   printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'Warnings'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/Concurrency.xcodeproj" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
   MCP_RAW=1 node scripts/mcp-call.mjs "$work" build_sim > "$results/build_sim.json" || true
@@ -1757,10 +1774,7 @@ xcode_mcp_captures() {
   rm -rf "${out:?}"
   mkdir -p "$out"
   resolved=$(cd "$testbed/field" && pwd -P)
-  neutral() {
-    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
-      "$resolved" /testbed/field "$HOME" /testbed/user "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
-  }
+  neutral() { neutralise "$resolved" /testbed/field; }
   for step in initialize tools/list; do
     name=$(printf '%s' "$step" | tr '/' '-')
     MCP_RAW=1 MCP_SERVER=xcode node scripts/mcp-call.mjs "$testbed/field" "$step" > "$out/$name.raw" || true
@@ -1854,18 +1868,14 @@ midrun_copy() {
 watched_capture() {
   out=$testbed/captures/raw
   mkdir -p "$out"
-  rm -f "$out/$3.json" "$out/$3.log" "$out/$3-snapshots.json" "$out/$3-midrun.log"
+  rm -f "$out/$3.json" "$out/$3.log" "$out/$3-snapshots.json" "$out/$3-midrun.log" "$out/$3.tests.json" "$out/$3.summary.json" "$out/$3".details.*.json
   work=$(mktemp -d)/$1
   cp -R "$testbed/$1" "$work"
   derived=$(mktemp -d)
   results=$(mktemp -d)
   resolved=$(cd "$work" && pwd -P)
   label=/testbed/$1
-  neutral() {
-    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
-      "$resolved" "$label" "$work" "$label" "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
-      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
-  }
+  neutral() { neutralise "$resolved" "$label" "$work" "$label" "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData; }
   mkdir -p "$work/.mobilebuildmcp"
   printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'Kit'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/$2" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
   watched_call "$results" "$3" "$4"
@@ -1875,6 +1885,8 @@ watched_capture() {
   midrun_copy "$results" "$3"
   neutral < "$results/$3.json" | uuids_out > "$out/$3.json"
   if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/$3.log"; fi
+  bundle=$(raw_bundle "$results/$3.json")
+  if [ -n "$bundle" ]; then bundle_answers "$bundle" "$3"; fi
   rm -rf "${work:?}" "${derived:?}" "${results:?}"
   echo "$out/$3.json"
 }
@@ -1920,6 +1932,40 @@ parallel_captures() {
     ].filter(([ok]) => !ok).map(([, what]) => what)
     if (wrong.length) { console.error(`generate.sh: the parallel run did not come to what its bundle holds: ${wrong.join(", ")}`); process.exit(1) }
   '
+}
+
+# The bundle answers of the raw captures already committed, from the bundles MobileBuildMCP kept on this Mac: no
+# simulator, no new run. All are written, or none: a bundle that's gone is named, and an answer that fails stops the
+# step before anything is moved in. Each run's work copy was a temporary folder, gone since; it's found in the answers
+# and neutralised as the capture's own step did. Not empty-filter, whose answers field/ keeps, nor parallel, which isn't
+# committed; a fresh `raw` or `parallel` capture writes its own.
+raw_answers() {
+  kept="serial swift-testing profile shapes"
+  gone=
+  for name in $kept; do
+    if [ -z "$(raw_bundle "$testbed/captures/raw/$name.json")" ]; then gone="$gone $name"; fi
+  done
+  if [ -n "$gone" ]; then
+    echo "generate.sh: the result bundle of each of these raw captures is gone, so nothing was written:$gone" >&2
+    exit 1
+  fi
+  out=$(mktemp -d)
+  trap 'rm -rf "${out:?}"' EXIT
+  for name in $kept; do
+    bundle=$(raw_bundle "$testbed/captures/raw/$name.json")
+    case $name in shapes) fixture=swift-testing ;; *) fixture=field ;; esac
+    # A run whose answers name no file of its work copy maps none.
+    work=$(xcrun xcresulttool get test-results tests --path "$bundle" --compact | grep -oE "(/private)?/var/folders/[^/\"]+/[^/\"]+/T/tmp\.[A-Za-z0-9]+/$fixture/" | head -1 | sed 's#^/private##; s#/$##' || true)
+    work=${work:-/nonexistent/$fixture}
+    neutral() { neutralise "/private$work" "/testbed/$fixture" "$work" "/testbed/$fixture"; }
+    bundle_answers "$bundle" "$name"
+  done
+  raw_manifest
+  for name in $kept; do
+    rm -f "$testbed/captures/raw/$name.tests.json" "$testbed/captures/raw/$name.summary.json" "$testbed/captures/raw/$name".details.*.json
+  done
+  mv "$out"/* "$testbed/captures/raw/"
+  echo "$testbed/captures/raw"
 }
 
 # The crash rules on made-up reports: at finish_simulator's shutdown, and mid-run as a parallel run clones.
@@ -1988,6 +2034,11 @@ fi
 if [ "$build" = shapes ]; then
   capture_simulator
   shapes_captures
+  exit 0
+fi
+
+if [ "$build" = raw-answers ]; then
+  raw_answers
   exit 0
 fi
 
