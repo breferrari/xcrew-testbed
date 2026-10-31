@@ -5,6 +5,7 @@
 # scripts/testbed/generate.sh [--build]   --build also builds each form for testing, to prove it's real
 # scripts/testbed/generate.sh concurrency   only the concurrency fixture and its capture, on a capture simulator never booted
 # scripts/testbed/generate.sh raw           only the raw MobileBuildMCP captures, on the capture simulator
+# scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
 # scripts/testbed/generate.sh xcode-mcp     only the Xcode MCP's captures, never in a full run: it needs Xcode open
 set -eu
 # No step reads a terminal: one that tried would stop the run, its simulator still there.
@@ -564,6 +565,86 @@ EOF
 }
 
 if runs concurrency; then concurrency; fi
+
+# A Swift Testing fixture with each shape of result in one suite: a passing test, a failing one, one disabled with a
+# reason, one whose failure is a known issue, one parameterised over three arguments, and one that waits five seconds, so a
+# run has a window to read its log in mid-tests. An XcodeGen framework and its tests, in a scheme of their own, so no
+# other fixture or capture changes.
+swift_testing() {
+  fixture=$testbed/swift-testing
+  rm -rf "${fixture:?}"
+  mkdir -p "$fixture/Kit" "$fixture/KitTests"
+  cat > "$fixture/Kit/Kit.swift" <<'EOF'
+public enum Kit {
+    public static let name = "Kit"
+}
+EOF
+  cat > "$fixture/KitTests/ShapesTests.swift" <<'EOF'
+import Testing
+@testable import Kit
+
+@Suite struct ShapesTests {
+    @Test func passes() {
+        #expect(Kit.name == "Kit")
+    }
+
+    @Test func fails() {
+        #expect(Kit.name == "Other", "the name is Kit")
+    }
+
+    @Test(.disabled("skipped on purpose")) func skipped() {}
+
+    @Test func knownIssue() {
+        withKnownIssue("a known issue") {
+            #expect(Kit.name == "Other")
+        }
+    }
+
+    @Test(arguments: [1, 2, 3]) func parameterised(value: Int) {
+        #expect(value > 0)
+    }
+
+    @Test func waits() async throws {
+        try await Task.sleep(for: .seconds(5))
+    }
+}
+EOF
+  cat > "$fixture/project.yml" <<'EOF'
+name: SwiftTesting
+options:
+  bundleIdPrefix: dev.xcrew.testbed
+  deploymentTarget:
+    iOS: "18.0"
+targets:
+  Kit:
+    type: framework
+    platform: iOS
+    sources: [Kit]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+  KitTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [KitTests]
+    dependencies:
+      - target: Kit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Kit:
+    build:
+      targets:
+        Kit: all
+    test:
+      targets: [KitTests]
+EOF
+  xcodegen generate --quiet --spec "$fixture/project.yml" --project "$fixture"
+  fixture_json "$fixture" pbxproj-groups xcodegen root
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
+if runs swift-testing || [ "$build" = shapes ]; then swift_testing; fi
 
 # The captures' own simulator: an iPhone on the newest released iOS runtime, created for this run, booted once and reused
 # by every capture, so none boots another, and deleted at the end. A beta runtime's system apps can crash on boot, and
@@ -1513,6 +1594,88 @@ xcode_mcp_captures() {
   echo "$out"
 }
 
+# The swift-testing fixture's run, raw, with the log it names: Swift Testing's shapes of result in one suite. Its one
+# failing test is meant to fail, so the step checks the run came to exactly that, and stops otherwise. While it runs, the
+# live log is copied each second: the capture keeps where its markers stood in each copy, and the copy taken mid-tests.
+# On the capture simulator.
+shapes_captures() {
+  out=$testbed/captures/raw
+  mkdir -p "$out"
+  rm -f "$out/shapes.json" "$out/shapes.log" "$out/shapes-snapshots.json" "$out/shapes-midrun.log"
+  work=$(mktemp -d)/swift-testing
+  cp -R "$testbed/swift-testing" "$work"
+  derived=$(mktemp -d)
+  results=$(mktemp -d)
+  resolved=$(cd "$work" && pwd -P)
+  neutral() {
+    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
+      "$resolved" /testbed/swift-testing "$work" /testbed/swift-testing "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
+      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
+  }
+  mkdir -p "$work/.mobilebuildmcp"
+  printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'Kit'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/SwiftTesting.xcodeproj" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
+  started=$(mktemp)
+  MCP_RAW=1 node scripts/mcp-call.mjs "$work" test_sim '{}' > "$results/shapes.json" &
+  call=$!
+  n=0
+  while kill -0 "$call" 2> /dev/null; do
+    live=$(find "$HOME/Library/Developer/MobileBuildMCP/workspaces" -path '*/logs/test_sim_*.log' -newer "$started" 2> /dev/null | head -1)
+    if [ -n "$live" ]; then n=$((n + 1)); cp "$live" "$results/snapshot-$(printf '%03d' "$n").log"; fi
+    sleep 1
+  done
+  wait "$call" || true
+  rm -f "$started"
+  crash_check
+  # The run came to what the suite holds, or the capture proves nothing: one failure, `fails()`, the disabled test
+  # skipped, and the parameterised and waiting tests passed.
+  node -e '
+    const fs = require("fs")
+    const result = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+    const data = result.structuredContent?.data ?? {}
+    const failures = data.diagnostics?.testFailures ?? []
+    const log = fs.readFileSync(process.argv[2], "utf8")
+    const wrong = [
+      [result.structuredContent?.schema === "mobilebuildmcp.output.test-result", "the run completed"],
+      [failures.length === 1 && failures[0].test === "fails()", "exactly one failure, fails()"],
+      [data.summary?.counts?.failed === 1, "one failed"],
+      [/Test skipped\(\) skipped/.test(log), "skipped() skipped"],
+      [/Test parameterised\(value:\) with 3 test cases passed/.test(log), "parameterised ran its three cases"],
+      [/Test waits\(\) passed/.test(log), "waits() passed"],
+    ].filter(([ok]) => !ok).map(([, what]) => what)
+    if (wrong.length) { console.error(`generate.sh: the shapes run did not come to what its suite holds: ${wrong.join(", ")}`); process.exit(1) }
+  ' "$results/shapes.json" "$(grep -o '~/[^ "\\]*\.log' "$results/shapes.json" | head -1 | sed "s#^~#$HOME#")"
+  # Where each marker stood in each copy of the live log: MobileBuildMCP writes "Testing started" itself.
+  node -e '
+    const fs = require("fs")
+    const [folder, out] = process.argv.slice(1)
+    const markers = { testingStarted: /^Testing started$/, testSuiteStarted: /^Test Suite .* started at /, swiftTestingStarted: /^◇ Test run started\.$/, testExecute: /^\*\* TEST EXECUTE / }
+    const snapshots = fs.readdirSync(folder).filter(name => /^snapshot-\d+\.log$/.test(name)).sort().map(name => {
+      const lines = fs.readFileSync(`${folder}/${name}`, "utf8").split("\n")
+      const at = Object.fromEntries(Object.entries(markers).map(([key, pattern]) => [key, (lines.findIndex(line => pattern.test(line)) + 1) || null]))
+      return { snapshot: name, lines: lines.length, ...at }
+    })
+    fs.writeFileSync(out, JSON.stringify({ everySeconds: 1, snapshots }, null, 2) + "\n")
+  ' "$results" "$out/shapes-snapshots.json"
+  # The copy taken mid-tests: the last with the tests started and no verdict yet.
+  middle=$(node -e '
+    const listing = require(process.argv[1]).snapshots
+    const mid = listing.filter(s => (s.testSuiteStarted || s.swiftTestingStarted) && !s.testExecute).pop()
+    if (mid) console.log(mid.snapshot)
+  ' "$out/shapes-snapshots.json")
+  if [ -n "$middle" ]; then neutral < "$results/$middle" | uuids_out > "$out/shapes-midrun.log"; fi
+  neutral < "$results/shapes.json" | uuids_out > "$out/shapes.json"
+  log=$(grep -o '~/[^ "\\]*\.log' "$results/shapes.json" | head -1 | sed "s#^~#$HOME#")
+  if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/shapes.log"; fi
+  rm -rf "${work:?}" "${derived:?}" "${results:?}"
+  echo "$out/shapes.json"
+}
+
+if [ "$build" = shapes ]; then
+  capture_simulator
+  shapes_captures
+  exit 0
+fi
+
 if [ "$build" = xcode-mcp ]; then
   xcode_mcp_captures
   exit 0
@@ -1539,5 +1702,6 @@ uitests
 field_captures
 concurrency_captures
 raw_captures
+shapes_captures
 
 scripts/leaks.sh
