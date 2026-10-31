@@ -1,0 +1,41 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "\n🧪 Test\n\nWarnings (1):\n\n  ⚠ initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]\n    /testbed/field/Modules/Feature/Sources/Legacy.swift:3\n\n✅ Test succeeded. (⏱️ 16.0s)\n  └ Files:\n     └── ~/Library/Developer/MobileBuildMCP/workspaces/field-544252ffd451/\n         ├── logs/test_sim_2026-10-31T04-11-21-167Z_pid55487_28e269a7.log — Build Logs\n         ├── result-bundles/test_sim_2026-10-31T04-11-21-167Z_pid55487_c318534c.xcresult — Result Bundle\n         └── test-products/test_sim_2026-10-31T04-11-21-167Z_pid55487_4698ee96.xctestproducts — Test Products\n"
+    }
+  ],
+  "structuredContent": {
+    "schema": "mobilebuildmcp.output.test-result",
+    "schemaVersion": "3",
+    "didError": false,
+    "error": null,
+    "data": {
+      "summary": {
+        "status": "SUCCEEDED",
+        "durationMs": 16003,
+        "counts": {
+          "passed": 0,
+          "failed": 0,
+          "skipped": 0
+        },
+        "target": "simulator"
+      },
+      "artifacts": {
+        "buildLogPath": "~/Library/Developer/MobileBuildMCP/workspaces/field-544252ffd451/logs/test_sim_2026-10-31T04-11-21-167Z_pid55487_28e269a7.log",
+        "xcresultPath": "~/Library/Developer/MobileBuildMCP/workspaces/field-544252ffd451/result-bundles/test_sim_2026-10-31T04-11-21-167Z_pid55487_c318534c.xcresult",
+        "testProductsPath": "~/Library/Developer/MobileBuildMCP/workspaces/field-544252ffd451/test-products/test_sim_2026-10-31T04-11-21-167Z_pid55487_4698ee96.xctestproducts"
+      },
+      "diagnostics": {
+        "warnings": [
+          {
+            "message": "initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]",
+            "location": "/testbed/field/Modules/Feature/Sources/Legacy.swift:3"
+          }
+        ],
+        "errors": [],
+        "testFailures": []
+      }
+    }
+  }
+}

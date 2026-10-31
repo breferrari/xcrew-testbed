@@ -108,17 +108,20 @@ What they show:
 
 *Xcode 27.2, iOS 27.2, MobileBuildMCP 2.7.1, 2026-10-31.*
 
-MobileBuildMCP's `test_sim` answers whole, as JSON-RPC gives them (`content` and `structuredContent`), each with the log it names, on a copy of `field/`. `scripts/mcp-call.mjs` keeps them with `MCP_RAW=1`. They replace text captures as the tests reading those move to them.
+MobileBuildMCP's answers whole, as JSON-RPC gives them (`content` and `structuredContent`), each with the log it names: `test_sim` on a copy of `field/`, and `build_sim` on a copy of `concurrency/`. `scripts/mcp-call.mjs` keeps them with `MCP_RAW=1`. They replace text captures as the tests reading those move to them.
 
 | File | What runs |
 |---|---|
 | `serial.json`, `serial.log` | `FeatureTests/ProbeTests` with `-parallel-testing-enabled NO` |
 | `swift-testing.json`, `swift-testing.log` | the `Core` scheme's Swift Testing tests |
 | `profile.json`, `profile.log` | a call that names no scheme, under a `sessionDefaultsProfiles` profile whose scheme is `Data` |
+| `empty-filter.json`, `empty-filter.log` | `-only-testing:FeatureTests/NoSuchTests`, the selection `field/empty-filter` makes, matching no test (2026-10-31, booted once) |
+| `build_sim.json`, `build_sim.log` | `build_sim` of `concurrency/`'s `Warnings` scheme, which builds with its warnings, the simulator never booted (2026-10-31) |
 
 What they show:
 
-- **Claude Code hands the mod the text.** A passing run's `content` is text too, `✅ 1 test passed, 0 failed, 0 skipped`, and its JSON is only in `structuredContent`.
+- **Claude Code hands the mod the text.** A passing run's `content` is text too, `✅ 1 test passed, 0 failed, 0 skipped`, and its JSON is only in `structuredContent`. So is a passing build's: `✅ Build succeeded.`, its 7 warnings in `structuredContent.data.diagnostics.warnings` as `message` and `location`.
+- **A run matching no test says so only in its JSON.** The text is `✅ Test succeeded.` with no count; `structuredContent.data.summary` is `SUCCEEDED` with `counts` of 0 passed, 0 failed, 0 skipped.
 - **No result names its scheme.** `structuredContent.data` holds `summary`, `artifacts` and `diagnostics`, and the text has no `Scheme:` line.
 - **`test_sim` takes its scheme from the session defaults.** A call that passes `scheme` is refused: "scheme: scheme is required." `tools/list` gives `test_sim` no `scheme` parameter.
 - **A serial run's log** writes `Test Case '-[FeatureTests.ProbeTests testFails]' failed (0.006 seconds).` **A Swift Testing run's** writes `✔ Test itIsNamed() passed after 0.001 seconds.` Neither is the parallel runner's `Test case '…'`.
@@ -149,7 +152,7 @@ A capture simulator's services are killed when it shuts down, and each leaves a 
 - it ended by `XPC_EXIT_REASON_SIGTERM_TIMEOUT` (launchd's SIGTERM, then SIGKILL when the service didn't exit);
 - it's in the capture simulator's own coalition, `com.apple.CoreSimulator.SimDevice.<id>`.
 
-The rule never goes by the process name, and any other SIGKILL counts as a crash. `scripts/generate.sh self-test` checks this on made-up reports. On 2026-10-31 every report the raw and shapes runs left was one of these: tccd, routined, siriactionsd, newsd, generativeexperiencesd and dtdeviceinfod.
+The rule never goes by the process name, and any other SIGKILL counts as a crash. `scripts/generate.sh self-test` checks this on made-up reports. On 2026-10-31 every report the raw and shapes runs left was one of these: tccd, routined, siriactionsd, newsd, generativeexperiencesd and dtdeviceinfod. The empty-filter run's were tccd, routined, generativeexperiencesd and dmd; build_sim's, never booted, left none.
 
 ## xcode-mcp
 
