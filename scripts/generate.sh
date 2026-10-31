@@ -1762,7 +1762,7 @@ concurrency_captures() {
 
 # What captures/raw holds, for every step that writes there.
 raw_manifest() {
-  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted, retry FeatureTests/ProbeTests with -parallel-testing-enabled NO -retry-tests-on-failure -test-iterations 3. On a copy of plans/: configurations is the Kit scheme'"'"'s test plan, its configurations First and Second. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run, shapes-iterations the same with -test-iterations 2, cancel the Cancel scheme'"'"'s. Each <name>-snapshots.json and <name>-midrun.log is the live log, copied each second while it ran. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
+  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips, test-build-failed FeatureTests/ProbeTests with a type error written into its test file. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted, retry FeatureTests/ProbeTests with -parallel-testing-enabled NO -retry-tests-on-failure -test-iterations 3. On a copy of plans/: configurations is the Kit scheme'"'"'s test plan, its configurations First and Second. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run, shapes-iterations the same with -test-iterations 2, cancel the Cancel scheme'"'"'s. Each <name>-snapshots.json and <name>-midrun.log is the live log, copied each second while it ran. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
 }
 
 # Result bundle `$1`'s answers to what xcrew asks it, as `<name>` (`$2`) in `$out`, through the calling step's `neutral`:
@@ -1811,12 +1811,13 @@ raw_bundle() {
 
 # Raw MobileBuildMCP results, whole as JSON-RPC answers them (`content` and `structuredContent`), with the log each names:
 # a serial XCTest run, a Swift Testing run, a run under a session-defaults profile that names its scheme, called with
-# no scheme, a selection matching no test, and a serial run with a crash and `showTestTiming` on. On a copy of field/, on
+# no scheme, a selection matching no test, a serial run with a crash and `showTestTiming` on, and a run whose test target
+# doesn't build. On a copy of field/, on
 # the capture simulator. RAW_CAPTURES names the
 # ones to take again (`empty-filter`); unset, all of them. Either way the folder's other captures stay.
 raw_captures() {
   out=$testbed/captures/raw
-  wanted=${RAW_CAPTURES:-serial swift-testing profile empty-filter timing}
+  wanted=${RAW_CAPTURES:-serial swift-testing profile empty-filter timing test-build-failed}
   takes() { case " $wanted " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
   mkdir -p "$out"
   work=$(mktemp -d)/field
@@ -1862,6 +1863,23 @@ raw_captures() {
   if takes empty-filter; then
     configure "$(defaults Feature)"
     raw empty-filter '{"extraArgs":["-only-testing:FeatureTests/NoSuchTests"]}'
+  fi
+  # A test run whose test target doesn't build: a type error written into the probes' test file, on the copy alone and
+  # taken out after. The run came to that, or the capture proves nothing: the step checks the call failed and its
+  # result names the error's file and line, and stops otherwise.
+  if takes test-build-failed; then
+    probes=$work/Modules/Feature/Tests/ProbeTests.swift
+    line=$(($(wc -l < "$probes") + 2))
+    printf '\nlet testBuildError: Int = "not a number"\n' >> "$probes"
+    configure "$(defaults Feature)"
+    raw test-build-failed '{"extraArgs":["-only-testing:FeatureTests/ProbeTests"]}'
+    cp "$testbed/field/Modules/Feature/Tests/ProbeTests.swift" "$probes"
+    node -e '
+      const result = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
+      const text = (result.content ?? []).map(part => part.text ?? "").join("")
+      const wrong = [[result.isError === true, "the call failed"], [text.includes(`ProbeTests.swift:${process.argv[2]}`), `the result names ProbeTests.swift:${process.argv[2]}`]].filter(([holds]) => !holds)
+      if (wrong.length > 0) { console.error(`generate.sh: stopping: the test build failure capture isn\x27t one: ${wrong.map(([, what]) => what).join(", ")} didn\x27t hold`); process.exit(1) }
+    ' "$out/test-build-failed.json" "$line"
   fi
   # field/'s probes and its crash, serial, with `showTestTiming` on, which lists every test under `Test Results:`. Its one
   # expected crash, testOutOfRange, is excused for this call alone, and the crash log the bundle attached is kept.

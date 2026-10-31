@@ -1,0 +1,43 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "\n🧪 Test\n\nErrors (2):\n\n  ✗ cannot convert value of type 'String' to specified type 'Int'\n    /testbed/field/Modules/Feature/Tests/ProbeTests.swift:39\n\n  ✗ |                           `- error: cannot convert value of type 'String' to specified type 'Int'\n\nWarnings (1):\n\n  ⚠ initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]\n    /testbed/field/Modules/Feature/Sources/Legacy.swift:3\n\n❌ Test failed. (⏱️ 10.9s)\n  └ Files:\n     └── ~/Library/Developer/MobileBuildMCP/workspaces/field-e7c36bdefd4f/logs/test_sim_2026-10-31T05-35-55-655Z_pid29889_1219c6aa.log — Build Logs\n"
+    }
+  ],
+  "structuredContent": {
+    "schema": "mobilebuildmcp.output.test-result",
+    "schemaVersion": "3",
+    "didError": true,
+    "error": "Tests failed",
+    "data": {
+      "summary": {
+        "status": "FAILED",
+        "durationMs": 10866,
+        "target": "simulator"
+      },
+      "artifacts": {
+        "buildLogPath": "~/Library/Developer/MobileBuildMCP/workspaces/field-e7c36bdefd4f/logs/test_sim_2026-10-31T05-35-55-655Z_pid29889_1219c6aa.log"
+      },
+      "diagnostics": {
+        "warnings": [
+          {
+            "message": "initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]",
+            "location": "/testbed/field/Modules/Feature/Sources/Legacy.swift:3"
+          }
+        ],
+        "errors": [
+          {
+            "message": "cannot convert value of type 'String' to specified type 'Int'",
+            "location": "/testbed/field/Modules/Feature/Tests/ProbeTests.swift:39"
+          },
+          {
+            "message": "|                           `- error: cannot convert value of type 'String' to specified type 'Int'"
+          }
+        ],
+        "testFailures": []
+      }
+    }
+  },
+  "isError": true
+}
