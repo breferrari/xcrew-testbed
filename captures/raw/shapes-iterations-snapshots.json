@@ -1,0 +1,95 @@
+{
+  "everySeconds": 1,
+  "snapshots": [
+    {
+      "snapshot": "snapshot-001.log",
+      "lines": 11,
+      "testingStarted": null,
+      "testSuiteStarted": null,
+      "swiftTestingStarted": null,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": null
+    },
+    {
+      "snapshot": "snapshot-002.log",
+      "lines": 381,
+      "testingStarted": null,
+      "testSuiteStarted": null,
+      "swiftTestingStarted": null,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": null
+    },
+    {
+      "snapshot": "snapshot-003.log",
+      "lines": 499,
+      "testingStarted": null,
+      "testSuiteStarted": null,
+      "swiftTestingStarted": null,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 489
+    },
+    {
+      "snapshot": "snapshot-004.log",
+      "lines": 541,
+      "testingStarted": null,
+      "testSuiteStarted": 499,
+      "swiftTestingStarted": 502,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 489
+    },
+    {
+      "snapshot": "snapshot-005.log",
+      "lines": 541,
+      "testingStarted": null,
+      "testSuiteStarted": 499,
+      "swiftTestingStarted": 502,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 489
+    },
+    {
+      "snapshot": "snapshot-006.log",
+      "lines": 541,
+      "testingStarted": null,
+      "testSuiteStarted": 499,
+      "swiftTestingStarted": 502,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 489
+    },
+    {
+      "snapshot": "snapshot-007.log",
+      "lines": 542,
+      "testingStarted": null,
+      "testSuiteStarted": 499,
+      "swiftTestingStarted": 502,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 489
+    },
+    {
+      "snapshot": "snapshot-008.log",
+      "lines": 542,
+      "testingStarted": null,
+      "testSuiteStarted": 499,
+      "swiftTestingStarted": 502,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 489
+    },
+    {
+      "snapshot": "snapshot-009.log",
+      "lines": 542,
+      "testingStarted": null,
+      "testSuiteStarted": 499,
+      "swiftTestingStarted": 502,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 489
+    }
+  ]
+}

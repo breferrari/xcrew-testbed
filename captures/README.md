@@ -69,7 +69,7 @@ What MobileBuildMCP's `test_sim` and `build_sim` answered about the field fixtur
 
 | Scenario | What runs |
 |---|---|
-| `probes` | the five probe tests, five times each, relaunched every time |
+| `probes` | the five probe tests, five times each, relaunched every time; `probes.log` is its log, kept on 2026-10-31 by `scripts/generate.sh field-logs` |
 | `crash` | the crashing test, with its crash log |
 | `coverage` | one test run with coverage on, the half-tested file's line counts, and each target's counts |
 | `empty-filter` | a selection matching no test |
@@ -137,6 +137,24 @@ What they show:
 
 `scripts/generate.sh raw-answers` read them on 2026-10-31 from the bundles MobileBuildMCP kept from the runs above, booting nothing. Each run's work copy, a temporary folder gone since, is found in the answers and neutralised to `/testbed/<fixture>`, as the run's log was. A capture taken afresh writes its answers itself, `empty-filter`'s and `parallel`'s too. xcresulttool writes a duration in the Mac's locale: `"duration":"Ran for 0,0056 seconds"` under a locale whose decimal mark is a comma. Its `durationInSeconds` and counts are JSON numbers.
 
+### Several passes, and a cancel
+
+*Xcode 27.2, iOS 27.2, MobileBuildMCP 2.7.1, 2026-10-31, one capture simulator, serial.* `scripts/generate.sh multi-pass` takes four runs, each watched as shapes is, with its log, its bundle's answers and a mid-run copy. Each step checks only what's known before the run: it completed, and its tests ran as written. It's never part of a full run, whose probes leave `testFlaky` on a run where it passes first.
+
+| Capture | What runs | MobileBuildMCP's count | The log |
+|---|---|---|---|
+| `retry` | `field/`'s `ProbeTests`, `-retry-tests-on-failure -test-iterations 3`, on a fresh simulator, where `testFlaky` fails first | 1 failed, 2 passed, 1 skipped | one `Test Suite 'Selected tests' started`; `testFails` written failed three times in a row, `testFlaky` failed then passed |
+| `configurations` | `plans/`'s scheme, its test plan's configurations `First` and `Second` | 1 failed, 1 passed, 1 skipped | a `Test Suite 'All tests' started` for each configuration, every test written in each |
+| `shapes-iterations` | `swift-testing/`'s `Kit` scheme, `-test-iterations 2` | 1 failed, 3 passed, 1 skipped | one `◇ Test run started.`, each test written once, its time the iterations' together (`waits()` 10.179 s) |
+| `cancel` | `swift-testing/`'s `Cancel` scheme: `passes()`, and `cancels()`, which calls `try Test.cancel("cancelled on purpose")` | 1 passed, 0 failed, 1 skipped | `➜ Test cancels() was cancelled after 0.001 seconds: "cancelled on purpose"` |
+
+What they show:
+
+- **MobileBuildMCP counts tests, not runs.** Each count is the bundle summary's top level, which counts a test once however many times it ran. The summary's `devicesAndConfigurations` count runs: 3 failed for `retry`'s `testFails`, one entry each for `configurations`' `First` and `Second`, 10 passed over `shapes-iterations`' two iterations. For `retry` they add up to 7 of the 8 test runs its `statistics` names: `testFlaky`'s failed first try is in none.
+- **A retried test counts by its last try, and is still listed as failed.** `testFlaky`, failed and then passed, is among the 2 passed. The same result's text lists it under `Test Failures (2)` (`run 1 is odd`), and `structuredContent.data.diagnostics.testFailures` holds it beside `testFails`.
+- **A cancelled Swift Testing test counts as skipped.**
+- **The live log doesn't say how many passes are coming.** A configuration's pass looks like a run's start, and a retry writes a test again in the same pass.
+
 ### shapes
 
 *Xcode 27.2, iOS 27.2, MobileBuildMCP 2.7.1, 2026-10-31.* `swift-testing/`'s `ShapesTests` holds six Swift Testing tests:
@@ -176,7 +194,7 @@ The rule never goes by the process name, and any other SIGKILL counts as a crash
 
 ## Which names take captures
 
-Only a full run, `scripts/generate.sh` or `--build`, takes every capture. A step's name takes only that step's captures. A fixture's name that's no step's makes only that fixture, and boots nothing. A name that's neither stops with a usage line, writing nothing. Before 2026-10-31 a fixture's name, or any other, made what it named and then went on to take every capture. `scripts/generate.sh self-test` runs a fixture's name and an unknown one on a copy, with an `xcrun` that fails when asked to create or boot a simulator.
+Only a full run, `scripts/generate.sh` or `--build`, takes every capture but `multi-pass`'s and `xcode-mcp`'s, each its own mode. A step's name takes only that step's captures. A fixture's name that's no step's makes only that fixture, and boots nothing. A name that's neither stops with a usage line, writing nothing. Before 2026-10-31 a fixture's name, or any other, made what it named and then went on to take every capture. `scripts/generate.sh self-test` runs a fixture's name and an unknown one on a copy, with an `xcrun` that fails when asked to create or boot a simulator.
 
 ## xcode-mcp
 

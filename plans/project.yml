@@ -1,0 +1,29 @@
+name: Plans
+options:
+  bundleIdPrefix: dev.xcrew.testbed
+  deploymentTarget:
+    iOS: "18.0"
+targets:
+  Kit:
+    type: framework
+    platform: iOS
+    sources: [Kit]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+  KitTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [KitTests]
+    dependencies:
+      - target: Kit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Kit:
+    build:
+      targets:
+        Kit: all
+    test:
+      testPlans:
+        - path: Plans.xctestplan
+          defaultPlan: true

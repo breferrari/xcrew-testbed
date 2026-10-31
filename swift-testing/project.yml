@@ -18,6 +18,14 @@ targets:
       - target: Kit
     settings:
       GENERATE_INFOPLIST_FILE: YES
+  CancelTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [CancelTests]
+    dependencies:
+      - target: Kit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
 schemes:
   Kit:
     build:
@@ -25,3 +33,9 @@ schemes:
         Kit: all
     test:
       targets: [KitTests]
+  Cancel:
+    build:
+      targets:
+        Kit: all
+    test:
+      targets: [CancelTests]
