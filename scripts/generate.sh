@@ -7,6 +7,7 @@
 # scripts/testbed/generate.sh raw           only the raw MobileBuildMCP test captures (RAW_CAPTURES names which), on the capture simulator
 # scripts/testbed/generate.sh raw-answers   only the committed raw captures' bundle answers, from the bundles on this Mac; boots nothing
 # scripts/testbed/generate.sh raw-build     only the raw MobileBuildMCP build capture, on a capture simulator never booted
+# scripts/testbed/generate.sh raw-session   only the raw MobileBuildMCP session tools' answers, on a capture simulator never booted
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
 # scripts/testbed/generate.sh parallel      only the parallel fixture and its raw capture, on the capture simulator and its clones
 # scripts/testbed/generate.sh self-test     checks the crash rules on made-up reports, and that a fixture's or an unknown name boots nothing; boots nothing
@@ -1644,7 +1645,7 @@ concurrency_captures() {
 
 # What captures/raw holds, for every step that writes there.
 raw_manifest() {
-  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
+  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
 }
 
 # Result bundle `$1`'s answers to what xcrew asks it, as `<name>` (`$2`) in `$out`, through the calling step's `neutral`:
@@ -1748,6 +1749,41 @@ showTestTiming: true
       if [ -n "$report" ]; then neutral < "$report" | uuids_out > "$out/timing.crash.ips"; fi
     fi
   fi
+  rm -rf "${work:?}" "${derived:?}" "${results:?}"
+  raw_manifest
+  echo "$out"
+}
+
+# MobileBuildMCP's session tools' answers whole, as JSON-RPC gives them: session_show_defaults with two profiles, the
+# first active, and session_use_defaults_profile switching to the second. Neither persists: each changes only the
+# server's own session, so the project's config must come out as it went in, or the step stops. On a copy of field/,
+# its simulator named and never booted.
+raw_session_captures() {
+  out=$testbed/captures/raw
+  mkdir -p "$out"
+  rm -f "$out/session-defaults.json" "$out/profile-switched.json"
+  work=$(mktemp -d)/field
+  cp -R "$testbed/field" "$work"
+  derived=$(mktemp -d)
+  results=$(mktemp -d)
+  resolved=$(cd "$work" && pwd -P)
+  neutral() { neutralise "$resolved" /testbed/field "$work" /testbed/field "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData; }
+  mkdir -p "$work/.mobilebuildmcp"
+  profile() { printf "  %s:\n    workspacePath: '%s'\n    scheme: '%s'\n    simulatorName: '%s'\n    derivedDataPath: '%s'\n" "$1" "$resolved/Field.xcworkspace" "$2" "$simulator" "$derived"; }
+  printf 'schemaVersion: 1\nsessionDefaultsProfiles:\n%s%sactiveSessionDefaultsProfile: probe\n' "$(profile probe Feature)
+" "$(profile unit Data)
+" > "$work/.mobilebuildmcp/config.yaml"
+  config=$(shasum -a 256 < "$work/.mobilebuildmcp/config.yaml")
+  MCP_RAW=1 node scripts/mcp-call.mjs "$work" session_show_defaults '{}' > "$results/session-defaults.json" || true
+  MCP_RAW=1 node scripts/mcp-call.mjs "$work" session_use_defaults_profile '{"profile":"unit"}' > "$results/profile-switched.json" || true
+  if [ "$(shasum -a 256 < "$work/.mobilebuildmcp/config.yaml")" != "$config" ]; then
+    echo "generate.sh: stopping: a session call wrote the project's config" >&2
+    exit 1
+  fi
+  state=$(xcrun simctl list devices --json | node -e 'const d = JSON.parse(require("fs").readFileSync(0, "utf8")).devices; console.log(Object.values(d).flat().find(x => x.udid === process.argv[1])?.state ?? "gone")' "$simulator_id")
+  echo "generate.sh: the capture simulator was $state after the session calls" >&2
+  if [ "$state" != Shutdown ]; then crash_check; fi
+  for name in session-defaults profile-switched; do neutral < "$results/$name.json" | uuids_out > "$out/$name.json"; done
   rm -rf "${work:?}" "${derived:?}" "${results:?}"
   raw_manifest
   echo "$out"
@@ -2107,6 +2143,12 @@ if [ "$build" = raw ]; then
   exit 0
 fi
 
+if [ "$build" = raw-session ]; then
+  capture_simulator --no-boot
+  raw_session_captures
+  exit 0
+fi
+
 if [ "$build" = raw-build ]; then
   capture_simulator --no-boot
   raw_build_capture
@@ -2140,6 +2182,7 @@ field_captures
 concurrency_captures
 raw_captures
 raw_build_capture
+raw_session_captures
 shapes_captures
 parallel_captures
 
