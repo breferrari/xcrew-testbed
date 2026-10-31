@@ -69,7 +69,7 @@ What MobileBuildMCP's `test_sim` and `build_sim` answered about the field fixtur
 
 | Scenario | What runs |
 |---|---|
-| `probes` | the five probe tests, five times each, relaunched every time; `probes.log` is its log, kept on 2026-10-31 by `scripts/generate.sh field-logs` |
+| `probes` | the five probe tests, five times each, relaunched every time; `probes.log` is its log, kept on 2026-10-31 by `scripts/generate.sh field-logs`, its `PATH` since neutralised |
 | `crash` | the crashing test, with its crash log |
 | `coverage` | one test run with coverage on, the half-tested file's line counts, and each target's counts |
 | `empty-filter` | a selection matching no test |

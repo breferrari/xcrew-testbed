@@ -24,6 +24,17 @@ if grep -ralE '(/|\\/)(U[s]ers|h[o]me)(/|\\/)' forms adversarial modular field c
   echo "leaks.sh: the files above hold a user's home folder" >&2
   found=1
 fi
+# A PATH holds only an Xcode app's own entries and macOS's defaults: a file that neutral_path would change names a tool
+# of the Mac that made it.
+. scripts/neutral-path.sh
+paths=$(grep -rlI 'PATH' forms adversarial modular field captures 2> /dev/null | while IFS= read -r file; do
+  neutral_path < "$file" | cmp -s - "$file" || echo "$file"
+done)
+if [ -n "$paths" ]; then
+  printf '%s\n' "$paths"
+  echo "leaks.sh: the files above hold a PATH with this Mac's own tools; scripts/generate.sh neutral-paths rewrites them" >&2
+  found=1
+fi
 uuids=$(grep -raoE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' captures | grep -vE ':00000000-0000-0000-0000-[0-9]{12}$' | cut -d: -f1 | sort -u)
 if [ -n "$uuids" ]; then
   printf '%s\n' "$uuids"
