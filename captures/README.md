@@ -124,6 +124,33 @@ What they show:
 - **A serial run's log** writes `Test Case '-[FeatureTests.ProbeTests testFails]' failed (0.006 seconds).` **A Swift Testing run's** writes `✔ Test itIsNamed() passed after 0.001 seconds.` Neither is the parallel runner's `Test case '…'`.
 - **Paths:** `structuredContent`'s artifact paths are written from `~`. The rest is neutralised as the other captures are, JSON-escaped spellings included.
 
+### shapes
+
+*Xcode 27.2, iOS 27.2, MobileBuildMCP 2.7.1, 2026-10-31.* `swift-testing/`'s `ShapesTests` holds six Swift Testing tests:
+- `passes()`;
+- `fails()`, the one failure;
+- `skipped()`, `.disabled("skipped on purpose")`;
+- `knownIssue()`, a `withKnownIssue`;
+- `parameterised(value:)` over 1, 2 and 3;
+- `waits()`, which sleeps 5 s.
+
+The step checks the run came to exactly that (one failure, `fails()`; `skipped()` skipped; the parameterised and waiting tests passed) and stops otherwise. `shapes.json` and `shapes.log` are the result and its log. `shapes-snapshots.json` lists where the markers stood in each copy of the live log, taken each second while the run went. `shapes-midrun.log` is the last copy with the tests started and no verdict yet.
+
+What they show:
+
+- **MobileBuildMCP counts `❌ 1 test failed, 3 passed, 1 skipped`** for six tests. The parameterised test is one, not three. `knownIssue()` is in neither passed nor failed: Swift Testing writes it `━ Test knownIssue() passed after 0.001 seconds with 1 known issue`, not with `✔`.
+- **`Testing started` is written only after the tests.** In the ten copies, the tests had started from the seventh (`Test Suite 'All tests' started at` at line 495, `◇ Test run started.` at 498), and none holds `Testing started` or `** TEST EXECUTE`. In the finished log, `Testing started` is the last line, after `** TEST EXECUTE FAILED **`.
+
+## Crash reports
+
+A capture simulator's services are killed when it shuts down, and each leaves a report. `shutdown_kill` excuses one only when all four hold:
+- it was written after `finish_simulator`'s shutdown began;
+- it's `EXC_CRASH` with `SIGKILL`;
+- it ended by `XPC_EXIT_REASON_SIGTERM_TIMEOUT` (launchd's SIGTERM, then SIGKILL when the service didn't exit);
+- it's in the capture simulator's own coalition, `com.apple.CoreSimulator.SimDevice.<id>`.
+
+The rule never goes by the process name, and any other SIGKILL counts as a crash. `scripts/generate.sh self-test` checks this on made-up reports. On 2026-10-31 every report the raw and shapes runs left was one of these: tccd, routined, siriactionsd, newsd, generativeexperiencesd and dtdeviceinfod.
+
 ## xcode-mcp
 
 Not taken yet: `scripts/generate.sh xcode-mcp` writes the Xcode MCP's raw answers to `initialize` and `tools/list` here, when run by hand with Xcode open on `field/`.
