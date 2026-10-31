@@ -6,6 +6,7 @@
 # scripts/testbed/generate.sh concurrency   only the concurrency fixture and its capture, on a capture simulator never booted
 # scripts/testbed/generate.sh raw           only the raw MobileBuildMCP captures, on the capture simulator
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
+# scripts/testbed/generate.sh self-test     checks the crash rules on made-up reports; boots nothing
 # scripts/testbed/generate.sh xcode-mcp     only the Xcode MCP's captures, never in a full run: it needs Xcode open
 set -eu
 # No step reads a terminal: one that tried would stop the run, its simulator still there.
@@ -734,10 +735,25 @@ known_crash() {
   ' "$1" 2> /dev/null
 }
 
+# A capture simulator's service killed by its own shutdown, not a crash: written after finish_simulator's shutdown
+# began, EXC_CRASH with SIGKILL, ended by XPC_EXIT_REASON_SIGTERM_TIMEOUT (launchd's SIGTERM, then SIGKILL when the service
+# didn't exit), in the capture simulator's own coalition. All four, never the process name: any other SIGKILL counts.
+shutdown_kill() {
+  [ -n "${shutdown_marker:-}" ] && [ "$1" -nt "$shutdown_marker" ] || return 1
+  node -e '
+    const text = require("fs").readFileSync(process.argv[1], "utf8")
+    const report = JSON.parse(text.slice(text.indexOf("\n") + 1))
+    const killed = report.exception?.type === "EXC_CRASH" && report.exception?.signal === "SIGKILL"
+    const byShutdown = report.termination?.indicator === "XPC_EXIT_REASON_SIGTERM_TIMEOUT"
+    const ours = report.coalitionName === `com.apple.CoreSimulator.SimDevice.${process.argv[2]}`
+    process.exit(killed && byShutdown && ours ? 0 : 1)
+  ' "$1" "$simulator_id" 2> /dev/null
+}
+
 # The reports since the run began that name the capture simulator and aren't a known crash; the known ones are listed.
 simulator_crashes() {
   find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null | while IFS= read -r report; do
-    if [ -n "${shutdown_marker:-}" ] && [ "$report" -nt "$shutdown_marker" ] && grep -q -F '"signal":"SIGKILL"' "$report"; then continue; fi
+    if shutdown_kill "$report"; then continue; fi
     grep -q -F "$simulator_id" "$report" || continue
     if [ -n "${expected_reports:-}" ] && grep -q -x -F "$report" "$expected_reports"; then continue; fi
     if known_crash "$report"; then
@@ -1669,6 +1685,35 @@ shapes_captures() {
   rm -rf "${work:?}" "${derived:?}" "${results:?}"
   echo "$out/shapes.json"
 }
+
+# The crash rules on made-up reports: a shutdown's kill is excused, and a SIGKILL with another termination reason, or
+# written before the shutdown, still counts.
+crash_self_test() {
+  folder=$(mktemp -d)
+  simulator_id=00000000-0000-4000-8000-000000000001
+  report() {
+    printf '{"app_name":"tccd"}\n{"procName":"tccd","coalitionName":"com.apple.CoreSimulator.SimDevice.%s","exception":{"type":"EXC_CRASH","signal":"SIGKILL"},"termination":{"namespace":"LIBXPC","indicator":"%s"}}\n' "$simulator_id" "$1" > "$folder/$2.ips"
+  }
+  report XPC_EXIT_REASON_SIGTERM_TIMEOUT before
+  sleep 1
+  shutdown_marker=$(mktemp)
+  sleep 1
+  report XPC_EXIT_REASON_SIGTERM_TIMEOUT shutdown
+  report "Namespace SIGNAL, Code 9" other
+  failed=0
+  shutdown_kill "$folder/shutdown.ips" || { echo "generate.sh self-test: a shutdown's kill isn't excused" >&2; failed=1; }
+  if shutdown_kill "$folder/other.ips"; then echo "generate.sh self-test: a SIGKILL with another termination reason is excused" >&2; failed=1; fi
+  if shutdown_kill "$folder/before.ips"; then echo "generate.sh self-test: a kill written before the shutdown is excused" >&2; failed=1; fi
+  rm -rf "${folder:?}" "$shutdown_marker"
+  shutdown_marker=
+  [ "$failed" = 0 ] && echo "generate.sh self-test: the crash rules hold"
+  return "$failed"
+}
+
+if [ "$build" = self-test ]; then
+  crash_self_test
+  exit $?
+fi
 
 if [ "$build" = shapes ]; then
   capture_simulator
