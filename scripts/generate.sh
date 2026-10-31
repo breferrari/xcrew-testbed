@@ -4,6 +4,8 @@
 # (brew install tuist xcodegen getsentry/xcodebuildmcp/mobilebuildmcp); CI never runs it, it reads what this wrote.
 # scripts/testbed/generate.sh [--build]   --build also builds each form for testing, to prove it's real
 # scripts/testbed/generate.sh concurrency   only the concurrency fixture and its capture, on a capture simulator never booted
+# scripts/testbed/generate.sh raw           only the raw MobileBuildMCP captures, on the capture simulator
+# scripts/testbed/generate.sh xcode-mcp     only the Xcode MCP's captures, never in a full run: it needs Xcode open
 set -eu
 # No step reads a terminal: one that tried would stop the run, its simulator still there.
 exec < /dev/null
@@ -1438,6 +1440,90 @@ concurrency_captures() {
   echo "$out"
 }
 
+# Raw MobileBuildMCP results, whole as JSON-RPC answers them (`content` and `structuredContent`), with the log each names:
+# a serial XCTest run, a Swift Testing run, and a run under a session-defaults profile that names its scheme, called with
+# no scheme. On a copy of field/, on the capture simulator.
+raw_captures() {
+  out=$testbed/captures/raw
+  rm -rf "${out:?}"
+  mkdir -p "$out"
+  work=$(mktemp -d)/field
+  cp -R "$testbed/field" "$work"
+  derived=$(mktemp -d)
+  results=$(mktemp -d)
+  resolved=$(cd "$work" && pwd -P)
+  neutral() {
+    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
+      "$resolved" /testbed/field "$work" /testbed/field "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
+      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
+  }
+  configure() {
+    mkdir -p "$work/.mobilebuildmcp"
+    printf '%s' "$1" > "$work/.mobilebuildmcp/config.yaml"
+  }
+  # One raw call, kept as `<name>.json`, and the log it names as `<name>.log`.
+  raw() {
+    MCP_RAW=1 node scripts/mcp-call.mjs "$work" test_sim "$2" > "$results/$1.json" || true
+    crash_check
+    neutral < "$results/$1.json" | uuids_out > "$out/$1.json"
+    log=$(grep -o '~/[^ "\\]*\.log' "$results/$1.json" | head -1 | sed "s#^~#$HOME#")
+    if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/$1.log"; fi
+  }
+  # test_sim takes its scheme from the session defaults, never as an argument ("scheme is required" otherwise).
+  defaults() {
+    printf "schemaVersion: 1\nsessionDefaults:\n  workspacePath: '%s'\n  scheme: '%s'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/Field.xcworkspace" "$1" "$simulator" "$derived"
+  }
+  configure "$(defaults Feature)"
+  raw serial '{"extraArgs":["-only-testing:FeatureTests/ProbeTests","-parallel-testing-enabled","NO"]}'
+  configure "$(defaults Core)"
+  raw swift-testing '{}'
+  configure "$(printf "schemaVersion: 1\nsessionDefaultsProfiles:\n  unit:\n    workspacePath: '%s'\n    scheme: 'Data'\n    simulatorName: '%s'\n    derivedDataPath: '%s'\nactiveSessionDefaultsProfile: unit\n" "$resolved/Field.xcworkspace" "$simulator" "$derived")"
+  raw profile '{}'
+  rm -rf "${work:?}" "${derived:?}" "${results:?}"
+  printf '{\n  "replay": "each <name>.json is MobileBuildMCP test_sim'"'"'s whole JSON-RPC result on a copy of field/, content and structuredContent, and <name>.log the log it names: serial is FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data; tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$out/capture.json"
+  echo "$out"
+}
+
+# The Xcode MCP's answers, raw: its handshake and its tools. Never part of a full run, and run only by hand on this Mac,
+# on this repository's own fixture: the selected Xcode must already be open, opened by its own path, with field/'s
+# workspace in it, and Xcode asks whether to let the caller in, which only the person at the Mac answers. The build and
+# test calls join once the tools list shows their arguments.
+xcode_mcp_captures() {
+  out=$testbed/captures/xcode-mcp
+  app=$(xcode-select -p | sed 's#/Contents/Developer$##')
+  if ! pgrep -f -x "$app/Contents/MacOS/Xcode" > /dev/null; then
+    echo "generate.sh: open $app first, by that path, with $testbed/field/Field.xcworkspace in it" >&2
+    exit 1
+  fi
+  rm -rf "${out:?}"
+  mkdir -p "$out"
+  resolved=$(cd "$testbed/field" && pwd -P)
+  neutral() {
+    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
+      "$resolved" /testbed/field "$HOME" /testbed/user "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
+  }
+  for step in initialize tools/list; do
+    name=$(printf '%s' "$step" | tr '/' '-')
+    MCP_RAW=1 MCP_SERVER=xcode node scripts/mcp-call.mjs "$testbed/field" "$step" > "$out/$name.raw" || true
+    neutral < "$out/$name.raw" | uuids_out > "$out/$name.json"
+    rm -f "$out/$name.raw"
+  done
+  printf '{\n  "replay": "initialize.json and tools-list.json are the Xcode MCP'"'"'s (xcrun mcpbridge) raw answers to the handshake and to tools/list, Xcode open on field/; tests read them",\n  "xcode": "%s"\n}\n' "$xcode" > "$out/capture.json"
+  bash scripts/leaks.sh
+  echo "$out"
+}
+
+if [ "$build" = xcode-mcp ]; then
+  xcode_mcp_captures
+  exit 0
+fi
+
+if [ "$build" = raw ]; then
+  capture_simulator
+  raw_captures
+  exit 0
+fi
+
 if [ "$build" = concurrency ]; then
   capture_simulator --no-boot
   concurrency_captures
@@ -1452,5 +1538,6 @@ snapshots
 uitests
 field_captures
 concurrency_captures
+raw_captures
 
 scripts/leaks.sh

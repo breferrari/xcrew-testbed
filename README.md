@@ -54,6 +54,8 @@ scripts/generate.sh --build
 ```
 
 - **`--build`** also builds each form for testing, to prove it real.
+- **`scripts/generate.sh raw`** takes only the raw MobileBuildMCP captures, on the capture simulator.
+- **`scripts/generate.sh xcode-mcp`** takes the Xcode MCP's answers, and is never part of a full run. It needs the selected Xcode already open, by its own path, with `field/Field.xcworkspace` in it. Xcode then asks whether to let the caller in, which only the person at the Mac answers. It runs on this repository's fixture alone.
 - **`scripts/generate.sh concurrency`** makes only `concurrency/` and its capture. That capture only builds: its simulator is created on a released runtime and never booted, and deleted at the end.
 - **`FIELD_CAPTURES`** names the field scenarios to take again (`coverage type-error`), keeping the others' captures. Unset, all of them are taken afresh.
 - **Expectations** survive: regenerating keeps each fixture's own.

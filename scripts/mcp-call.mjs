@@ -2,12 +2,17 @@
 // another in the one session, as a stateful tool needs, and prints the text of the last result. Captures come from MCP
 // results, not the CLI's, which presents the same tools differently.
 // node scripts/mcp-call.mjs <project folder> <tool> ['<arguments as JSON>'] [<tool> '<arguments as JSON>' …]
+// MCP_RAW=1 prints the last answer whole, as JSON-RPC's `result`: `content` and `structuredContent` both. MCP_SERVER=xcode
+// talks to the Xcode MCP (`xcrun mcpbridge`) instead. A step named `tools/list` lists the server's tools, and one named
+// `initialize` prints the server's own answer to the handshake.
 import { spawn } from 'node:child_process'
 
 const [project, ...rest] = process.argv.slice(2)
 const calls = []
 for (let i = 0; i < rest.length; i += 2) calls.push([rest[i], rest[i + 1] ?? '{}'])
-const server = spawn('mobilebuildmcp', ['mcp'], { cwd: project, stdio: ['pipe', 'pipe', 'ignore'] })
+const raw = process.env.MCP_RAW === '1'
+const [command, ...commandArgs] = process.env.MCP_SERVER === 'xcode' ? ['xcrun', 'mcpbridge'] : ['mobilebuildmcp', 'mcp']
+const server = spawn(command, commandArgs, { cwd: project, stdio: ['pipe', 'pipe', 'ignore'] })
 const pending = new Map()
 let buffer = ''
 server.stdout.on('data', chunk => {
@@ -33,12 +38,12 @@ const timer = setTimeout(() => {
   server.kill()
   process.exit(2)
 }, 600_000)
-await request('initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'xcrew-testbed', version: '0' } })
+const initialized = await request('initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'xcrew-testbed', version: '0' } })
 server.stdin.write(JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' }) + '\n')
 let called
 for (const [index, [tool, args]] of calls.entries()) {
-  called = await request('tools/call', { name: tool, arguments: JSON.parse(args) })
-  const text = called.result?.content.map(part => part.text ?? '').join('') ?? ''
+  called = tool === 'initialize' ? initialized : tool === 'tools/list' ? await request('tools/list', {}) : await request('tools/call', { name: tool, arguments: JSON.parse(args) })
+  const text = called.result?.content?.map(part => part.text ?? '').join('') ?? ''
   // Each step's result on stderr, for the run's log: what a later step stands on.
   if (calls.length > 1) console.error(`mcp-call: ${tool}${called.result?.isError ? ' (error)' : ''}:\n${text.slice(0, 3000)}`)
   // A step before the last that failed leaves nothing to capture: the scenario didn't happen.
@@ -54,4 +59,5 @@ if (!called.result) {
   console.error(`mcp-call: ${JSON.stringify(called.error)}`)
   process.exit(1)
 }
-process.stdout.write(called.result.content.map(part => part.text ?? '').join(''), () => process.exit(0))
+const answer = raw || !called.result.content ? JSON.stringify(called.result, null, 2) + '\n' : called.result.content.map(part => part.text ?? '').join('')
+process.stdout.write(answer, () => process.exit(0))

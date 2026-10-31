@@ -1,0 +1,97 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "\n🧪 Test\n\nWarnings (1):\n\n  ⚠ initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]\n    /testbed/field/Modules/Feature/Sources/Legacy.swift:3\n\nTest Failures (4):\n\n  ✗ ProbeTests / testFails: XCTAssertEqual failed: (\"Hello, Ada\") is not equal to (\"Hi, Ada\")\n    /testbed/field/Modules/Feature/Tests/ProbeTests.swift:11\n\n  ✗ ProbeTests / testFails(): XCTAssertEqual failed: (\"Hello, Ada\") is not equal to (\"Hi, Ada\")\n\n  ✗ ProbeTests / testFlaky: XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - run 1 is odd\n    /testbed/field/Modules/Feature/Tests/ProbeTests.swift:19\n\n  ✗ ProbeTests / testFlaky(): XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - run 1 is odd\n\n❌ 2 tests failed, 1 passed, 1 skipped (⏱️ 14.2s)\n  └ Files:\n     └── ~/Library/Developer/MobileBuildMCP/workspaces/field-3d32f8cd53a2/\n         ├── logs/test_sim_2026-10-31T02-58-33-450Z_pid19405_1183ca26.log — Build Logs\n         ├── result-bundles/test_sim_2026-10-31T02-58-33-451Z_pid19405_dd194716.xcresult — Result Bundle\n         └── test-products/test_sim_2026-10-31T02-58-33-451Z_pid19405_f2831d6c.xctestproducts — Test Products\n"
+    }
+  ],
+  "structuredContent": {
+    "schema": "mobilebuildmcp.output.test-result",
+    "schemaVersion": "3",
+    "didError": true,
+    "error": "Tests failed",
+    "data": {
+      "summary": {
+        "status": "FAILED",
+        "durationMs": 14246,
+        "counts": {
+          "passed": 1,
+          "failed": 2,
+          "skipped": 1
+        },
+        "target": "simulator"
+      },
+      "artifacts": {
+        "buildLogPath": "~/Library/Developer/MobileBuildMCP/workspaces/field-3d32f8cd53a2/logs/test_sim_2026-10-31T02-58-33-450Z_pid19405_1183ca26.log",
+        "xcresultPath": "~/Library/Developer/MobileBuildMCP/workspaces/field-3d32f8cd53a2/result-bundles/test_sim_2026-10-31T02-58-33-451Z_pid19405_dd194716.xcresult",
+        "testProductsPath": "~/Library/Developer/MobileBuildMCP/workspaces/field-3d32f8cd53a2/test-products/test_sim_2026-10-31T02-58-33-451Z_pid19405_f2831d6c.xctestproducts"
+      },
+      "diagnostics": {
+        "warnings": [
+          {
+            "message": "initialization of immutable value 'unused' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]",
+            "location": "/testbed/field/Modules/Feature/Sources/Legacy.swift:3"
+          }
+        ],
+        "errors": [],
+        "testFailures": [
+          {
+            "suite": "ProbeTests",
+            "test": "testFails",
+            "message": "XCTAssertEqual failed: (\"Hello, Ada\") is not equal to (\"Hi, Ada\")",
+            "location": "/testbed/field/Modules/Feature/Tests/ProbeTests.swift:11"
+          },
+          {
+            "suite": "ProbeTests",
+            "test": "testFails()",
+            "message": "XCTAssertEqual failed: (\"Hello, Ada\") is not equal to (\"Hi, Ada\")"
+          },
+          {
+            "suite": "ProbeTests",
+            "test": "testFlaky",
+            "message": "XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - run 1 is odd",
+            "location": "/testbed/field/Modules/Feature/Tests/ProbeTests.swift:19"
+          },
+          {
+            "suite": "ProbeTests",
+            "test": "testFlaky()",
+            "message": "XCTAssertEqual failed: (\"1\") is not equal to (\"0\") - run 1 is odd"
+          }
+        ]
+      },
+      "testCases": [
+        {
+          "suite": "ProbeTests",
+          "test": "testExpectedFailure",
+          "status": "passed",
+          "durationMs": 394
+        },
+        {
+          "suite": "ProbeTests",
+          "test": "testFails",
+          "status": "failed",
+          "durationMs": 6
+        },
+        {
+          "suite": "ProbeTests",
+          "test": "testFlaky",
+          "status": "failed",
+          "durationMs": 9
+        },
+        {
+          "suite": "ProbeTests",
+          "test": "testPasses",
+          "status": "passed",
+          "durationMs": 1
+        },
+        {
+          "suite": "ProbeTests",
+          "test": "testSkipped",
+          "status": "skipped",
+          "durationMs": 14
+        }
+      ]
+    }
+  },
+  "isError": true
+}

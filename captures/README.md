@@ -104,6 +104,30 @@ What they show:
 - **Errors carry their group too:** the app's `var 'appCount' is not concurrency-safe … [#MutableGlobalVariable]`.
 - **Logs repeat a diagnostic.** xcodebuild's log writes each warning two or four times. MobileBuildMCP's result lists it once.
 
+## raw
+
+*Xcode 27.2, iOS 27.2, MobileBuildMCP 2.7.1, 2026-10-31.*
+
+MobileBuildMCP's `test_sim` answers whole, as JSON-RPC gives them (`content` and `structuredContent`), each with the log it names, on a copy of `field/`. `scripts/mcp-call.mjs` keeps them with `MCP_RAW=1`. They replace text captures as the tests reading those move to them.
+
+| File | What runs |
+|---|---|
+| `serial.json`, `serial.log` | `FeatureTests/ProbeTests` with `-parallel-testing-enabled NO` |
+| `swift-testing.json`, `swift-testing.log` | the `Core` scheme's Swift Testing tests |
+| `profile.json`, `profile.log` | a call that names no scheme, under a `sessionDefaultsProfiles` profile whose scheme is `Data` |
+
+What they show:
+
+- **Claude Code hands the mod the text.** A passing run's `content` is text too, `✅ 1 test passed, 0 failed, 0 skipped`, and its JSON is only in `structuredContent`.
+- **No result names its scheme.** `structuredContent.data` holds `summary`, `artifacts` and `diagnostics`, and the text has no `Scheme:` line.
+- **`test_sim` takes its scheme from the session defaults.** A call that passes `scheme` is refused: "scheme: scheme is required." `tools/list` gives `test_sim` no `scheme` parameter.
+- **A serial run's log** writes `Test Case '-[FeatureTests.ProbeTests testFails]' failed (0.006 seconds).` **A Swift Testing run's** writes `✔ Test itIsNamed() passed after 0.001 seconds.` Neither is the parallel runner's `Test case '…'`.
+- **Paths:** `structuredContent`'s artifact paths are written from `~`. The rest is neutralised as the other captures are, JSON-escaped spellings included.
+
+## xcode-mcp
+
+Not taken yet: `scripts/generate.sh xcode-mcp` writes the Xcode MCP's raw answers to `initialize` and `tools/list` here, when run by hand with Xcode open on `field/`.
+
 ## Neutralising
 
 - The captures' neutralisers rewrite a temporary folder of the Mac (`$TMPDIR`, with or without its `/private` prefix), which `leaks.sh` also fails on. The [README's Leaks section](../README.md#leaks) has what it looks for.
