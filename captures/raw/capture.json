@@ -1,0 +1,4 @@
+{
+  "replay": "each <name>.json is MobileBuildMCP test_sim's whole JSON-RPC result on a copy of field/, content and structuredContent, and <name>.log the log it names: serial is FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme's Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data; tests read them and never build",
+  "mobilebuildmcp": "2.7.1"
+}

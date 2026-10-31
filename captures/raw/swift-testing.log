@@ -1,0 +1,239 @@
+Command line invocation:
+    /Applications/Xcode-27.2.0.app/Contents/Developer/usr/bin/xcodebuild -workspace /testbed/field/Field.xcworkspace -scheme Core -skipMacroValidation -destination "platform=iOS Simulator,id=00000000-0000-0000-0000-000000000001" -collect-test-diagnostics never COMPILER_INDEX_STORE_ENABLE=NO ONLY_ACTIVE_ARCH=YES -packageCachePath /testbed/user/Library/Caches/org.swift.swiftpm -derivedDataPath /testbed/DerivedData -testProductsPath /testbed/user/Library/Developer/MobileBuildMCP/workspaces/field-3d32f8cd53a2/test-products/test_sim_2026-10-31T02-58-52-105Z_pid20279_32ef7fd1.xctestproducts build-for-testing
+
+Build settings from command line:
+    COMPILER_INDEX_STORE_ENABLE = NO
+    ONLY_ACTIVE_ARCH = YES
+
+2026-10-31 03:58:53.928 xcodebuild[20547:3253390] Writing test products to /testbed/user/Library/Developer/MobileBuildMCP/workspaces/field-3d32f8cd53a2/test-products/test_sim_2026-10-31T02-58-52-105Z_pid20279_32ef7fd1.xctestproducts
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (2 targets)
+    Target 'CoreTests' in project 'Core'
+        ➜ Explicit dependency on target 'Core' in project 'Core'
+    Target 'Core' in project 'Core' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 3a0b28bdb23567a0652940b10ddd80d7
+Build description path: /testbed/DerivedData/Build/Intermediates.noindex/XCBuildData/3a0b28bdb23567a0652940b10ddd80d7.xcbuilddata
+ClangStatCache /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-6636dc27d5987ae8ce4688cdf207bdd4.sdkstatcache
+    cd /testbed/field
+    /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -o /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-6636dc27d5987ae8ce4688cdf207bdd4.sdkstatcache
+
+ProcessInfoPlistFile /testbed/DerivedData/Build/Products/Debug-iphonesimulator/Core.framework/Info.plist /testbed/field/Modules/Core/Derived/InfoPlists/Core-Info.plist (in target 'Core' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-infoPlistUtility /testbed/field/Modules/Core/Derived/InfoPlists/Core-Info.plist -producttype com.apple.product-type.framework -expandbuildsettings -format binary -platform iphonesimulator -o /testbed/DerivedData/Build/Products/Debug-iphonesimulator/Core.framework/Info.plist
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests.hmap (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests_const_extract_protocols.json (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests_const_extract_protocols.json
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-OutputFileMap.json (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-OutputFileMap.json
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.SwiftConstValuesFileList (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.SwiftFileList (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.SwiftFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests.DependencyStaticMetadataFileList (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.LinkFileList (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.LinkFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests.DependencyMetadataFileList (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests.DependencyMetadataFileList
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-project-headers.hmap (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-project-headers.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-own-target-headers.hmap (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-own-target-headers.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-generated-files.hmap (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-generated-files.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-all-target-headers.hmap (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-all-target-headers.hmap
+
+WriteAuxiliaryFile /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-all-non-framework-target-headers.hmap (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    write-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-all-non-framework-target-headers.hmap
+
+MkDir /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    /bin/mkdir -p /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest
+
+SwiftDriver CoreTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-SwiftDriver -- /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name CoreTests -Onone @/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -target arm64-apple-ios18.0-simulator -g -module-cache-path /testbed/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /testbed/DerivedData/Build/Products/Debug-iphonesimulator -Isystem /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /testbed/DerivedData/Build/Products/Debug-iphonesimulator -F /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/Developer/Library/Frameworks -parse-as-library -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-6636dc27d5987ae8ce4688cdf207bdd4.sdkstatcache -output-file-map /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /testbed/DerivedData/ModuleCache.noindex -sdk-module-cache-path /testbed/DerivedData/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /testbed/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests_const_extract_protocols.json -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-generated-files.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-own-target-headers.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/Core-8443154cdf1df848ba4af4bd8aa58d25-VFS-iphonesimulator/all-product-headers.yaml -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-project-headers.hmap -Xcc -I/testbed/DerivedData/Build/Products/Debug-iphonesimulator/include -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources-normal/arm64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources/arm64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-Swift.h -working-directory /testbed/field/Modules/Core -experimental-emit-module-separately -disable-cmo
+
+ProcessInfoPlistFile /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/Info.plist /testbed/field/Modules/Core/Derived/InfoPlists/CoreTests-Info.plist (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-infoPlistUtility /testbed/field/Modules/Core/Derived/InfoPlists/CoreTests-Info.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -format binary -platform iphonesimulator -o /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/Info.plist
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/Testing-3E7I1SDJUZXFA.swiftmodule
+
+SwiftCompile normal arm64 Compiling\ CoreTests.swift /testbed/field/Modules/Core/Tests/CoreTests.swift (in target 'CoreTests' from project 'Core')
+
+SwiftCompile normal arm64 /testbed/field/Modules/Core/Tests/CoreTests.swift (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-SwiftPerFileCompile CoreTests.swift
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ CoreTests (in target 'CoreTests' from project 'Core')
+
+SwiftCompile normal arm64 (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for CoreTests (in target 'CoreTests' from project 'Core')
+
+SwiftDriver\ Compilation\ Requirements CoreTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name CoreTests -Onone @/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -target arm64-apple-ios18.0-simulator -g -module-cache-path /testbed/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /testbed/DerivedData/Build/Products/Debug-iphonesimulator -Isystem /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /testbed/DerivedData/Build/Products/Debug-iphonesimulator -F /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/Developer/Library/Frameworks -parse-as-library -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-6636dc27d5987ae8ce4688cdf207bdd4.sdkstatcache -output-file-map /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /testbed/DerivedData/ModuleCache.noindex -sdk-module-cache-path /testbed/DerivedData/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /testbed/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests_const_extract_protocols.json -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-generated-files.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-own-target-headers.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/Core-8443154cdf1df848ba4af4bd8aa58d25-VFS-iphonesimulator/all-product-headers.yaml -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-project-headers.hmap -Xcc -I/testbed/DerivedData/Build/Products/Debug-iphonesimulator/include -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources-normal/arm64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources/arm64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-Swift.h -working-directory /testbed/field/Modules/Core -experimental-emit-module-separately -disable-cmo
+
+SwiftMergeGeneratedHeaders /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources/CoreTests-Swift.h /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-Swift.h (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-swiftHeaderTool -arch arm64 /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-Swift.h -o /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources/CoreTests-Swift.h
+
+Copy /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.swiftmodule/arm64-apple-ios-simulator.swiftdoc /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.swiftdoc (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.swiftdoc /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.swiftmodule/arm64-apple-ios-simulator.swiftdoc
+
+Copy /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.swiftmodule/arm64-apple-ios-simulator.abi.json /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.abi.json (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.abi.json /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.swiftmodule/arm64-apple-ios-simulator.abi.json
+
+Copy /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.swiftsourceinfo (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.swiftsourceinfo /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo
+
+Copy /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.swiftmodule/arm64-apple-ios-simulator.swiftmodule /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.swiftmodule (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.swiftmodule /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.swiftmodule/arm64-apple-ios-simulator.swiftmodule
+
+SwiftDriverJobDiscovery normal arm64 Compiling CoreTests.swift (in target 'CoreTests' from project 'Core')
+
+SwiftDriver\ Compilation CoreTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-Swift-Compilation -- /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name CoreTests -Onone @/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -target arm64-apple-ios18.0-simulator -g -module-cache-path /testbed/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /testbed/DerivedData/Build/Products/Debug-iphonesimulator -Isystem /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /testbed/DerivedData/Build/Products/Debug-iphonesimulator -F /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/Developer/Library/Frameworks -parse-as-library -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /testbed/DerivedData/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-6636dc27d5987ae8ce4688cdf207bdd4.sdkstatcache -output-file-map /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /testbed/DerivedData/ModuleCache.noindex -sdk-module-cache-path /testbed/DerivedData/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /testbed/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests_const_extract_protocols.json -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-generated-files.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-own-target-headers.hmap -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/Core-8443154cdf1df848ba4af4bd8aa58d25-VFS-iphonesimulator/all-product-headers.yaml -Xcc -iquote -Xcc /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests-project-headers.hmap -Xcc -I/testbed/DerivedData/Build/Products/Debug-iphonesimulator/include -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources-normal/arm64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources/arm64 -Xcc -I/testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests-Swift.h -working-directory /testbed/field/Modules/Core -experimental-emit-module-separately -disable-cmo
+
+Ld /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/CoreTests normal (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios18.0-simulator -bundle -isysroot /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -O0 -Xlinker -no_warn_duplicate_libraries -L/testbed/DerivedData/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/testbed/DerivedData/Build/Products/Debug-iphonesimulator -L/Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F/testbed/DerivedData/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/testbed/DerivedData/Build/Products/Debug-iphonesimulator -iframework /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -iframework /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/Developer/Library/Frameworks -filelist /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.LinkFileList -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @loader_path/Frameworks -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.swiftmodule -L/Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport -framework Core -Xlinker -no_adhoc_codesign -o /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/CoreTests
+
+GenerateDSYMFile /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest.dSYM /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/CoreTests (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    export PATH\=/Applications/Xcode-27.2.0.app/Contents/SharedFrameworks/SwiftBuild.framework/Versions/A/PlugIns/SWBBuildService.bundle/Contents/PlugIns/SWBUniversalPlatformPlugin.bundle/Contents/Frameworks/SWBUniversalPlatform.framework/Resources:/Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin:/Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/local/bin:/Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/libexec:/Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/usr/bin:/Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/usr/local/bin:/Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/local/bin:/Applications/Xcode-27.2.0.app/Contents/Developer/usr/bin:/Applications/Xcode-27.2.0.app/Contents/Developer/usr/local/bin:/testbed/user/bin:/testbed/user/.grok/bin:/testbed/user/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/testbed/user/.cargo/bin:/Applications/Ghostty.app/Contents/MacOS
+    /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/CoreTests -o /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest.dSYM
+
+CopySwiftLibs /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/CoreTests --scan-folder /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/Frameworks --scan-folder /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/PlugIns --scan-folder /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/SystemExtensions --scan-folder /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/Extensions --scan-folder /testbed/DerivedData/Build/Products/Debug-iphonesimulator/Core.framework --platform iphonesimulator --toolchain /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/Frameworks --strip-bitcode --scan-executable /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name CoreTests --sdk-root /Applications/Xcode-27.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk --xcode-version 27B52 --platform-family iOS --deployment-target 18.0 --bundle-identifier dev.xcrew.testbed.CoreTests --output /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest --target-triple arm64-apple-ios18.0-simulator --binary-file /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/CoreTests --dependency-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests_dependency_info.dat --stringsdata-file /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.SwiftFileList --metadata-file-list /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests.DependencyMetadataFileList --static-metadata-file-list /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests.DependencyStaticMetadataFileList --swift-const-vals-list /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/Objects-normal/arm64/CoreTests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-10-31 03:58:56.509 appintentsmetadataprocessor[20648:3253947] Starting App Intents metadata extraction
+2026-10-31 03:58:56.512 appintentsmetadataprocessor[20648:3253947] warning: Metadata extraction skipped, no AppIntents.framework dependency found
+
+AppIntentsSSUTraining (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    /Applications/Xcode-27.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsnltrainingprocessor --infoplist-path /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/Info.plist --temp-dir-path /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/ssu --bundle-id dev.xcrew.testbed.CoreTests --product-path /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest --extracted-metadata-path /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/Metadata.appintents --metadata-file-list /testbed/DerivedData/Build/Intermediates.noindex/Core.build/Debug-iphonesimulator/CoreTests.build/CoreTests.DependencyMetadataFileList --source-file /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest/Info.plist --archive-ssu-assets
+2026-10-31 03:58:56.552 appintentsnltrainingprocessor[20649:3253954] Parsing options for appintentsnltrainingprocessor
+2026-10-31 03:58:56.553 appintentsnltrainingprocessor[20649:3253954] Starting AppIntents SSU YAML Generation
+2026-10-31 03:58:56.554 appintentsnltrainingprocessor[20649:3253954] No AppShortcuts found - Skipping.
+
+CodeSign /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der --strip-disallowed-xattrs /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest
+
+RegisterExecutionPolicyException /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    builtin-RegisterExecutionPolicyException /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest
+
+Touch /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest (in target 'CoreTests' from project 'Core')
+    cd /testbed/field/Modules/Core
+    /usr/bin/touch -c /testbed/DerivedData/Build/Products/Debug-iphonesimulator/CoreTests.xctest
+
+PruneExplicitPrecompiledModules /testbed/DerivedData/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /testbed/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /testbed/DerivedData/SDKExplicitPrecompiledModules
+
+note: Removed stale file '/testbed/DerivedData/Build/Intermediates.noindex/Data.build/Debug-iphonesimulator/Data-617f025ee7a7d625818ed86490556ae2-VFS-iphonesimulator/all-product-headers.yaml'
+
+note: Removed stale file '/testbed/DerivedData/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator/Data.framework/Data.tbd'
+
+note: Removed stale file '/testbed/DerivedData/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator/Feature.framework/Feature.tbd'
+
+note: Removed stale file '/testbed/DerivedData/Build/Intermediates.noindex/Feature.build/Debug-iphonesimulator/Feature-c6516ae7e398ebbecf7755b79415e46c-VFS-iphonesimulator/all-product-headers.yaml'
+
+** TEST BUILD SUCCEEDED **
+
+Command line invocation:
+    /Applications/Xcode-27.2.0.app/Contents/Developer/usr/bin/xcodebuild -testProductsPath /testbed/user/Library/Developer/MobileBuildMCP/workspaces/field-3d32f8cd53a2/test-products/test_sim_2026-10-31T02-58-52-105Z_pid20279_32ef7fd1.xctestproducts -destination "platform=iOS Simulator,id=00000000-0000-0000-0000-000000000001" -collect-test-diagnostics never -resultBundlePath /testbed/user/Library/Developer/MobileBuildMCP/workspaces/field-3d32f8cd53a2/result-bundles/test_sim_2026-10-31T02-58-52-105Z_pid20279_8eddb088.xcresult test-without-building
+
+Writing result bundle at path:
+	/testbed/user/Library/Developer/MobileBuildMCP/workspaces/field-3d32f8cd53a2/result-bundles/test_sim_2026-10-31T02-58-52-105Z_pid20279_8eddb088.xcresult
+
+Test Suite 'All tests' started at 2026-10-31 03:58:58.863.
+Test Suite 'All tests' passed at 2026-10-31 03:58:58.864.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 2403
+↳ Target Platform: arm64-apple-ios17.0-simulator
+◇ Test itIsNamed() started.
+✔ Test itIsNamed() passed after 0.001 seconds.
+✔ Test run with 1 test in 0 suites passed after 0.003 seconds.
+2026-10-31 03:58:59.142 xcodebuild[20652:3253972] [MT] IDETestOperationsObserverDebug: 1.420 elapsed -- Testing started completed.
+2026-10-31 03:58:59.142 xcodebuild[20652:3253972] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-31 03:58:59.142 xcodebuild[20652:3253972] [MT] IDETestOperationsObserverDebug: 1.420 sec, +1.420 sec -- end
+
+Test session results, code coverage, and logs:
+	/testbed/user/Library/Developer/MobileBuildMCP/workspaces/field-3d32f8cd53a2/result-bundles/test_sim_2026-10-31T02-58-52-105Z_pid20279_8eddb088.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started
