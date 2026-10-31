@@ -11,6 +11,7 @@
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
 # scripts/testbed/generate.sh multi-pass    only the plans fixture and the raw captures of runs with several passes or a
 #                                           cancel, on the capture simulator; never in a full run (multi_pass_captures)
+# scripts/testbed/generate.sh neutral-paths only rewrites every committed capture's PATH to scripts/neutral-path's; boots nothing
 # scripts/testbed/generate.sh field-logs    only the logs of committed field captures (FIELD_CAPTURES names which), from this Mac's MobileBuildMCP workspaces; boots nothing
 # scripts/testbed/generate.sh parallel      only the parallel fixture and its raw capture, on the capture simulator and its clones
 # scripts/testbed/generate.sh self-test     checks the crash rules on made-up reports, and that a fixture's or an unknown name boots nothing; boots nothing
@@ -46,7 +47,17 @@ uuids_out() {
 # unset, is skipped: it would match between every character.
 neutralise() {
   perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { next unless length $from; (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
-    "$@" "$HOME" /testbed/user "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
+    "$@" "$HOME" /testbed/user "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp | neutral_path
+}
+
+# The macOS search path a capture's PATH holds in place of this Mac's own, whose tools are no capture's business:
+# scripts/neutral-path, which leaks.sh holds every committed PATH to.
+neutral_path_defaults=$(cat scripts/neutral-path)
+
+# Every PATH a tool writes, as xcodebuild echoes it (`export PATH\=…`) or an environment lists it (`PATH=…`), keeps only
+# its entries inside an Xcode app, which Xcode sets, followed by macOS's defaults (`neutral_path_defaults`).
+neutral_path() {
+  perl -pe 'BEGIN { $defaults = shift @ARGV } s{(\bPATH\\?=)([^\s"]+)}{ $1 . join(":", (grep { m{^/Applications/Xcode[^/]*\.app/} } split(/:/, $2)), $defaults) }ge' "$neutral_path_defaults"
 }
 
 xcodegen_spec() {
@@ -1138,7 +1149,7 @@ EOF
   written=$(cd "$fixture" && pwd)
   resolved=$(cd "$fixture" && pwd -P)
   neutral() {
-    perl -pe 'BEGIN { ($w, $r, $n) = @ARGV; @ARGV = (); ($we, $re, $ne) = map { (my $e = $_) =~ s#/#\\/#g; $e } $w, $r, $n } s#\Q$we\E#$ne#g; s#\Q$re\E#$ne#g; s#\Q$w\E#$n#g; s#\Q$r\E#$n#g' "$written" "$resolved" /testbed/captures/coverage
+    perl -pe 'BEGIN { ($w, $r, $n) = @ARGV; @ARGV = (); ($we, $re, $ne) = map { (my $e = $_) =~ s#/#\\/#g; $e } $w, $r, $n } s#\Q$we\E#$ne#g; s#\Q$re\E#$ne#g; s#\Q$w\E#$n#g; s#\Q$r\E#$n#g' "$written" "$resolved" /testbed/captures/coverage | neutral_path
   }
   xcrun xcresulttool get content-availability --path "$bundle" > "$fixture/content-availability.json"
   xcrun xccov view --archive --file-list --json "$bundle" | neutral > "$fixture/file-list.json"
@@ -1166,7 +1177,7 @@ environment() {
   # temporary folder last: xcodebuild writes an error result bundle there.
   neutral() {
     perl -pe 'BEGIN { ($rf, $wf, $rd, $wd, $h, $rt, $wt) = @ARGV; @ARGV = () } s#\Q$rf\E#/testbed/captures/environment#g; s#\Q$wf\E#/testbed/captures/environment#g; s#\Q$rd\E#/testbed/DerivedData#g; s#\Q$wd\E#/testbed/DerivedData#g; s#\Q$h\E#/testbed/home#g; s#\Q$rt\E#/testbed/tmp#g; s#\Q$wt\E#/testbed/tmp#g' \
-      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME" "$(cd "${TMPDIR:-/tmp}" && pwd -P)" "${TMPDIR%/}"
+      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME" "$(cd "${TMPDIR:-/tmp}" && pwd -P)" "${TMPDIR%/}" | neutral_path
   }
   configure() {
     mkdir -p "$fixture/.mobilebuildmcp"
@@ -1319,7 +1330,7 @@ EOF
   resolved=$(cd "$fixture" && pwd -P)
   neutral() {
     perl -pe 'BEGIN { ($rf, $wf, $rd, $wd, $h) = @ARGV; @ARGV = () } s#\Q$rf\E#/testbed/captures/snapshots#g; s#\Q$wf\E#/testbed/captures/snapshots#g; s#\Q$rd\E#/testbed/DerivedData#g; s#\Q$wd\E#/testbed/DerivedData#g; s#\Q$h\E#/testbed/user#g' \
-      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME"
+      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME" | neutral_path
   }
   # Both runs fail by design: a test that records fails in both libraries, and so does every comparison after.
   (cd "$fixture" && TEST_RUNNER_SNAPSHOT_RECORD=1 xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -quiet > /dev/null 2>&1) || true
@@ -1551,7 +1562,7 @@ EOF
   resolved=$(cd "$fixture" && pwd -P)
   neutral() {
     perl -pe 'BEGIN { ($rf, $wf, $rd, $wd, $h) = @ARGV; @ARGV = () } s#\Q$rf\E#/testbed/captures/uitests#g; s#\Q$wf\E#/testbed/captures/uitests#g; s#\Q$rd\E#/testbed/DerivedData#g; s#\Q$wd\E#/testbed/DerivedData#g; s#\Q$h\E#/testbed/user#g' \
-      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME"
+      "$resolved" "$(cd "$fixture" && pwd)" "$(cd "$derived" && pwd -P)" "$derived" "$HOME" | neutral_path
   }
   # Fails by design: four of the five tests fail under at least one configuration.
   (cd "$fixture" && xcodebuild test -project App.xcodeproj -scheme App -destination "platform=iOS Simulator,id=$simulator_id" -derivedDataPath "$derived" -resultBundlePath "$results/UITests.xcresult" -quiet > /dev/null 2>&1) || true
@@ -2251,6 +2262,15 @@ field_logs() {
   echo "$out"
 }
 
+# Every committed capture file whose PATH isn't neutral yet, rewritten in place through `neutral_path`: no run, and
+# nothing but its PATH values changes.
+neutral_paths() {
+  git ls-files -z captures forms adversarial modular field | xargs -0 grep -l -I -E 'PATH\\?=' 2> /dev/null | while IFS= read -r file; do
+    neutral_path < "$file" > "$file.neutral"
+    if cmp -s "$file" "$file.neutral"; then rm -f "$file.neutral"; else mv "$file.neutral" "$file"; echo "$file"; fi
+  done
+}
+
 # The crash rules on made-up reports: at finish_simulator's shutdown, and mid-run as a parallel run clones.
 crash_self_test() {
   folder=$(mktemp -d)
@@ -2351,6 +2371,11 @@ fi
 
 if [ "$build" = raw-answers ]; then
   raw_answers
+  exit 0
+fi
+
+if [ "$build" = neutral-paths ]; then
+  neutral_paths
   exit 0
 fi
 
