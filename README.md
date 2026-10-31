@@ -91,7 +91,7 @@ The run ends with `scripts/leaks.sh`. It fails when a committed file holds:
 - the id of one of its devices or simulators, binary files included, since an archived attachment can hold one as text. Captures number ids instead, from `00000000-0000-0000-0000-000000000001`;
 - a temporary folder of the Mac (`$TMPDIR`, with or without its `/private` prefix), as written or JSON-escaped, in any file;
 - any user's home folder, not only this Mac's, macOS's `USER` placeholder included, and any Linux one;
-- a `PATH` with an entry other than an Xcode app's own and macOS's defaults, which would name the Mac's own tools. `scripts/neutral-path.sh` holds the rule, which every step writes through and `scripts/generate.sh neutral-paths` applies to committed files in place.
+- a `PATH` with an entry other than an Xcode app's own and macOS's defaults, which would name the Mac's own tools. `scripts/neutral-path.sh` holds the rule, which every step writes through and `scripts/generate.sh neutral-paths` applies to committed files in place. Other variables whose names end in PATH (`MANPATH`, `INFOPATH`, `DYLD_LIBRARY_PATH`) are left alone on purpose: they name the system's and Homebrew's usual folders, not the Mac's own tools.
 
 Paths count as written or with JSON's escaped slashes (`\/`).
 

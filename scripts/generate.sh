@@ -2350,12 +2350,12 @@ path_self_test() {
   given=$(mktemp)
   wanted=$(mktemp)
   cat > "$given" <<'PATHS'
-    export PATH\=/Applications/Xcode-27.2.0.app/Contents/Developer/usr/bin:/testbed/user/.cargo/bin:/opt/homebrew/bin
-PATH=/testbed/user/Library/Application\ Support/Toolbox/scripts:/usr/bin next
-{"text":"    export PATH\\=\/Applications\/Xcode.app\/Contents\/Developer\/usr\/bin:\/opt\/homebrew\/bin\nHOME=\/testbed\/user"}
-PATH="/opt/homebrew/bin:/usr/bin"
-PATH=/Volumes/Tools/Xcode-beta.app/Contents/Developer/usr/bin:/opt/homebrew/bin
-    export MANPATH\=/opt/homebrew/share/man DYLD_LIBRARY_PATH=/opt/homebrew/lib
+    export PATH\=/Applications/Xcode-27.2.0.app/Contents/Developer/usr/bin:/testbed/user/tools/bin:/opt/tools/bin
+PATH=/testbed/user/Library/Application\ Support/Tool/scripts:/usr/bin next
+{"text":"    export PATH\\=\/Applications\/Xcode.app\/Contents\/Developer\/usr\/bin:\/opt\/tools\/bin\nHOME=\/testbed\/user"}
+PATH="/opt/tools/bin:/usr/bin"
+PATH=/Volumes/Tools/Xcode-beta.app/Contents/Developer/usr/bin:/opt/tools/bin
+    export MANPATH\=/opt/tools/share/man DYLD_LIBRARY_PATH=/opt/tools/lib
 PATHS
   cat > "$wanted" <<'PATHS'
     export PATH\=/Applications/Xcode-27.2.0.app/Contents/Developer/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -2363,7 +2363,7 @@ PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin next
 {"text":"    export PATH\\=\/Applications\/Xcode.app\/Contents\/Developer\/usr\/bin:\/usr\/local\/bin:\/usr\/bin:\/bin:\/usr\/sbin:\/sbin\nHOME=\/testbed\/user"}
 PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 PATH=/Volumes/Tools/Xcode-beta.app/Contents/Developer/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-    export MANPATH\=/opt/homebrew/share/man DYLD_LIBRARY_PATH=/opt/homebrew/lib
+    export MANPATH\=/opt/tools/share/man DYLD_LIBRARY_PATH=/opt/tools/lib
 PATHS
   failed=0
   if ! neutral_path < "$given" | diff "$wanted" - >&2; then echo "generate.sh self-test: neutral_path wrote the lines above otherwise" >&2; failed=1; fi
