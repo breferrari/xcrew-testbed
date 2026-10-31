@@ -116,11 +116,13 @@ MobileBuildMCP's answers whole, as JSON-RPC gives them (`content` and `structure
 | `swift-testing.json`, `swift-testing.log` | the `Core` scheme's Swift Testing tests |
 | `profile.json`, `profile.log` | a call that names no scheme, under a `sessionDefaultsProfiles` profile whose scheme is `Data` |
 | `empty-filter.json`, `empty-filter.log` | `-only-testing:FeatureTests/NoSuchTests`, the selection `field/empty-filter` makes, matching no test (2026-10-31, booted once) |
+| `timing.json`, `timing.log`, `timing.crash.ips` | `FeatureTests/ProbeTests` and `FeatureTests/CrashTests` with `-parallel-testing-enabled NO` and `showTestTiming: true` in the project's config, the crash log exported from the bundle (2026-10-31, booted once) |
 | `build_sim.json`, `build_sim.log` | `build_sim` of `concurrency/`'s `Warnings` scheme, which builds with its warnings, the simulator never booted (2026-10-31) |
 
 What they show:
 
 - **Claude Code hands the mod the text.** A passing run's `content` is text too, `✅ 1 test passed, 0 failed, 0 skipped`, and its JSON is only in `structuredContent`. So is a passing build's: `✅ Build succeeded.`, its 7 warnings in `structuredContent.data.diagnostics.warnings` as `message` and `location`.
+- **`showTestTiming` adds `Test Results:`.** With it on, a test run's text lists each test, `✅ ProbeTests/testPasses (0.000s)`, `⏭️ ProbeTests/testSkipped (0.009s)`, before the summary line. The test that crashed isn't listed, though it counts among the failures, and the expected failure is listed as passed.
 - **A run matching no test says so only in its JSON.** The text is `✅ Test succeeded.` with no count; `structuredContent.data.summary` is `SUCCEEDED` with `counts` of 0 passed, 0 failed, 0 skipped.
 - **No result names its scheme.** `structuredContent.data` holds `summary`, `artifacts` and `diagnostics`, and the text has no `Scheme:` line.
 - **`test_sim` takes its scheme from the session defaults.** A call that passes `scheme` is refused: "scheme: scheme is required." `tools/list` gives `test_sim` no `scheme` parameter.

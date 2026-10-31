@@ -1643,7 +1643,7 @@ concurrency_captures() {
 
 # What captures/raw holds, for every step that writes there.
 raw_manifest() {
-  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
+  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
 }
 
 # Result bundle `$1`'s answers to what xcrew asks it, as `<name>` (`$2`) in `$out`, through the calling step's `neutral`:
@@ -1680,11 +1680,12 @@ raw_bundle() {
 
 # Raw MobileBuildMCP results, whole as JSON-RPC answers them (`content` and `structuredContent`), with the log each names:
 # a serial XCTest run, a Swift Testing run, a run under a session-defaults profile that names its scheme, called with
-# no scheme, and a selection matching no test. On a copy of field/, on the capture simulator. RAW_CAPTURES names the
+# no scheme, a selection matching no test, and a serial run with a crash and `showTestTiming` on. On a copy of field/, on
+# the capture simulator. RAW_CAPTURES names the
 # ones to take again (`empty-filter`); unset, all of them. Either way the folder's other captures stay.
 raw_captures() {
   out=$testbed/captures/raw
-  wanted=${RAW_CAPTURES:-serial swift-testing profile empty-filter}
+  wanted=${RAW_CAPTURES:-serial swift-testing profile empty-filter timing}
   takes() { case " $wanted " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
   mkdir -p "$out"
   work=$(mktemp -d)/field
@@ -1697,10 +1698,12 @@ raw_captures() {
     mkdir -p "$work/.mobilebuildmcp"
     printf '%s' "$1" > "$work/.mobilebuildmcp/config.yaml"
   }
-  # One raw call, kept as `<name>.json`, and the log it names as `<name>.log`.
+  # One raw call, kept as `<name>.json`, and the log it names as `<name>.log`; `$3` names a test expected to crash.
   raw() {
     MCP_RAW=1 node scripts/mcp-call.mjs "$work" test_sim "$2" > "$results/$1.json" || true
-    crash_check
+    # An expected crash's report lands a little after the process ends: wait for it, so this step's check sees it.
+    if [ -n "${3:-}" ]; then sleep 20; fi
+    crash_check "${3:-}"
     neutral < "$results/$1.json" | uuids_out > "$out/$1.json"
     log=$(grep -o '~/[^ "\\]*\.log' "$results/$1.json" | head -1 | sed "s#^~#$HOME#")
     if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/$1.log"; fi
@@ -1711,7 +1714,7 @@ raw_captures() {
   defaults() {
     printf "schemaVersion: 1\nsessionDefaults:\n  workspacePath: '%s'\n  scheme: '%s'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/Field.xcworkspace" "$1" "$simulator" "$derived"
   }
-  for name in $wanted; do rm -f "$out/$name.json" "$out/$name.log" "$out/$name.tests.json" "$out/$name.summary.json" "$out/$name".details.*.json; done
+  for name in $wanted; do rm -f "$out/$name.json" "$out/$name.log" "$out/$name.tests.json" "$out/$name.summary.json" "$out/$name".details.*.json "$out/$name.crash.ips"; done
   if takes serial; then
     configure "$(defaults Feature)"
     raw serial '{"extraArgs":["-only-testing:FeatureTests/ProbeTests","-parallel-testing-enabled","NO"]}'
@@ -1728,6 +1731,21 @@ raw_captures() {
   if takes empty-filter; then
     configure "$(defaults Feature)"
     raw empty-filter '{"extraArgs":["-only-testing:FeatureTests/NoSuchTests"]}'
+  fi
+  # field/'s probes and its crash, serial, with `showTestTiming` on, which lists every test under `Test Results:`. Its one
+  # expected crash, testOutOfRange, is excused for this call alone, and the crash log the bundle attached is kept.
+  if takes timing; then
+    configure "$(defaults Feature)
+showTestTiming: true
+"
+    raw timing '{"extraArgs":["-only-testing:FeatureTests/ProbeTests","-only-testing:FeatureTests/CrashTests","-parallel-testing-enabled","NO"]}' testOutOfRange
+    bundle=$(raw_bundle "$results/timing.json")
+    if [ -n "$bundle" ]; then
+      mkdir -p "$results/timing-export"
+      xcrun xcresulttool export attachments --path "$bundle" --output-path "$results/timing-export" --only-failures > /dev/null
+      report=$(find "$results/timing-export" -name '*.ips' | head -1)
+      if [ -n "$report" ]; then neutral < "$report" | uuids_out > "$out/timing.crash.ips"; fi
+    fi
   fi
   rm -rf "${work:?}" "${derived:?}" "${results:?}"
   raw_manifest
