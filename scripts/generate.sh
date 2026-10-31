@@ -7,6 +7,7 @@
 # scripts/testbed/generate.sh raw           only the raw MobileBuildMCP test captures (RAW_CAPTURES names which), on the capture simulator
 # scripts/testbed/generate.sh raw-build     only the raw MobileBuildMCP build capture, on a capture simulator never booted
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
+# scripts/testbed/generate.sh parallel      only the parallel fixture and its raw capture, on the capture simulator and its clones
 # scripts/testbed/generate.sh self-test     checks the crash rules on made-up reports; boots nothing
 # scripts/testbed/generate.sh field-captures   only the field captures (FIELD_CAPTURES names which), on the capture simulator
 # scripts/testbed/generate.sh xcode-mcp     only the Xcode MCP's captures, never in a full run: it needs Xcode open
@@ -649,8 +650,86 @@ EOF
 
 if runs swift-testing || [ "$build" = shapes ]; then swift_testing; fi
 
+# An XCTest bundle its scheme runs in parallel: a pass, a failure and a skip in one class, a 5 s wait in another, so the
+# two classes can run on separate clones of the simulator.
+parallel_fixture() {
+  fixture=$testbed/parallel
+  rm -rf "${fixture:?}"
+  mkdir -p "$fixture/Kit" "$fixture/KitTests"
+  cat > "$fixture/Kit/Kit.swift" <<'EOF'
+public enum Kit {
+    public static let name = "Kit"
+}
+EOF
+  cat > "$fixture/KitTests/ProbeTests.swift" <<'EOF'
+import XCTest
+@testable import Kit
+
+final class ProbeTests: XCTestCase {
+    func testPasses() {
+        XCTAssertEqual(Kit.name, "Kit")
+    }
+
+    func testFails() {
+        XCTAssertEqual(Kit.name, "Other", "the name is Kit")
+    }
+
+    func testSkipped() throws {
+        throw XCTSkip("skipped on purpose")
+    }
+}
+EOF
+  cat > "$fixture/KitTests/SlowTests.swift" <<'EOF'
+import XCTest
+
+final class SlowTests: XCTestCase {
+    func testWaits() async throws {
+        try await Task.sleep(for: .seconds(5))
+    }
+}
+EOF
+  cat > "$fixture/project.yml" <<'EOF'
+name: Parallel
+options:
+  bundleIdPrefix: dev.xcrew.testbed
+  deploymentTarget:
+    iOS: "18.0"
+targets:
+  Kit:
+    type: framework
+    platform: iOS
+    sources: [Kit]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+  KitTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [KitTests]
+    dependencies:
+      - target: Kit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Kit:
+    build:
+      targets:
+        Kit: all
+    test:
+      targets:
+        - name: KitTests
+          parallelizable: true
+EOF
+  xcodegen generate --quiet --spec "$fixture/project.yml" --project "$fixture"
+  fixture_json "$fixture" pbxproj-groups xcodegen root
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
+if runs parallel; then parallel_fixture; fi
+
 # The captures' own simulator: an iPhone on the newest released iOS runtime, created for this run, booted once and reused
-# by every capture, so none boots another, and deleted at the end. A beta runtime's system apps can crash on boot, and
+# by every capture, so none boots another, and deleted at the end. A parallel run's clones are xcodebuild's, which it
+# boots and deletes itself. A beta runtime's system apps can crash on boot, and
 # a crash shows a dialog on the Mac, so no capture may cause one: the run fails when a crash report appeared during it.
 capture_simulator() {
   chosen=$(node -e '
@@ -691,6 +770,11 @@ capture_simulator() {
   # shellcheck disable=SC2086 # two words: the device type and the runtime
   simulator_id=$(xcrun simctl create "$simulator" $chosen)
   crash_marker=$(mktemp)
+  # `$run_ids`: this run's simulators, one id a line, the capture simulator first, then any clone a parallel run made.
+  # `$watch`: what watch_run saw of each.
+  run_ids=$(mktemp)
+  watch=$(mktemp -d)
+  printf '%s\n' "$simulator_id" > "$run_ids"
   # The reports a step expected (crash_check's argument), excused for the rest of the run and nothing else.
   expected_reports=$(mktemp)
   # A run stopped any way still deletes its simulator: a signal exits, and exiting runs the cleanup. Job control's stop
@@ -737,26 +821,33 @@ known_crash() {
   ' "$1" 2> /dev/null
 }
 
-# A capture simulator's service killed by its own shutdown, not a crash: written after finish_simulator's shutdown
-# began, EXC_CRASH with SIGKILL, ended by XPC_EXIT_REASON_SIGTERM_TIMEOUT (launchd's SIGTERM, then SIGKILL when the service
-# didn't exit), in the capture simulator's own coalition. All four, never the process name: any other SIGKILL counts.
+# A simulator's service killed by its own shutdown, not a crash: EXC_CRASH with SIGKILL, ended by
+# XPC_EXIT_REASON_SIGTERM_TIMEOUT (launchd's SIGTERM, then SIGKILL when the service didn't exit), in the coalition of
+# this run's capture simulator or one of its clones, and written after that simulator's shutdown began: its first
+# observed departure from Booted (watch_run), or for the capture simulator finish_simulator's shutdown, whichever is
+# earlier. A departure is seen a second or more late, so a report written in that gap counts. All four, never the
+# process name: any other SIGKILL counts.
 shutdown_kill() {
-  [ -n "${shutdown_marker:-}" ] && [ "$1" -nt "$shutdown_marker" ] || return 1
-  node -e '
+  owner=$(node -e '
     const text = require("fs").readFileSync(process.argv[1], "utf8")
     const report = JSON.parse(text.slice(text.indexOf("\n") + 1))
     const killed = report.exception?.type === "EXC_CRASH" && report.exception?.signal === "SIGKILL"
     const byShutdown = report.termination?.indicator === "XPC_EXIT_REASON_SIGTERM_TIMEOUT"
-    const ours = report.coalitionName === `com.apple.CoreSimulator.SimDevice.${process.argv[2]}`
-    process.exit(killed && byShutdown && ours ? 0 : 1)
-  ' "$1" "$simulator_id" 2> /dev/null
+    const prefix = "com.apple.CoreSimulator.SimDevice."
+    const coalition = report.coalitionName ?? ""
+    if (killed && byShutdown && coalition.startsWith(prefix)) console.log(coalition.slice(prefix.length))
+  ' "$1" 2> /dev/null) || return 1
+  [ -n "$owner" ] || return 1
+  if [ -n "${watch:-}" ] && [ -f "$watch/$owner.departed" ] && [ "$1" -nt "$watch/$owner.departed" ]; then return 0; fi
+  [ "$owner" = "$simulator_id" ] && [ -n "${shutdown_marker:-}" ] && [ "$1" -nt "$shutdown_marker" ]
 }
 
-# The reports since the run began that name the capture simulator and aren't a known crash; the known ones are listed.
+# The reports since the run began that name one of this run's simulators and aren't a known crash; the known ones are
+# listed.
 simulator_crashes() {
   find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null | while IFS= read -r report; do
     if shutdown_kill "$report"; then continue; fi
-    grep -q -F "$simulator_id" "$report" || continue
+    grep -q -F -f "$run_ids" "$report" || continue
     if [ -n "${expected_reports:-}" ] && grep -q -x -F "$report" "$expected_reports"; then continue; fi
     if known_crash "$report"; then
       echo "generate.sh: known Apple iOS 27.2 runtime crash, ignored: $report" >&2
@@ -782,7 +873,7 @@ crash_check() {
     fi
   fi
   if [ -n "$found" ]; then
-    echo "generate.sh: stopping: the capture simulator ($simulator_id) crashed" >&2
+    echo "generate.sh: stopping: the capture simulator ($simulator_id) or a clone of it crashed" >&2
     printf '%s\n' "$found" >&2
     exit 1
   fi
@@ -801,9 +892,23 @@ expected_crash() {
 
 finish_simulator() {
   status=$?
+  # A run stopped mid-call stops the call too, so xcodebuild makes no clone after this.
+  if [ -n "${call:-}" ]; then kill "$call" 2> /dev/null || true; fi
   shutdown_marker=$(mktemp)
   xcrun simctl shutdown "$simulator_id" 2> /dev/null || true
   xcrun simctl delete "$simulator_id"
+  # xcodebuild deletes its clones when the run ends. One it left is deleted here, and only one of this run's that is
+  # named a clone of the capture simulator: a device another project's run made in the testing set is never touched.
+  clones=$(tail -n +2 "$run_ids")
+  for clone in $clones; do
+    if xcrun simctl --set testing list devices 2> /dev/null | grep -q -F "of $simulator ($clone)"; then
+      echo "generate.sh: xcodebuild left its clone $clone; deleting it" >&2
+      touch "$watch/$clone.departed"
+      sleep 1
+      xcrun simctl --set testing shutdown "$clone" 2> /dev/null || true
+      xcrun simctl --set testing delete "$clone" 2> /dev/null || true
+    fi
+  done
   # The shutdown kills the simulator's services, and their SIGKILL reports land up to half a minute later: wait for
   # them, and leave out only those, so a real crash during the shutdown still counts.
   sleep 45
@@ -811,15 +916,17 @@ finish_simulator() {
   # which is no fault of the run.
   ours=$(simulator_crashes)
   others=$(find "$HOME/Library/Logs/DiagnosticReports" -newer "$crash_marker" -name '*.ips' 2> /dev/null | while IFS= read -r report; do
-    grep -q -F "$simulator_id" "$report" || echo "$report"
+    grep -q -F -f "$run_ids" "$report" || echo "$report"
   done)
-  rm -f "$crash_marker" "$shutdown_marker" "$expected_reports"
+  if [ -n "$clones" ]; then echo "generate.sh: this run's clones: $(printf '%s' "$clones" | tr '\n' ' ')" >&2; fi
+  rm -f "$crash_marker" "$shutdown_marker" "$expected_reports" "$run_ids"
+  rm -rf "${watch:?}"
   if [ -n "$others" ]; then
-    echo "generate.sh: other crash reports appeared during the run, not the capture simulator's:" >&2
+    echo "generate.sh: other crash reports appeared during the run, not this run's simulators':" >&2
     echo "$others" >&2
   fi
   if [ -n "$ours" ]; then
-    echo "generate.sh: the capture simulator ($simulator_id) crashed during the run:" >&2
+    echo "generate.sh: the capture simulator ($simulator_id) or a clone of it crashed during the run:" >&2
     echo "$ours" >&2
     status=1
   fi
@@ -1665,41 +1772,117 @@ xcode_mcp_captures() {
   echo "$out"
 }
 
-# The swift-testing fixture's run, raw, with the log it names: Swift Testing's shapes of result in one suite. Its one
-# failing test is meant to fail, so the step checks the run came to exactly that, and stops otherwise. While it runs, the
-# live log is copied each second: the capture keeps where its markers stood in each copy, and the copy taken mid-tests.
-# On the capture simulator.
-shapes_captures() {
-  out=$testbed/captures/raw
-  mkdir -p "$out"
-  rm -f "$out/shapes.json" "$out/shapes.log" "$out/shapes-snapshots.json" "$out/shapes-midrun.log"
-  work=$(mktemp -d)/swift-testing
-  cp -R "$testbed/swift-testing" "$work"
-  derived=$(mktemp -d)
-  results=$(mktemp -d)
-  resolved=$(cd "$work" && pwd -P)
-  neutral() {
-    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
-      "$resolved" /testbed/swift-testing "$work" /testbed/swift-testing "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
-      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
-  }
-  mkdir -p "$work/.mobilebuildmcp"
-  printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'Kit'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/SwiftTesting.xcodeproj" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
+# One raw test_sim call in `$work`, kept as `<results>/<name>.json`, its live log copied each second while it runs as
+# `snapshot-<n>.log`, and this run's simulators watched each second (watch_run).
+watched_call() {
   started=$(mktemp)
-  MCP_RAW=1 node scripts/mcp-call.mjs "$work" test_sim '{}' > "$results/shapes.json" &
+  before=$(mktemp)
+  device_states --set testing | cut -d ' ' -f 1 > "$before"
+  MCP_RAW=1 node scripts/mcp-call.mjs "$work" test_sim "$3" > "$1/$2.json" &
   call=$!
   n=0
   while kill -0 "$call" 2> /dev/null; do
     live=$(find "$HOME/Library/Developer/MobileBuildMCP/workspaces" -path '*/logs/test_sim_*.log' -newer "$started" 2> /dev/null | head -1)
-    if [ -n "$live" ]; then n=$((n + 1)); cp "$live" "$results/snapshot-$(printf '%03d' "$n").log"; fi
+    if [ -n "$live" ]; then n=$((n + 1)); cp "$live" "$1/snapshot-$(printf '%03d' "$n").log"; fi
+    watch_run "$before"
     sleep 1
   done
   wait "$call" || true
-  rm -f "$started"
-  crash_check
-  # The run came to what the suite holds, or the capture proves nothing: one failure, `fails()`, the disabled test
-  # skipped, and the parameterised and waiting tests passed.
+  call=
+  watch_run "$before"
+  rm -f "$started" "$before"
+}
+
+# One look at this run's simulators. A clone is this run's when it appears in the testing device set, where xcodebuild
+# makes a parallel run's clones, and wasn't there before the call (`$1`); the set is read each second, since xcodebuild
+# deletes its clones as the run ends. A simulator seen Booted gets `<id>.booted` in `$watch`, and the first look that
+# finds it otherwise, shut down or gone, gets `<id>.departed`: the moment its shutdown's reports count from
+# (shutdown_kill). xcodebuild shuts the capture simulator down to clone it, and its clones as the run ends.
+watch_run() {
+  testing=$(device_states --set testing)
+  printf '%s\n' "$testing" | cut -d ' ' -f 1 | grep . | grep -v -x -F -f "$1" | grep -v -x -F -f "$run_ids" >> "$run_ids" || true
+  states=$(device_states; printf '%s\n' "$testing")
+  while IFS= read -r id; do
+    state=$(printf '%s\n' "$states" | grep -F "$id " | cut -d ' ' -f 2-)
+    if [ "$state" = Booted ]; then
+      touch "$watch/$id.booted"
+    elif [ -f "$watch/$id.booted" ] && [ ! -f "$watch/$id.departed" ]; then
+      touch "$watch/$id.departed"
+    fi
+  done < "$run_ids"
+}
+
+# Each simulator in a device set as `<id> <state>`, one a line: the default set, or the one `--set <name>` names.
+device_states() {
+  xcrun simctl "$@" list devices --json 2> /dev/null | node -e '
+    // simctl may answer nothing while CoreSimulator is busy cloning: that look sees no device.
+    const text = require("fs").readFileSync(0, "utf8")
+    const devices = (text.trim() ? JSON.parse(text).devices : null) ?? {}
+    for (const device of Object.values(devices).flat()) console.log(`${device.udid} ${device.state}`)
+  '
+}
+
+# Where each marker stood in each copy of `<results>`'s live log, as `<name>-snapshots.json`, and the copy taken
+# mid-tests as `<name>-midrun.log`: the last with the tests' build done or the tests started, and no verdict yet. A
+# parallel run's log holds no test line before its verdict, so its copy is the last after `** TEST BUILD SUCCEEDED **`.
+# MobileBuildMCP writes "Testing started" itself, after the tests.
+midrun_copy() {
   node -e '
+    const fs = require("fs")
+    const [folder, out] = process.argv.slice(1)
+    const markers = { testingStarted: /^Testing started$/, testSuiteStarted: /^Test Suite .* started at /, swiftTestingStarted: /^◇ Test run started\.$/, testExecute: /^\*\* TEST EXECUTE /, firstResult: /^Test [Cc]ase '.*' (passed|failed|skipped)/, testBuildSucceeded: /^\*\* TEST BUILD SUCCEEDED \*\*$/ }
+    const snapshots = fs.readdirSync(folder).filter(name => /^snapshot-\d+\.log$/.test(name)).sort().map(name => {
+      const lines = fs.readFileSync(`${folder}/${name}`, "utf8").split("\n")
+      const at = Object.fromEntries(Object.entries(markers).map(([key, pattern]) => [key, (lines.findIndex(line => pattern.test(line)) + 1) || null]))
+      return { snapshot: name, lines: lines.length, ...at }
+    })
+    fs.writeFileSync(out, JSON.stringify({ everySeconds: 1, snapshots }, null, 2) + "\n")
+  ' "$1" "$out/$2-snapshots.json"
+  middle=$(node -e '
+    const listing = require(process.argv[1]).snapshots
+    const mid = listing.filter(s => (s.testSuiteStarted || s.swiftTestingStarted || s.firstResult || s.testBuildSucceeded) && !s.testExecute).pop()
+    if (mid) console.log(mid.snapshot)
+  ' "$out/$2-snapshots.json")
+  if [ -n "$middle" ]; then neutral < "$1/$middle" | uuids_out > "$out/$2-midrun.log"; fi
+}
+
+
+# A watched raw test_sim run of the fixture `$1`, whose project is `$2`, kept in captures/raw as `<name>.json` (`$3`) and
+# the log it names as `<name>.log`, with where the live log's markers stood each second (midrun_copy). `$4` is
+# test_sim's arguments, and `$5` a node check the result and log must pass, or the capture proves nothing and the step
+# stops. On the capture simulator.
+watched_capture() {
+  out=$testbed/captures/raw
+  mkdir -p "$out"
+  rm -f "$out/$3.json" "$out/$3.log" "$out/$3-snapshots.json" "$out/$3-midrun.log"
+  work=$(mktemp -d)/$1
+  cp -R "$testbed/$1" "$work"
+  derived=$(mktemp -d)
+  results=$(mktemp -d)
+  resolved=$(cd "$work" && pwd -P)
+  label=/testbed/$1
+  neutral() {
+    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
+      "$resolved" "$label" "$work" "$label" "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
+      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
+  }
+  mkdir -p "$work/.mobilebuildmcp"
+  printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'Kit'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/$2" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
+  watched_call "$results" "$3" "$4"
+  crash_check
+  log=$(grep -o '~/[^ "\\]*\.log' "$results/$3.json" | head -1 | sed "s#^~#$HOME#")
+  node -e "$5" "$results/$3.json" "$log"
+  midrun_copy "$results" "$3"
+  neutral < "$results/$3.json" | uuids_out > "$out/$3.json"
+  if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/$3.log"; fi
+  rm -rf "${work:?}" "${derived:?}" "${results:?}"
+  echo "$out/$3.json"
+}
+
+# Swift Testing's shapes of result in one suite, the swift-testing fixture's. The run must come to what the suite holds:
+# one failure, `fails()`, the disabled test skipped, and the parameterised and waiting tests passed.
+shapes_captures() {
+  watched_capture swift-testing SwiftTesting.xcodeproj shapes '{}' '
     const fs = require("fs")
     const result = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
     const data = result.structuredContent?.data ?? {}
@@ -1714,53 +1897,79 @@ shapes_captures() {
       [/Test waits\(\) passed/.test(log), "waits() passed"],
     ].filter(([ok]) => !ok).map(([, what]) => what)
     if (wrong.length) { console.error(`generate.sh: the shapes run did not come to what its suite holds: ${wrong.join(", ")}`); process.exit(1) }
-  ' "$results/shapes.json" "$(grep -o '~/[^ "\\]*\.log' "$results/shapes.json" | head -1 | sed "s#^~#$HOME#")"
-  # Where each marker stood in each copy of the live log: MobileBuildMCP writes "Testing started" itself.
-  node -e '
-    const fs = require("fs")
-    const [folder, out] = process.argv.slice(1)
-    const markers = { testingStarted: /^Testing started$/, testSuiteStarted: /^Test Suite .* started at /, swiftTestingStarted: /^◇ Test run started\.$/, testExecute: /^\*\* TEST EXECUTE / }
-    const snapshots = fs.readdirSync(folder).filter(name => /^snapshot-\d+\.log$/.test(name)).sort().map(name => {
-      const lines = fs.readFileSync(`${folder}/${name}`, "utf8").split("\n")
-      const at = Object.fromEntries(Object.entries(markers).map(([key, pattern]) => [key, (lines.findIndex(line => pattern.test(line)) + 1) || null]))
-      return { snapshot: name, lines: lines.length, ...at }
-    })
-    fs.writeFileSync(out, JSON.stringify({ everySeconds: 1, snapshots }, null, 2) + "\n")
-  ' "$results" "$out/shapes-snapshots.json"
-  # The copy taken mid-tests: the last with the tests started and no verdict yet.
-  middle=$(node -e '
-    const listing = require(process.argv[1]).snapshots
-    const mid = listing.filter(s => (s.testSuiteStarted || s.swiftTestingStarted) && !s.testExecute).pop()
-    if (mid) console.log(mid.snapshot)
-  ' "$out/shapes-snapshots.json")
-  if [ -n "$middle" ]; then neutral < "$results/$middle" | uuids_out > "$out/shapes-midrun.log"; fi
-  neutral < "$results/shapes.json" | uuids_out > "$out/shapes.json"
-  log=$(grep -o '~/[^ "\\]*\.log' "$results/shapes.json" | head -1 | sed "s#^~#$HOME#")
-  if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/shapes.log"; fi
-  rm -rf "${work:?}" "${derived:?}" "${results:?}"
-  echo "$out/shapes.json"
+  '
 }
 
-# The crash rules on made-up reports: a shutdown's kill is excused, and a SIGKILL with another termination reason, or
-# written before the shutdown, still counts.
+# XCTest's parallel runner, the parallel fixture's, two workers at most, so three simulators at most, never a number
+# xcodebuild picks. The run must come to what the bundle holds, on the parallel runner: one failure, testFails, one
+# skipped, and the waiting test passed. On the capture simulator and the clones xcodebuild makes of it.
+parallel_captures() {
+  watched_capture parallel Parallel.xcodeproj parallel '{"extraArgs":["-parallel-testing-enabled","YES","-parallel-testing-worker-count","2"]}' '
+    const fs = require("fs")
+    const result = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+    const data = result.structuredContent?.data ?? {}
+    const failures = data.diagnostics?.testFailures ?? []
+    const log = fs.readFileSync(process.argv[2], "utf8")
+    const wrong = [
+      [result.structuredContent?.schema === "mobilebuildmcp.output.test-result", "the run completed"],
+      [failures.length === 1 && /testFails/.test(failures[0].test ?? ""), "exactly one failure, testFails"],
+      [data.summary?.counts?.failed === 1, "one failed"],
+      [data.summary?.counts?.skipped === 1, "one skipped"],
+      [/ on .Clone /.test(log), "the parallel runner ran it"],
+      [/testWaits.* passed/.test(log), "testWaits passed"],
+    ].filter(([ok]) => !ok).map(([, what]) => what)
+    if (wrong.length) { console.error(`generate.sh: the parallel run did not come to what its bundle holds: ${wrong.join(", ")}`); process.exit(1) }
+  '
+}
+
+# The crash rules on made-up reports: at finish_simulator's shutdown, and mid-run as a parallel run clones.
 crash_self_test() {
   folder=$(mktemp -d)
+  watch=$(mktemp -d)
   simulator_id=00000000-0000-4000-8000-000000000001
+  clone=00000000-0000-4000-8000-000000000002
+  unseen=00000000-0000-4000-8000-000000000003
+  stranger=00000000-0000-4000-8000-000000000004
+  run_ids=$(mktemp)
+  printf '%s\n%s\n%s\n' "$simulator_id" "$clone" "$unseen" > "$run_ids"
+  # report <termination indicator> <file name> [<simulator id>]
   report() {
-    printf '{"app_name":"tccd"}\n{"procName":"tccd","coalitionName":"com.apple.CoreSimulator.SimDevice.%s","exception":{"type":"EXC_CRASH","signal":"SIGKILL"},"termination":{"namespace":"LIBXPC","indicator":"%s"}}\n' "$simulator_id" "$1" > "$folder/$2.ips"
+    printf '{"app_name":"tccd"}\n{"procName":"tccd","coalitionName":"com.apple.CoreSimulator.SimDevice.%s","exception":{"type":"EXC_CRASH","signal":"SIGKILL"},"termination":{"namespace":"LIBXPC","indicator":"%s"}}\n' "${3:-$simulator_id}" "$1" > "$folder/$2.ips"
   }
+  failed=0
+  excused() { shutdown_kill "$folder/$1.ips" || { echo "generate.sh self-test: $2 isn't excused" >&2; failed=1; }; }
+  counted() { if shutdown_kill "$folder/$1.ips"; then echo "generate.sh self-test: $2 is excused" >&2; failed=1; fi; }
   report XPC_EXIT_REASON_SIGTERM_TIMEOUT before
   sleep 1
   shutdown_marker=$(mktemp)
   sleep 1
   report XPC_EXIT_REASON_SIGTERM_TIMEOUT shutdown
   report "Namespace SIGNAL, Code 9" other
-  failed=0
-  shutdown_kill "$folder/shutdown.ips" || { echo "generate.sh self-test: a shutdown's kill isn't excused" >&2; failed=1; }
-  if shutdown_kill "$folder/other.ips"; then echo "generate.sh self-test: a SIGKILL with another termination reason is excused" >&2; failed=1; fi
-  if shutdown_kill "$folder/before.ips"; then echo "generate.sh self-test: a kill written before the shutdown is excused" >&2; failed=1; fi
-  rm -rf "${folder:?}" "$shutdown_marker"
+  report XPC_EXIT_REASON_SIGTERM_TIMEOUT unseen-at-shutdown "$unseen"
+  excused shutdown "a shutdown's kill"
+  counted unseen-at-shutdown "a clone's kill after the capture simulator's shutdown, never seen leaving Booted itself"
+  counted other "a SIGKILL with another termination reason"
+  counted before "a kill written before the shutdown"
+  rm -f "$shutdown_marker"
   shutdown_marker=
+  report XPC_EXIT_REASON_SIGTERM_TIMEOUT cloning-before
+  report XPC_EXIT_REASON_SIGTERM_TIMEOUT clone-before-look "$clone"
+  sleep 1
+  touch "$watch/$simulator_id.departed" "$watch/$clone.departed"
+  sleep 1
+  report XPC_EXIT_REASON_SIGTERM_TIMEOUT cloning
+  report XPC_EXIT_REASON_SIGTERM_TIMEOUT clone-after "$clone"
+  report XPC_EXIT_REASON_SIGTERM_TIMEOUT unseen "$unseen"
+  report XPC_EXIT_REASON_SIGTERM_TIMEOUT stranger "$stranger"
+  excused cloning "the capture simulator's kill after it was seen shutting down to be cloned"
+  counted cloning-before "the capture simulator's kill before it was seen leaving Booted"
+  excused clone-after "a clone's kill after it was seen leaving Booted"
+  counted clone-before-look "a clone's kill in the second before the look that saw it leave"
+  counted unseen "a kill of a clone never seen leaving Booted"
+  counted stranger "a kill of a simulator not this run's"
+  rm -rf "${folder:?}" "${watch:?}" "$run_ids"
+  watch=
+  run_ids=
   [ "$failed" = 0 ] && echo "generate.sh self-test: the crash rules hold"
   return "$failed"
 }
@@ -1779,6 +1988,12 @@ fi
 if [ "$build" = shapes ]; then
   capture_simulator
   shapes_captures
+  exit 0
+fi
+
+if [ "$build" = parallel ]; then
+  capture_simulator
+  parallel_captures
   exit 0
 fi
 
@@ -1816,5 +2031,6 @@ concurrency_captures
 raw_captures
 raw_build_capture
 shapes_captures
+parallel_captures
 
 scripts/leaks.sh
