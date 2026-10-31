@@ -61,7 +61,8 @@ scripts/generate.sh --build
 - **`scripts/generate.sh raw-build`** takes only the raw `build_sim` capture. It only builds: its simulator is created on a released runtime, never booted, and deleted at the end.
 - **`scripts/generate.sh shapes`** makes only `swift-testing/` and its raw capture, on the capture simulator.
 - **`scripts/generate.sh parallel`** makes only `parallel/` and its raw capture, on the capture simulator and at most two clones xcodebuild makes of it.
-- **`scripts/generate.sh self-test`** checks the crash rules on made-up reports, and boots nothing.
+- **`scripts/generate.sh self-test`** checks the crash rules on made-up reports, and that a name other than a full run's boots nothing. It boots nothing itself.
+- **A fixture's name** (`forms`, `adversarial`, `modular`, `field`, `swift-testing`) makes only that fixture. `concurrency` and `parallel` are steps too, and take their captures. Any name that's no step's or fixture's stops with a usage line, having changed nothing. Only `scripts/generate.sh` or `--build` takes every capture.
 - **`scripts/generate.sh xcode-mcp`** takes the Xcode MCP's answers, and is never part of a full run. It needs the selected Xcode already open, by its own path, with `field/Field.xcworkspace` in it. Xcode then asks whether to let the caller in, which only the person at the Mac answers. It runs on this repository's fixture alone.
 - **`scripts/generate.sh concurrency`** makes only `concurrency/` and its capture. That capture only builds: its simulator is created on a released runtime and never booted, and deleted at the end.
 - **`FIELD_CAPTURES`** names the field scenarios to take again (`coverage type-error`), keeping the others' captures. Unset, all of them are taken afresh.
