@@ -11,7 +11,7 @@
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
 # scripts/testbed/generate.sh multi-pass    only the plans fixture and the raw captures of runs with several passes or a
 #                                           cancel, on the capture simulator; never in a full run (multi_pass_captures)
-# scripts/testbed/generate.sh neutral-paths only rewrites every committed capture's PATH to scripts/neutral-path's; boots nothing
+# scripts/testbed/generate.sh neutral-paths only rewrites every committed capture's PATH through scripts/neutral-path.sh; boots nothing
 # scripts/testbed/generate.sh field-logs    only the logs of committed field captures (FIELD_CAPTURES names which), from this Mac's MobileBuildMCP workspaces; boots nothing
 # scripts/testbed/generate.sh parallel      only the parallel fixture and its raw capture, on the capture simulator and its clones
 # scripts/testbed/generate.sh self-test     checks the crash rules on made-up reports, and that a fixture's or an unknown name boots nothing; boots nothing
@@ -50,15 +50,8 @@ neutralise() {
     "$@" "$HOME" /testbed/user "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp | neutral_path
 }
 
-# The macOS search path a capture's PATH holds in place of this Mac's own, whose tools are no capture's business:
-# scripts/neutral-path, which leaks.sh holds every committed PATH to.
-neutral_path_defaults=$(cat scripts/neutral-path)
-
-# Every PATH a tool writes, as xcodebuild echoes it (`export PATH\=…`) or an environment lists it (`PATH=…`), keeps only
-# its entries inside an Xcode app, which Xcode sets, followed by macOS's defaults (`neutral_path_defaults`).
-neutral_path() {
-  perl -pe 'BEGIN { $defaults = shift @ARGV } s{(\bPATH\\?=)([^\s"]+)}{ $1 . join(":", (grep { m{^/Applications/Xcode[^/]*\.app/} } split(/:/, $2)), $defaults) }ge' "$neutral_path_defaults"
-}
+# neutral_path and its defaults: scripts/neutral-path.sh.
+. scripts/neutral-path.sh
 
 xcodegen_spec() {
   cat > "$1/project.yml" <<EOF
@@ -2265,9 +2258,10 @@ field_logs() {
 # Every committed capture file whose PATH isn't neutral yet, rewritten in place through `neutral_path`: no run, and
 # nothing but its PATH values changes.
 neutral_paths() {
-  git ls-files -z captures forms adversarial modular field | xargs -0 grep -l -I -E 'PATH\\?=' 2> /dev/null | while IFS= read -r file; do
-    neutral_path < "$file" > "$file.neutral"
-    if cmp -s "$file" "$file.neutral"; then rm -f "$file.neutral"; else mv "$file.neutral" "$file"; echo "$file"; fi
+  git ls-files -z captures forms adversarial modular field | xargs -0 grep -l -I 'PATH' 2> /dev/null | while IFS= read -r file; do
+    neutral=$(mktemp)
+    neutral_path < "$file" > "$neutral"
+    if cmp -s "$file" "$neutral"; then rm -f "$neutral"; else cat "$neutral" > "$file"; rm -f "$neutral"; echo "$file"; fi
   done
 }
 
@@ -2350,6 +2344,34 @@ modes_self_test() {
   return "$failed"
 }
 
+# neutral_path on each spelling of a PATH a tool writes, each against the line it must become: an echo's, an escaped
+# space, a JSON string's, a quoted value, an Xcode elsewhere than /Applications, and other variables left alone.
+path_self_test() {
+  given=$(mktemp)
+  wanted=$(mktemp)
+  cat > "$given" <<'PATHS'
+    export PATH\=/Applications/Xcode-27.2.0.app/Contents/Developer/usr/bin:/testbed/user/.cargo/bin:/opt/homebrew/bin
+PATH=/testbed/user/Library/Application\ Support/Toolbox/scripts:/usr/bin next
+{"text":"    export PATH\\=\/Applications\/Xcode.app\/Contents\/Developer\/usr\/bin:\/opt\/homebrew\/bin\nHOME=\/testbed\/user"}
+PATH="/opt/homebrew/bin:/usr/bin"
+PATH=/Volumes/Tools/Xcode-beta.app/Contents/Developer/usr/bin:/opt/homebrew/bin
+    export MANPATH\=/opt/homebrew/share/man DYLD_LIBRARY_PATH=/opt/homebrew/lib
+PATHS
+  cat > "$wanted" <<'PATHS'
+    export PATH\=/Applications/Xcode-27.2.0.app/Contents/Developer/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin next
+{"text":"    export PATH\\=\/Applications\/Xcode.app\/Contents\/Developer\/usr\/bin:\/usr\/local\/bin:\/usr\/bin:\/bin:\/usr\/sbin:\/sbin\nHOME=\/testbed\/user"}
+PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+PATH=/Volumes/Tools/Xcode-beta.app/Contents/Developer/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+    export MANPATH\=/opt/homebrew/share/man DYLD_LIBRARY_PATH=/opt/homebrew/lib
+PATHS
+  failed=0
+  if ! neutral_path < "$given" | diff "$wanted" - >&2; then echo "generate.sh self-test: neutral_path wrote the lines above otherwise" >&2; failed=1; fi
+  rm -f "$given" "$wanted"
+  [ "$failed" = 0 ] && echo "generate.sh self-test: every PATH is neutral, and nothing else is touched"
+  return "$failed"
+}
+
 if [ "$build" = field-captures ]; then
   capture_simulator
   field_captures
@@ -2360,6 +2382,7 @@ if [ "$build" = self-test ]; then
   # Called plainly, so `set -e` holds inside them: a failing setup step fails the self-test, not one of its cases.
   crash_self_test
   modes_self_test
+  path_self_test
   exit 0
 fi
 

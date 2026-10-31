@@ -59,6 +59,7 @@ scripts/generate.sh --build
 - **`--build`** also builds each form for testing, to prove it real.
 - **`scripts/generate.sh raw`** takes only the raw MobileBuildMCP test captures, on the capture simulator. **`RAW_CAPTURES`** names the ones to take again (`empty-filter`), keeping the folder's others. Unset, all of them are taken afresh.
 - **`scripts/generate.sh multi-pass`** makes only `plans/` and takes the raw captures of runs that test a case more than once, and of a cancelled Swift Testing test, on one capture simulator.
+- **`scripts/generate.sh neutral-paths`** rewrites every committed capture's `PATH` through `scripts/neutral-path.sh`, booting nothing; only `PATH` values change.
 - **`scripts/generate.sh field-logs`** keeps the logs of committed field captures (`FIELD_CAPTURES` names which, `probes` unless named) from the MobileBuildMCP workspaces on this Mac, booting nothing. A log that's gone, or isn't a run of the test bed's `field/`, writes nothing.
 - **`scripts/generate.sh raw-answers`** rereads the result bundles MobileBuildMCP kept for the committed raw captures and saves their answers, booting nothing. If any bundle is gone, or any answer fails, it writes nothing.
 - **`scripts/generate.sh raw-session`** takes only the raw answers of MobileBuildMCP's session tools. Neither call persists, and the step stops if the project's config changes. Its simulator is created on a released runtime and never booted.
@@ -89,7 +90,8 @@ The run ends with `scripts/leaks.sh`. It fails when a committed file holds:
 - a path of the Mac that made it: its home folder or this checkout;
 - the id of one of its devices or simulators, binary files included, since an archived attachment can hold one as text. Captures number ids instead, from `00000000-0000-0000-0000-000000000001`;
 - a temporary folder of the Mac (`$TMPDIR`, with or without its `/private` prefix), as written or JSON-escaped, in any file;
-- any user's home folder, not only this Mac's, macOS's `USER` placeholder included, and any Linux one.
+- any user's home folder, not only this Mac's, macOS's `USER` placeholder included, and any Linux one;
+- a `PATH` with an entry other than an Xcode app's own and macOS's defaults, which would name the Mac's own tools. `scripts/neutral-path.sh` holds the rule, which every step writes through and `scripts/generate.sh neutral-paths` applies to committed files in place.
 
 Paths count as written or with JSON's escaped slashes (`\/`).
 
