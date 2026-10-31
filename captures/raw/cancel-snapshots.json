@@ -1,0 +1,35 @@
+{
+  "everySeconds": 1,
+  "snapshots": [
+    {
+      "snapshot": "snapshot-001.log",
+      "lines": 379,
+      "testingStarted": null,
+      "testSuiteStarted": null,
+      "swiftTestingStarted": null,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": null
+    },
+    {
+      "snapshot": "snapshot-002.log",
+      "lines": 495,
+      "testingStarted": null,
+      "testSuiteStarted": null,
+      "swiftTestingStarted": null,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    },
+    {
+      "snapshot": "snapshot-003.log",
+      "lines": 518,
+      "testingStarted": 517,
+      "testSuiteStarted": 495,
+      "swiftTestingStarted": 498,
+      "testExecute": 515,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    }
+  ]
+}

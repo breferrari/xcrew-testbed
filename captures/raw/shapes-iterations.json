@@ -1,0 +1,66 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "\n🧪 Test\n\nDiscovered 6 test(s):\n   KitTests/ShapesTests/fails\n   KitTests/ShapesTests/knownIssue\n   KitTests/ShapesTests/parameterised\n   KitTests/ShapesTests/passes\n   KitTests/ShapesTests/skipped\n   KitTests/ShapesTests/waits\n\nRaw Output:\n\n  2026-10-31 06:26:18.034 xcodebuild[10436:4121495] Writing test products to /testbed/user/Library/Developer/MobileBuildMCP/workspaces/swift-testing-9f01391f7046/test-products/test_sim_2026-10-31T05-26-17-273Z_pid10317_e2263a08.xctestproducts\n  2026-10-31 06:26:33.362 xcodebuild[10645:4122175] [MT] IDETestOperationsObserverDebug: 11.558 elapsed -- Testing started completed.\n  2026-10-31 06:26:33.362 xcodebuild[10645:4122175] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start\n  2026-10-31 06:26:33.362 xcodebuild[10645:4122175] [MT] IDETestOperationsObserverDebug: 11.558 sec, +11.558 sec -- end\n  Failing tests:\n  \tShapesTests.fails()\n  ** TEST EXECUTE FAILED **\n  Test Run test-without-building failed.\n\n❌ 1 test failed, 3 passed, 1 skipped (⏱️ 16.2s)\n  └ Files:\n     └── ~/Library/Developer/MobileBuildMCP/workspaces/swift-testing-9f01391f7046/\n         ├── logs/test_sim_2026-10-31T05-26-17-273Z_pid10317_79fe0f8f.log — Build Logs\n         ├── result-bundles/test_sim_2026-10-31T05-26-17-273Z_pid10317_0c5e0829.xcresult — Result Bundle\n         └── test-products/test_sim_2026-10-31T05-26-17-273Z_pid10317_e2263a08.xctestproducts — Test Products\n"
+    }
+  ],
+  "structuredContent": {
+    "schema": "mobilebuildmcp.output.test-result",
+    "schemaVersion": "3",
+    "didError": true,
+    "error": "Tests failed",
+    "data": {
+      "summary": {
+        "status": "FAILED",
+        "durationMs": 16197,
+        "counts": {
+          "passed": 3,
+          "failed": 1,
+          "skipped": 1
+        },
+        "target": "simulator"
+      },
+      "artifacts": {
+        "buildLogPath": "~/Library/Developer/MobileBuildMCP/workspaces/swift-testing-9f01391f7046/logs/test_sim_2026-10-31T05-26-17-273Z_pid10317_79fe0f8f.log",
+        "xcresultPath": "~/Library/Developer/MobileBuildMCP/workspaces/swift-testing-9f01391f7046/result-bundles/test_sim_2026-10-31T05-26-17-273Z_pid10317_0c5e0829.xcresult",
+        "testProductsPath": "~/Library/Developer/MobileBuildMCP/workspaces/swift-testing-9f01391f7046/test-products/test_sim_2026-10-31T05-26-17-273Z_pid10317_e2263a08.xctestproducts"
+      },
+      "tests": {
+        "discovered": {
+          "total": 6,
+          "items": [
+            "KitTests/ShapesTests/fails",
+            "KitTests/ShapesTests/knownIssue",
+            "KitTests/ShapesTests/parameterised",
+            "KitTests/ShapesTests/passes",
+            "KitTests/ShapesTests/skipped",
+            "KitTests/ShapesTests/waits"
+          ]
+        }
+      },
+      "diagnostics": {
+        "warnings": [],
+        "errors": [],
+        "rawOutput": [
+          "2026-10-31 06:26:18.034 xcodebuild[10436:4121495] Writing test products to /testbed/user/Library/Developer/MobileBuildMCP/workspaces/swift-testing-9f01391f7046/test-products/test_sim_2026-10-31T05-26-17-273Z_pid10317_e2263a08.xctestproducts",
+          "2026-10-31 06:26:33.362 xcodebuild[10645:4122175] [MT] IDETestOperationsObserverDebug: 11.558 elapsed -- Testing started completed.",
+          "2026-10-31 06:26:33.362 xcodebuild[10645:4122175] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start",
+          "2026-10-31 06:26:33.362 xcodebuild[10645:4122175] [MT] IDETestOperationsObserverDebug: 11.558 sec, +11.558 sec -- end",
+          "Failing tests:",
+          "\tShapesTests.fails()",
+          "** TEST EXECUTE FAILED **",
+          "Test Run test-without-building failed."
+        ],
+        "testFailures": []
+      },
+      "testCases": [
+        {
+          "test": "skipped",
+          "status": "skipped"
+        }
+      ]
+    }
+  },
+  "isError": true
+}

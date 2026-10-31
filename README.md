@@ -26,8 +26,9 @@ adversarial/<name>/ projects shaped to trip tools up
 modular/<name>/     apps split into modules across projects
 field/              a large modular app's shape, with no identity
 concurrency/        two frameworks and an app drawing Swift concurrency diagnostics
-swift-testing/      a Swift Testing suite with each shape of result
+swift-testing/      a Swift Testing suite with each shape of result, and a Cancel scheme with a cancelled test
 parallel/           an XCTest bundle its scheme runs in parallel
+plans/              an XCTest bundle whose test plan has two configurations
 captures/<name>/    what tools answered about a real run, replayed by tests
 scripts/generate.sh regenerates every fixture from base/
 ```
@@ -57,13 +58,15 @@ scripts/generate.sh --build
 
 - **`--build`** also builds each form for testing, to prove it real.
 - **`scripts/generate.sh raw`** takes only the raw MobileBuildMCP test captures, on the capture simulator. **`RAW_CAPTURES`** names the ones to take again (`empty-filter`), keeping the folder's others. Unset, all of them are taken afresh.
+- **`scripts/generate.sh multi-pass`** makes only `plans/` and takes the raw captures of runs that test a case more than once, and of a cancelled Swift Testing test, on one capture simulator.
+- **`scripts/generate.sh field-logs`** keeps the logs of committed field captures (`FIELD_CAPTURES` names which, `probes` unless named) from the MobileBuildMCP workspaces on this Mac, booting nothing. A log that's gone, or isn't a run of the test bed's `field/`, writes nothing.
 - **`scripts/generate.sh raw-answers`** rereads the result bundles MobileBuildMCP kept for the committed raw captures and saves their answers, booting nothing. If any bundle is gone, or any answer fails, it writes nothing.
 - **`scripts/generate.sh raw-session`** takes only the raw answers of MobileBuildMCP's session tools. Neither call persists, and the step stops if the project's config changes. Its simulator is created on a released runtime and never booted.
 - **`scripts/generate.sh raw-build`** takes only the raw `build_sim` capture. It only builds: its simulator is created on a released runtime, never booted, and deleted at the end.
 - **`scripts/generate.sh shapes`** makes only `swift-testing/` and its raw capture, on the capture simulator.
 - **`scripts/generate.sh parallel`** makes only `parallel/` and its raw capture, on the capture simulator and at most two clones xcodebuild makes of it.
 - **`scripts/generate.sh self-test`** checks the crash rules on made-up reports, and that a name other than a full run's boots nothing. It boots nothing itself.
-- **A fixture's name** (`forms`, `adversarial`, `modular`, `field`, `swift-testing`) makes only that fixture. `concurrency` and `parallel` are steps too, and take their captures. Any name that's no step's or fixture's stops with a usage line, having changed nothing. Only `scripts/generate.sh` or `--build` takes every capture.
+- **A fixture's name** (`forms`, `adversarial`, `modular`, `field`, `swift-testing`, `plans`) makes only that fixture. `concurrency` and `parallel` are steps too, and take their captures. Any name that's no step's or fixture's stops with a usage line, having changed nothing. Only `scripts/generate.sh` or `--build` takes every capture but `multi-pass`'s, which has its own mode, and `xcode-mcp`'s, which needs Xcode open.
 - **`scripts/generate.sh xcode-mcp`** takes the Xcode MCP's answers, and is never part of a full run. It needs the selected Xcode already open, by its own path, with `field/Field.xcworkspace` in it. Xcode then asks whether to let the caller in, which only the person at the Mac answers. It runs on this repository's fixture alone.
 - **`scripts/generate.sh concurrency`** makes only `concurrency/` and its capture. That capture only builds: its simulator is created on a released runtime and never booted, and deleted at the end.
 - **`FIELD_CAPTURES`** names the field scenarios to take again (`coverage type-error`), keeping the others' captures. Unset, all of them are taken afresh.

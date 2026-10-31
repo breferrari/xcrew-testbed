@@ -9,6 +9,9 @@
 # scripts/testbed/generate.sh raw-build     only the raw MobileBuildMCP build capture, on a capture simulator never booted
 # scripts/testbed/generate.sh raw-session   only the raw MobileBuildMCP session tools' answers, on a capture simulator never booted
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
+# scripts/testbed/generate.sh multi-pass    only the plans fixture and the raw captures of runs with several passes or a
+#                                           cancel, on the capture simulator; never in a full run (multi_pass_captures)
+# scripts/testbed/generate.sh field-logs    only the logs of committed field captures (FIELD_CAPTURES names which), from this Mac's MobileBuildMCP workspaces; boots nothing
 # scripts/testbed/generate.sh parallel      only the parallel fixture and its raw capture, on the capture simulator and its clones
 # scripts/testbed/generate.sh self-test     checks the crash rules on made-up reports, and that a fixture's or an unknown name boots nothing; boots nothing
 # scripts/testbed/generate.sh field-captures   only the field captures (FIELD_CAPTURES names which), on the capture simulator
@@ -625,8 +628,103 @@ import Testing
     }
 }
 EOF
+  mkdir -p "$fixture/CancelTests"
+  cat > "$fixture/CancelTests/CancelTests.swift" <<'EOF'
+import Testing
+@testable import Kit
+
+@Suite struct CancelTests {
+    @Test func passes() {
+        #expect(Kit.name == "Kit")
+    }
+
+    @Test func cancels() throws {
+        try Test.cancel("cancelled on purpose")
+    }
+}
+EOF
   cat > "$fixture/project.yml" <<'EOF'
 name: SwiftTesting
+options:
+  bundleIdPrefix: dev.xcrew.testbed
+  deploymentTarget:
+    iOS: "18.0"
+targets:
+  Kit:
+    type: framework
+    platform: iOS
+    sources: [Kit]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+  KitTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [KitTests]
+    dependencies:
+      - target: Kit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+  CancelTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [CancelTests]
+    dependencies:
+      - target: Kit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Kit:
+    build:
+      targets:
+        Kit: all
+    test:
+      targets: [KitTests]
+  Cancel:
+    build:
+      targets:
+        Kit: all
+    test:
+      targets: [CancelTests]
+EOF
+  xcodegen generate --quiet --spec "$fixture/project.yml" --project "$fixture"
+  fixture_json "$fixture" pbxproj-groups xcodegen root
+  find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
+  echo "$fixture"
+}
+
+if runs swift-testing || [ "$build" = shapes ]; then swift_testing; fi
+
+# An XCTest bundle whose scheme's test plan has two configurations, `First` and `Second`, with no options of their own:
+# a pass, a failure and a skip, run once in each.
+plans_fixture() {
+  fixture=$testbed/plans
+  rm -rf "${fixture:?}"
+  mkdir -p "$fixture/Kit" "$fixture/KitTests"
+  cat > "$fixture/Kit/Kit.swift" <<'EOF'
+public enum Kit {
+    public static let name = "Kit"
+}
+EOF
+  cat > "$fixture/KitTests/ProbeTests.swift" <<'EOF'
+import XCTest
+@testable import Kit
+
+final class ProbeTests: XCTestCase {
+    func testPasses() {
+        XCTAssertEqual(Kit.name, "Kit")
+    }
+
+    func testFails() {
+        XCTAssertEqual(Kit.name, "Other", "the name is Kit")
+    }
+
+    func testSkipped() throws {
+        throw XCTSkip("skipped on purpose")
+    }
+}
+EOF
+  cat > "$fixture/project.yml" <<'EOF'
+name: Plans
 options:
   bundleIdPrefix: dev.xcrew.testbed
   deploymentTarget:
@@ -652,15 +750,34 @@ schemes:
       targets:
         Kit: all
     test:
-      targets: [KitTests]
+      testPlans:
+        - path: Plans.xctestplan
+          defaultPlan: true
 EOF
+  # The plan names its target by the id XcodeGen gives it, so it's written once the project is.
+  printf '{ "configurations" : [], "defaultOptions" : {}, "testTargets" : [], "version" : 1 }\n' > "$fixture/Plans.xctestplan"
   xcodegen generate --quiet --spec "$fixture/project.yml" --project "$fixture"
+  target=$(awk '/Begin PBXNativeTarget section/ { on = 1 } /End PBXNativeTarget section/ { on = 0 } on && /\/\* KitTests \*\/ = \{/ { print $1; exit }' "$fixture/Plans.xcodeproj/project.pbxproj")
+  [ -n "$target" ] || { echo "generate.sh: the plans fixture's KitTests target has no id" >&2; exit 1; }
+  cat > "$fixture/Plans.xctestplan" <<EOF
+{
+  "configurations" : [
+    { "id" : "00000000-0000-0000-0000-00000000000A", "name" : "First", "options" : {} },
+    { "id" : "00000000-0000-0000-0000-00000000000B", "name" : "Second", "options" : {} }
+  ],
+  "defaultOptions" : {},
+  "testTargets" : [
+    { "target" : { "containerPath" : "container:Plans.xcodeproj", "identifier" : "$target", "name" : "KitTests" } }
+  ],
+  "version" : 1
+}
+EOF
   fixture_json "$fixture" pbxproj-groups xcodegen root
   find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
   echo "$fixture"
 }
 
-if runs swift-testing || [ "$build" = shapes ]; then swift_testing; fi
+if runs plans || [ "$build" = multi-pass ]; then plans_fixture; fi
 
 # An XCTest bundle its scheme runs in parallel: a pass, a failure and a skip in one class, a 5 s wait in another, so the
 # two classes can run on separate clones of the simulator.
@@ -1529,7 +1646,7 @@ field_captures() {
     if [ -n "${2:-}" ]; then sleep 20; fi
     crash_check "${2:-}"
     neutral < "$results/$1.txt" | uuids_out > "$out/$1.txt"
-    log=$(grep -o '~/[^ ]*\.log' "$results/$1.txt" | head -1 | sed "s#^~#$HOME#")
+    log=$(named_log "$results/$1.txt")
     if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/$1.log"; fi
   }
   # The bundle a test call names.
@@ -1645,7 +1762,7 @@ concurrency_captures() {
 
 # What captures/raw holds, for every step that writes there.
 raw_manifest() {
-  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
+  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted, retry FeatureTests/ProbeTests with -parallel-testing-enabled NO -retry-tests-on-failure -test-iterations 3. On a copy of plans/: configurations is the Kit scheme'"'"'s test plan, its configurations First and Second. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run, shapes-iterations the same with -test-iterations 2, cancel the Cancel scheme'"'"'s. Each <name>-snapshots.json and <name>-midrun.log is the live log, copied each second while it ran. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
 }
 
 # Result bundle `$1`'s answers to what xcrew asks it, as `<name>` (`$2`) in `$out`, through the calling step's `neutral`:
@@ -1672,6 +1789,18 @@ bundle_answer() {
   answer=$(xcrun xcresulttool get test-results "$3" ${4:+"$4"} ${5:+"$5"} --path "$1" --compact) || { echo "generate.sh: xcresulttool couldn't answer $3 for $1" >&2; exit 1; }
   printf '%s\n' "$answer" | neutral | uuids_out > "$2"
   node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$2" 2> /dev/null || { echo "generate.sh: $2 isn't JSON" >&2; exit 1; }
+}
+
+# The log a MobileBuildMCP result's text names, written from `~`: on its own, or as `logs/…` in the folder tree below
+# its workspace's `└── ~/…/` line, as a test run's result writes it.
+named_log() {
+  log=$(grep -o '~/[^ ]*\.log' "$1" | head -1)
+  if [ -z "$log" ]; then
+    root=$(grep -o '└── ~/[^ ]*/$' "$1" | head -1 | sed 's#^└── ##')
+    file=$(grep -oE 'logs/[^ ]+\.log' "$1" | head -1)
+    if [ -n "$root" ] && [ -n "$file" ]; then log=$root$file; fi
+  fi
+  printf '%s' "$log" | sed "s#^~#$HOME#"
 }
 
 # The result bundle a raw capture's JSON names, written from `~`, when it's on this Mac.
@@ -1919,7 +2048,8 @@ midrun_copy() {
 # A watched raw test_sim run of the fixture `$1`, whose project is `$2`, kept in captures/raw as `<name>.json` (`$3`) and
 # the log it names as `<name>.log`, with where the live log's markers stood each second (midrun_copy). `$4` is
 # test_sim's arguments, and `$5` a node check the result and log must pass, or the capture proves nothing and the step
-# stops. On the capture simulator.
+# stops. `$6` is the scheme, `Kit` unless named; a project that's a `.xcworkspace` is opened as one. On the capture
+# simulator.
 watched_capture() {
   out=$testbed/captures/raw
   mkdir -p "$out"
@@ -1932,7 +2062,8 @@ watched_capture() {
   label=/testbed/$1
   neutral() { neutralise "$resolved" "$label" "$work" "$label" "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData; }
   mkdir -p "$work/.mobilebuildmcp"
-  printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'Kit'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/$2" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
+  case $2 in *.xcworkspace) container=workspacePath ;; *) container=projectPath ;; esac
+  printf "schemaVersion: 1\nsessionDefaults:\n  %s: '%s'\n  scheme: '%s'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$container" "$resolved/$2" "${6:-Kit}" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
   watched_call "$results" "$3" "$4"
   crash_check
   log=$(grep -o '~/[^ "\\]*\.log' "$results/$3.json" | head -1 | sed "s#^~#$HOME#")
@@ -1993,7 +2124,7 @@ parallel_captures() {
 # simulator, no new run. All are written, or none: a bundle that's gone is named, and an answer that fails stops the
 # step before anything is moved in. Each run's work copy was a temporary folder, gone since; it's found in the answers
 # and neutralised as the capture's own step did. Not empty-filter, whose answers field/ keeps, nor parallel, which isn't
-# committed; a fresh `raw` or `parallel` capture writes its own.
+# committed, nor multi-pass's four; a fresh `raw`, `parallel` or `multi-pass` capture writes its own.
 raw_answers() {
   kept="serial swift-testing profile shapes"
   gone=
@@ -2021,6 +2152,85 @@ raw_answers() {
   done
   mv "$out"/* "$testbed/captures/raw/"
   echo "$testbed/captures/raw"
+}
+
+# Runs that test each case more than once, and a cancelled Swift Testing test, raw, each watched as shapes is: field/'s
+# ProbeTests retried on failure (xcodebuild runs a failed test again at once, within the same pass, up to three tries), the plans fixture's two configurations, the swift-testing suite twice over, and its
+# Cancel scheme. One boot serves them all, and the first that doesn't come to what it holds stops the run. Each check
+# asks only what's known before the run (it completed, its tests ran as written), never the shape it's taken to show.
+# Never part of a full run: `testFlaky` fails on a fresh simulator's first run, which retry's check counts on, and the
+# full run's probes leave it on a later one.
+multi_pass_captures() {
+  watched_capture field Field.xcworkspace retry '{"extraArgs":["-only-testing:FeatureTests/ProbeTests","-parallel-testing-enabled","NO","-retry-tests-on-failure","-test-iterations","3"]}' '
+    const fs = require("fs")
+    const result = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+    const log = fs.readFileSync(process.argv[2], "utf8")
+    const fails = log.split("\n").filter(line => /testFails\]. failed/.test(line)).length
+    const wrong = [
+      [result.structuredContent?.schema === "mobilebuildmcp.output.test-result", "the run completed"],
+      [fails === 3, "testFails failed, and was run again until its third try"],
+      [/testFlaky\]. failed[\s\S]*testFlaky\]. passed/.test(log), "testFlaky failed, then passed when run again"],
+    ].filter(([ok]) => !ok).map(([, what]) => what)
+    if (wrong.length) { console.error(`generate.sh: the retry run did not come to what it holds: ${wrong.join(", ")}`); process.exit(1) }
+  ' Feature
+  watched_capture plans Plans.xcodeproj configurations '{"extraArgs":["-parallel-testing-enabled","NO"]}' '
+    const fs = require("fs")
+    const result = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+    const log = fs.readFileSync(process.argv[2], "utf8")
+    const wrong = [
+      [result.structuredContent?.schema === "mobilebuildmcp.output.test-result", "the run completed"],
+      [/testFails\]. failed/.test(log), "testFails failed"],
+      [/testPasses\]. passed/.test(log), "testPasses passed"],
+    ].filter(([ok]) => !ok).map(([, what]) => what)
+    if (wrong.length) { console.error(`generate.sh: the configurations run did not come to what it holds: ${wrong.join(", ")}`); process.exit(1) }
+  '
+  watched_capture swift-testing SwiftTesting.xcodeproj shapes-iterations '{"extraArgs":["-test-iterations","2"]}' '
+    const fs = require("fs")
+    const result = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+    const log = fs.readFileSync(process.argv[2], "utf8")
+    const wrong = [
+      [result.structuredContent?.schema === "mobilebuildmcp.output.test-result", "the run completed"],
+      [/Test fails\(\) failed after/.test(log), "fails() failed"],
+      [/Test passes\(\) passed after/.test(log), "passes() passed"],
+    ].filter(([ok]) => !ok).map(([, what]) => what)
+    if (wrong.length) { console.error(`generate.sh: the shapes-iterations run did not come to what it holds: ${wrong.join(", ")}`); process.exit(1) }
+  '
+  watched_capture swift-testing SwiftTesting.xcodeproj cancel '{}' '
+    const fs = require("fs")
+    const result = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+    const log = fs.readFileSync(process.argv[2], "utf8")
+    const wrong = [
+      [result.structuredContent?.schema === "mobilebuildmcp.output.test-result", "the run completed"],
+      [/Test passes\(\) passed after/.test(log), "passes() passed"],
+      [/Test cancels\(\)/.test(log), "cancels() ran"],
+    ].filter(([ok]) => !ok).map(([, what]) => what)
+    if (wrong.length) { console.error(`generate.sh: the cancel run did not come to what it holds: ${wrong.join(", ")}`); process.exit(1) }
+  ' Cancel
+  raw_manifest
+}
+
+# The logs of committed field captures, kept beside them as `<name>.log`, from the MobileBuildMCP workspace each names
+# on this Mac: no run. A log is kept only when it's the test bed's own: its xcodebuild opened a temporary copy of
+# field/'s Field.xcworkspace. Its work copy and DerivedData, temporary folders gone since, are read from its own command
+# line and neutralised as field/'s step does. All are written, or none.
+field_logs() {
+  out=$testbed/captures/field
+  wanted=${FIELD_CAPTURES:-probes}
+  staged=$(mktemp -d)
+  trap 'rm -rf "${staged:?}"' EXIT
+  for name in $wanted; do
+    log=$(named_log "$out/$name.txt")
+    if [ -z "$log" ]; then echo "generate.sh: $name's result names no log, so nothing was written" >&2; exit 1; fi
+    if [ ! -f "$log" ]; then echo "generate.sh: $name's log is gone from this Mac, so nothing was written" >&2; exit 1; fi
+    work=$(grep -oE -- '-workspace [^ ]+/field/Field\.xcworkspace' "$log" | head -1 | sed 's#^-workspace ##; s#/Field\.xcworkspace$##; s#^/private##')
+    case $work in */T/tmp.*/field) ;; *) echo "generate.sh: $name's log isn't a run of the test bed's field/, so nothing was written" >&2; exit 1 ;; esac
+    derived=$(grep -oE -- '-derivedDataPath [^ ]+' "$log" | head -1 | sed 's#^-derivedDataPath ##; s#^/private##')
+    derived=${derived:-/nonexistent/DerivedData}
+    neutral() { neutralise "/private$work" /testbed/field "$work" /testbed/field "/private$derived" /testbed/DerivedData "$derived" /testbed/DerivedData; }
+    neutral < "$log" | uuids_out > "$staged/$name.log"
+  done
+  mv "$staged"/* "$out/"
+  echo "$out"
 }
 
 # The crash rules on made-up reports: at finish_simulator's shutdown, and mid-run as a parallel run clones.
@@ -2126,6 +2336,17 @@ if [ "$build" = raw-answers ]; then
   exit 0
 fi
 
+if [ "$build" = multi-pass ]; then
+  capture_simulator
+  multi_pass_captures
+  exit 0
+fi
+
+if [ "$build" = field-logs ]; then
+  field_logs
+  exit 0
+fi
+
 if [ "$build" = parallel ]; then
   capture_simulator
   parallel_captures
@@ -2167,7 +2388,7 @@ case $build in
   "" | --build) ;;
   *)
     if [ -n "$named" ]; then exit 0; fi
-    echo "generate.sh: no step or fixture is named \"$build\"; usage: scripts/generate.sh [--build | <step> | <fixture>]: a step named at the top of this script, or a fixture, forms, adversarial, modular, field or swift-testing" >&2
+    echo "generate.sh: no step or fixture is named \"$build\"; usage: scripts/generate.sh [--build | <step> | <fixture>]: a step named at the top of this script, or a fixture, forms, adversarial, modular, field, swift-testing or plans" >&2
     exit 2
     ;;
 esac
