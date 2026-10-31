@@ -81,7 +81,7 @@ What they show:
 
 - **Repeated probes.** MobileBuildMCP's text lists the flaky test once per failing run ("run 1 is odd", 3, 5) with no verdict, gives no skip reason, and doesn't count the expected failure. Its summary reads "2 tests failed, 1 passed, 1 skipped". The bundle's test list has each run.
 - **The crash.** The error text ("Index out of range") appears only among the errors. The failure line names the test with no file:line ("Crash: xctest at CrashTests.testOutOfRange()").
-- **An empty selection** reports "Test succeeded".
+- **An empty selection** reports "Test succeeded" with no count, as MobileBuildMCP writes for any test run it has no count for. `empty-filter.summary.json`, from its result bundle, counts 0 tests (`totalTestCount: 0`): that is what says none ran. Re-taken on 2026-10-31 with its bundle's answers, so its text is a cold build's, with the fixture's one warning.
 - **No locked build database.** A second build into the same DerivedData while another `xcodebuild` builds there succeeds, even with that `xcodebuild` stopped (SIGSTOP). The build runs in Xcode's build service, not in the `xcodebuild` process. So a locked build database seen in the field isn't reproduced here. It needs a stuck build service, which a capture must not cause, since Xcode itself shares it.
 - **The expected crash.** The crashing test crashes on purpose. Its capture step excuses exactly that one report, the test runner's with `testOutOfRange` in its crashing thread, for that step alone. Any other crash, before or after, stops the run as ever.
 
