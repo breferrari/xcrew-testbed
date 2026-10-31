@@ -127,6 +127,12 @@ What they show:
 - **A serial run's log** writes `Test Case '-[FeatureTests.ProbeTests testFails]' failed (0.006 seconds).` **A Swift Testing run's** writes `✔ Test itIsNamed() passed after 0.001 seconds.` Neither is the parallel runner's `Test case '…'`.
 - **Paths:** `structuredContent`'s artifact paths are written from `~`. The rest is neutralised as the other captures are, JSON-escaped spellings included.
 
+**Bundle answers.** Beside `serial`, `swift-testing`, `profile` and `shapes` are their result bundles' answers to what xcrew asks, as `field/`'s are:
+- `<name>.tests.json` and `<name>.summary.json`, from `xcresulttool get test-results tests` and `summary`;
+- `<name>.details.<Class.test>.json`, from `test-details`, for each test that failed or failed as expected: serial's `testFails`, `testFlaky` and `testExpectedFailure`, and shapes' `fails` and `knownIssue` (a known issue reads as an expected failure).
+
+`scripts/generate.sh raw-answers` read them on 2026-10-31 from the bundles MobileBuildMCP kept from the runs above, booting nothing. Each run's work copy, a temporary folder gone since, is found in the answers and neutralised to `/testbed/<fixture>`, as the run's log was. A capture taken afresh writes its answers itself, `empty-filter`'s and `parallel`'s too. xcresulttool writes a duration in the Mac's locale: `"duration":"Ran for 0,0056 seconds"` under a locale whose decimal mark is a comma. Its `durationInSeconds` and counts are JSON numbers.
+
 ### shapes
 
 *Xcode 27.2, iOS 27.2, MobileBuildMCP 2.7.1, 2026-10-31.* `swift-testing/`'s `ShapesTests` holds six Swift Testing tests:
