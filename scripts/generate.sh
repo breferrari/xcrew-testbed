@@ -4,7 +4,8 @@
 # (brew install tuist xcodegen getsentry/xcodebuildmcp/mobilebuildmcp); CI never runs it, it reads what this wrote.
 # scripts/testbed/generate.sh [--build]   --build also builds each form for testing, to prove it's real
 # scripts/testbed/generate.sh concurrency   only the concurrency fixture and its capture, on a capture simulator never booted
-# scripts/testbed/generate.sh raw           only the raw MobileBuildMCP captures, on the capture simulator
+# scripts/testbed/generate.sh raw           only the raw MobileBuildMCP test captures (RAW_CAPTURES names which), on the capture simulator
+# scripts/testbed/generate.sh raw-build     only the raw MobileBuildMCP build capture, on a capture simulator never booted
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
 # scripts/testbed/generate.sh self-test     checks the crash rules on made-up reports; boots nothing
 # scripts/testbed/generate.sh field-captures   only the field captures (FIELD_CAPTURES names which), on the capture simulator
@@ -1542,12 +1543,19 @@ concurrency_captures() {
   echo "$out"
 }
 
+# What captures/raw holds, for every step that writes there.
+raw_manifest() {
+  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, and <name>.log the log it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
+}
+
 # Raw MobileBuildMCP results, whole as JSON-RPC answers them (`content` and `structuredContent`), with the log each names:
-# a serial XCTest run, a Swift Testing run, and a run under a session-defaults profile that names its scheme, called with
-# no scheme. On a copy of field/, on the capture simulator.
+# a serial XCTest run, a Swift Testing run, a run under a session-defaults profile that names its scheme, called with
+# no scheme, and a selection matching no test. On a copy of field/, on the capture simulator. RAW_CAPTURES names the
+# ones to take again (`empty-filter`); unset, all of them. Either way the folder's other captures stay.
 raw_captures() {
   out=$testbed/captures/raw
-  rm -rf "${out:?}"
+  wanted=${RAW_CAPTURES:-serial swift-testing profile empty-filter}
+  takes() { case " $wanted " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
   mkdir -p "$out"
   work=$(mktemp -d)/field
   cp -R "$testbed/field" "$work"
@@ -1575,14 +1583,56 @@ raw_captures() {
   defaults() {
     printf "schemaVersion: 1\nsessionDefaults:\n  workspacePath: '%s'\n  scheme: '%s'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/Field.xcworkspace" "$1" "$simulator" "$derived"
   }
-  configure "$(defaults Feature)"
-  raw serial '{"extraArgs":["-only-testing:FeatureTests/ProbeTests","-parallel-testing-enabled","NO"]}'
-  configure "$(defaults Core)"
-  raw swift-testing '{}'
-  configure "$(printf "schemaVersion: 1\nsessionDefaultsProfiles:\n  unit:\n    workspacePath: '%s'\n    scheme: 'Data'\n    simulatorName: '%s'\n    derivedDataPath: '%s'\nactiveSessionDefaultsProfile: unit\n" "$resolved/Field.xcworkspace" "$simulator" "$derived")"
-  raw profile '{}'
+  for name in $wanted; do rm -f "$out/$name.json" "$out/$name.log"; done
+  if takes serial; then
+    configure "$(defaults Feature)"
+    raw serial '{"extraArgs":["-only-testing:FeatureTests/ProbeTests","-parallel-testing-enabled","NO"]}'
+  fi
+  if takes swift-testing; then
+    configure "$(defaults Core)"
+    raw swift-testing '{}'
+  fi
+  if takes profile; then
+    configure "$(printf "schemaVersion: 1\nsessionDefaultsProfiles:\n  unit:\n    workspacePath: '%s'\n    scheme: 'Data'\n    simulatorName: '%s'\n    derivedDataPath: '%s'\nactiveSessionDefaultsProfile: unit\n" "$resolved/Field.xcworkspace" "$simulator" "$derived")"
+    raw profile '{}'
+  fi
+  # The same selection as field/'s empty-filter, whose bundle answers are kept there.
+  if takes empty-filter; then
+    configure "$(defaults Feature)"
+    raw empty-filter '{"extraArgs":["-only-testing:FeatureTests/NoSuchTests"]}'
+  fi
   rm -rf "${work:?}" "${derived:?}" "${results:?}"
-  printf '{\n  "replay": "each <name>.json is MobileBuildMCP test_sim'"'"'s whole JSON-RPC result on a copy of field/, content and structuredContent, and <name>.log the log it names: serial is FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data; tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$out/capture.json"
+  raw_manifest
+  echo "$out"
+}
+
+# MobileBuildMCP's build_sim answer whole, as JSON-RPC gives it, with the log it names: concurrency/'s Warnings scheme,
+# which builds with its concurrency warnings. It only builds: its simulator is named and never booted.
+raw_build_capture() {
+  out=$testbed/captures/raw
+  mkdir -p "$out"
+  rm -f "$out/build_sim.json" "$out/build_sim.log"
+  work=$(mktemp -d)/concurrency
+  cp -R "$testbed/concurrency" "$work"
+  derived=$(mktemp -d)
+  results=$(mktemp -d)
+  resolved=$(cd "$work" && pwd -P)
+  neutral() {
+    perl -pe 'BEGIN { my @pairs = @ARGV; @ARGV = (); while (my ($from, $to) = splice(@pairs, 0, 2)) { (my $escaped = $from) =~ s#/#\\/#g; (my $to_escaped = $to) =~ s#/#\\/#g; push @rules, [$from, $to], [$escaped, $to_escaped] } } for my $rule (@rules) { my ($from, $to) = @$rule; s/\Q$from\E/$to/g } s#/U[s]ers/[^/"\\]+/#/testbed/user/#g; s#\\/U[s]ers\\/[^/"\\]+\\/#\\/testbed\\/user\\/#g' \
+      "$resolved" /testbed/concurrency "$work" /testbed/concurrency "$(cd "$derived" && pwd -P)" /testbed/DerivedData "$derived" /testbed/DerivedData "$HOME" /testbed/user \
+      "$(cd "${TMPDIR:-/tmp}" && pwd -P)" /testbed/tmp "${TMPDIR%/}" /testbed/tmp
+  }
+  mkdir -p "$work/.mobilebuildmcp"
+  printf "schemaVersion: 1\nsessionDefaults:\n  projectPath: '%s'\n  scheme: 'Warnings'\n  simulatorName: '%s'\n  derivedDataPath: '%s'\n" "$resolved/Concurrency.xcodeproj" "$simulator" "$derived" > "$work/.mobilebuildmcp/config.yaml"
+  MCP_RAW=1 node scripts/mcp-call.mjs "$work" build_sim > "$results/build_sim.json" || true
+  state=$(xcrun simctl list devices --json | node -e 'const d = JSON.parse(require("fs").readFileSync(0, "utf8")).devices; console.log(Object.values(d).flat().find(x => x.udid === process.argv[1])?.state ?? "gone")' "$simulator_id")
+  echo "generate.sh: the capture simulator was $state after build_sim" >&2
+  if [ "$state" != Shutdown ]; then crash_check; fi
+  neutral < "$results/build_sim.json" | uuids_out > "$out/build_sim.json"
+  log=$(grep -o '~/[^ "\\]*\.log' "$results/build_sim.json" | head -1 | sed "s#^~#$HOME#")
+  if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/build_sim.log"; fi
+  rm -rf "${work:?}" "${derived:?}" "${results:?}"
+  raw_manifest
   echo "$out"
 }
 
@@ -1743,6 +1793,12 @@ if [ "$build" = raw ]; then
   exit 0
 fi
 
+if [ "$build" = raw-build ]; then
+  capture_simulator --no-boot
+  raw_build_capture
+  exit 0
+fi
+
 if [ "$build" = concurrency ]; then
   capture_simulator --no-boot
   concurrency_captures
@@ -1758,6 +1814,7 @@ uitests
 field_captures
 concurrency_captures
 raw_captures
+raw_build_capture
 shapes_captures
 
 scripts/leaks.sh
