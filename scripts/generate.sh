@@ -1766,7 +1766,7 @@ concurrency_captures() {
 
 # What captures/raw holds, for every step that writes there.
 raw_manifest() {
-  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips, test-build-failed FeatureTests/ProbeTests with a type error written into its test file. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted, retry FeatureTests/ProbeTests with -parallel-testing-enabled NO -retry-tests-on-failure -test-iterations 3. On a copy of plans/: configurations is the Kit scheme'"'"'s test plan, its configurations First and Second. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run, shapes-iterations the same with -test-iterations 2, cancel the Cancel scheme'"'"'s. Each <name>-snapshots.json and <name>-midrun.log is the live log, copied each second while it ran. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
+  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips, test-build-failed FeatureTests/ProbeTests with a type error written into its test file, system-failure-crash a test crashing inside XCTAssertEqual'"'"'s autoclosure written into it, its crash log as system-failure-crash.crash.ips. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted, retry FeatureTests/ProbeTests with -parallel-testing-enabled NO -retry-tests-on-failure -test-iterations 3. On a copy of plans/: configurations is the Kit scheme'"'"'s test plan, its configurations First and Second. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run, shapes-iterations the same with -test-iterations 2, cancel the Cancel scheme'"'"'s. Each <name>-snapshots.json and <name>-midrun.log is the live log, copied each second while it ran. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
 }
 
 # Result bundle `$1`'s answers to what xcrew asks it, as `<name>` (`$2`) in `$out`, through the calling step's `neutral`:
@@ -1815,13 +1815,13 @@ raw_bundle() {
 
 # Raw MobileBuildMCP results, whole as JSON-RPC answers them (`content` and `structuredContent`), with the log each names:
 # a serial XCTest run, a Swift Testing run, a run under a session-defaults profile that names its scheme, called with
-# no scheme, a selection matching no test, a serial run with a crash and `showTestTiming` on, and a run whose test target
-# doesn't build. On a copy of field/, on
+# no scheme, a selection matching no test, a serial run with a crash and `showTestTiming` on, a run whose test target
+# doesn't build, and a test crashing inside an assertion. On a copy of field/, on
 # the capture simulator. RAW_CAPTURES names the
 # ones to take again (`empty-filter`); unset, all of them. Either way the folder's other captures stay.
 raw_captures() {
   out=$testbed/captures/raw
-  wanted=${RAW_CAPTURES:-serial swift-testing profile empty-filter timing test-build-failed}
+  wanted=${RAW_CAPTURES:-serial swift-testing profile empty-filter timing test-build-failed system-failure-crash}
   takes() { case " $wanted " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
   mkdir -p "$out"
   work=$(mktemp -d)/field
@@ -1867,6 +1867,24 @@ raw_captures() {
   if takes empty-filter; then
     configure "$(defaults Feature)"
     raw empty-filter '{"extraArgs":["-only-testing:FeatureTests/NoSuchTests"]}'
+  fi
+  # A test that crashes inside an XCTest assertion's autoclosure, `XCTAssertEqual(values[3], 0)`, written into the probes'
+  # test file on the copy alone and taken out after. Its crash is the one expected for this call. The step checks only
+  # that the call failed, and keeps the crash log the bundle attaches to a failure, whatever case it's filed under.
+  if takes system-failure-crash; then
+    probes=$work/Modules/Feature/Tests/ProbeTests.swift
+    printf '\nfinal class AssertCrashTests: XCTestCase {\n    func test_crash() {\n        let values: [Int] = []\n        XCTAssertEqual(values[3], 0)\n    }\n}\n' >> "$probes"
+    configure "$(defaults Feature)"
+    raw system-failure-crash '{"extraArgs":["-only-testing:FeatureTests/AssertCrashTests"]}' test_crash
+    cp "$testbed/field/Modules/Feature/Tests/ProbeTests.swift" "$probes"
+    node -e 'process.exit(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).isError === true ? 0 : 1)' "$out/system-failure-crash.json" || { echo "generate.sh: stopping: the crashing test's call didn't fail" >&2; exit 1; }
+    bundle=$(raw_bundle "$results/system-failure-crash.json")
+    if [ -n "$bundle" ]; then
+      mkdir -p "$results/system-failure-crash-export"
+      xcrun xcresulttool export attachments --path "$bundle" --output-path "$results/system-failure-crash-export" --only-failures > /dev/null
+      report=$(find "$results/system-failure-crash-export" -name '*.ips' | head -1)
+      if [ -n "$report" ]; then neutral < "$report" | uuids_out > "$out/system-failure-crash.crash.ips"; fi
+    fi
   fi
   # A test run whose test target doesn't build: a type error written into the probes' test file, on the copy alone and
   # taken out after. The run came to that, or the capture proves nothing: the step checks the call failed and its
