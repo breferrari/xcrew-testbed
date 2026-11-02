@@ -1611,7 +1611,7 @@ EOF
 # - crash: the crashing test, with its crash log
 # - coverage: one test run with coverage on, the half-tested file's line counts, and each target's counts
 # - lldb-expr: LLDB's `expr` on the running app under the default debugger backend
-# - two-display: a two-display device's screenshot error, from MobileBuildMCP's tool and simctl's message, not a run
+# - two-display: a two-display device's screenshot error, MobileBuildMCP's tool over simctl's real answer (captures/simctl)
 # - empty-filter: a selection matching no test
 # - type-error: a build failing on a plain type error, with the pinned Xcode not the one building
 # FIELD_CAPTURES names the scenarios to take again (`coverage type-error`), keeping the others' captures; unset,
@@ -1682,22 +1682,21 @@ field_captures() {
     calls lldb-expr session_set_defaults '{"scheme":"App"}' build_run_sim '{}' debug_attach_sim '{"bundleId":"dev.xcrew.testbed.App"}' debug_lldb_command '{"command":"expr 1 + 1"}'
   fi
   # two-display: a screenshot of a device with two displays. Its device, the iPhone Duo, runs only on a runtime of its own, not
-  # a released one, so nothing boots: MobileBuildMCP's own screenshot tool runs against an `xcrun` that lists the
-  # device as booted and fails `simctl io … screenshot` with simctl's message, read from CoreSimulator's simctl
-  # (`Cannot choose between %lu displays. Specify one with --display:`, then a line per display, which only a run can
-  # fill and is left out). A real run needs a Mac with that device's runtime.
+  # a released one, so nothing boots here: MobileBuildMCP's own screenshot tool runs against an `xcrun` that lists the
+  # device as booted and answers `simctl io … screenshot` as simctl did on a booted Duo, its stderr and exit status
+  # (captures/simctl, taken once on the Duo's runtime as an exception to the released-runtime rule, its note says how).
   if takes two-display; then
     fake=$(mktemp -d)
     cat > "$fake/xcrun" <<'XCRUN'
 #!/bin/sh
 case "$*" in
   "simctl list devices -j"*) echo '{"devices":{"com.apple.CoreSimulator.SimRuntime.iOS-27-2-iPhone19-4":[{"udid":"00000000-0000-4000-8000-000000000001","name":"iPhone Duo","state":"Booted","isAvailable":true}]}}' ;;
-  "simctl io 00000000-0000-4000-8000-000000000001 screenshot "*) echo 'Cannot choose between 2 displays. Specify one with --display:' >&2; exit 1 ;;
+  "simctl io 00000000-0000-4000-8000-000000000001 screenshot "*) cat "$SIMCTL_ANSWER" >&2; exit 22 ;;
   *) exec /usr/bin/xcrun "$@" ;;
 esac
 XCRUN
     chmod +x "$fake/xcrun"
-    PATH="$fake:$PATH" node scripts/mcp-call.mjs "$work" session_set_defaults '{"simulatorId":"00000000-0000-4000-8000-000000000001"}' screenshot '{}' > "$results/two-display.txt" || true
+    SIMCTL_ANSWER="$(cd "$testbed" && pwd -P)/captures/simctl/duo-screenshot.stderr" PATH="$fake:$PATH" node scripts/mcp-call.mjs "$work" session_set_defaults '{"simulatorId":"00000000-0000-4000-8000-000000000001"}' screenshot '{}' > "$results/two-display.txt" || true
     neutral < "$results/two-display.txt" | uuids_out > "$out/two-display.txt"
     rm -rf "$fake"
   fi
@@ -2391,7 +2390,8 @@ PATHS
 }
 
 if [ "$build" = field-captures ]; then
-  capture_simulator
+  # The two-display capture alone boots nothing: it replays simctl's answer, so it needs no capture simulator.
+  if [ "${FIELD_CAPTURES:-}" = two-display ]; then simulator=xcrew-testbed; else capture_simulator; fi
   field_captures
   exit 0
 fi

@@ -1,0 +1,3 @@
+{
+  "replay": "duo-screenshot.stderr is what `xcrun simctl io <udid> screenshot <file>` wrote to stderr, exiting 22, on a booted iPhone Duo, which has two displays. Taken November 2, 2026, macOS 27.2, Xcode 27.2, on the iPhone Duo's own runtime, iOS 27.2 (24B91016s, com.apple.CoreSimulator.SimRuntime.iOS-27-2-iPhone19-4): an exception to the released-runtime rule, since the Duo runs on no other. One fresh simulator, booted once, deleted after; no crash report. generate.sh's two-display capture replays it through MobileBuildMCP's screenshot tool."
+}
