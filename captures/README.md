@@ -244,6 +244,16 @@ The probe that showed it:
 - It aborted on an uncaught exception that PhotoLibraryServices threw in `PLLibraryServicesOperation` on the queue `PLLibraryServicesStateNode(…: prep-pre-migration)`: an `EXC_CRASH` with `SIGABRT`, about 3 seconds after the test run ended.
 - Nothing the captures build uses Photos.
 
+### UsageTrackingAgent
+
+*iOS 27.2 runtime on macOS 27.2 (26B123), Xcode 27.2, 2026-11-02.*
+
+- During a parallel capture, UsageTrackingAgent, the Screen Time usage service, trapped: an `EXC_BREAKPOINT` with `SIGTRAP` on the queue `com.apple.root.background-qos.cooperative`.
+- Its crashing thread is a Swift `_assertionFailure` in libswiftCore, called from the DeviceActivity framework inside a `dispatch_once` (`_dispatch_once_callout`): Apple frames only.
+- It crashed on a plain simulator too, with no capture's app involved, so it's the runtime's, not the captures'.
+- Of every crash report on the Mac that day, the entry's frames and queue match this one alone.
+- To revisit on the next iOS runtime: if it no longer crashes, the entry goes.
+
 ### Adding an entry
 
 An entry joins `known_crash` only for an Apple system process, with only Apple frames in its crashing thread, and with evidence that no capture's code is involved. If yet another Apple process crashes, the list is the wrong tool: let the fresh simulator settle longer after boot instead.
