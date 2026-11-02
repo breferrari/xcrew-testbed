@@ -39,3 +39,11 @@ schemes:
         Kit: all
     test:
       targets: [CancelTests]
+  KitPlans:
+    build:
+      targets:
+        Kit: all
+    test:
+      testPlans:
+        - path: KitPlans.xctestplan
+          defaultPlan: true
