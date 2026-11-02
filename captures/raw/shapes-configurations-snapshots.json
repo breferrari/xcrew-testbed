@@ -1,0 +1,115 @@
+{
+  "everySeconds": 1,
+  "snapshots": [
+    {
+      "snapshot": "snapshot-001.log",
+      "lines": 63,
+      "testingStarted": null,
+      "testSuiteStarted": null,
+      "swiftTestingStarted": null,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": null
+    },
+    {
+      "snapshot": "snapshot-002.log",
+      "lines": 367,
+      "testingStarted": null,
+      "testSuiteStarted": null,
+      "swiftTestingStarted": null,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": null
+    },
+    {
+      "snapshot": "snapshot-003.log",
+      "lines": 489,
+      "testingStarted": null,
+      "testSuiteStarted": null,
+      "swiftTestingStarted": null,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    },
+    {
+      "snapshot": "snapshot-004.log",
+      "lines": 495,
+      "testingStarted": null,
+      "testSuiteStarted": null,
+      "swiftTestingStarted": null,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    },
+    {
+      "snapshot": "snapshot-005.log",
+      "lines": 495,
+      "testingStarted": null,
+      "testSuiteStarted": null,
+      "swiftTestingStarted": null,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    },
+    {
+      "snapshot": "snapshot-006.log",
+      "lines": 523,
+      "testingStarted": null,
+      "testSuiteStarted": 495,
+      "swiftTestingStarted": 498,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    },
+    {
+      "snapshot": "snapshot-007.log",
+      "lines": 523,
+      "testingStarted": null,
+      "testSuiteStarted": 495,
+      "swiftTestingStarted": 498,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    },
+    {
+      "snapshot": "snapshot-008.log",
+      "lines": 526,
+      "testingStarted": null,
+      "testSuiteStarted": 495,
+      "swiftTestingStarted": 498,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    },
+    {
+      "snapshot": "snapshot-009.log",
+      "lines": 554,
+      "testingStarted": null,
+      "testSuiteStarted": 495,
+      "swiftTestingStarted": 498,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    },
+    {
+      "snapshot": "snapshot-010.log",
+      "lines": 554,
+      "testingStarted": null,
+      "testSuiteStarted": 495,
+      "swiftTestingStarted": 498,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    },
+    {
+      "snapshot": "snapshot-011.log",
+      "lines": 554,
+      "testingStarted": null,
+      "testSuiteStarted": 495,
+      "swiftTestingStarted": 498,
+      "testExecute": null,
+      "firstResult": null,
+      "testBuildSucceeded": 487
+    }
+  ]
+}

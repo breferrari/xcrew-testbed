@@ -1,0 +1,57 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "\n🧪 Test\n\nRaw Output:\n\n  2026-11-02 08:59:37.785 xcodebuild[25570:6482142] Writing test products to /testbed/user/Library/Developer/MobileBuildMCP/workspaces/swift-testing-a4e71ce5151c/test-products/test_sim_2026-11-02T07-59-35-356Z_pid25448_41192d96.xctestproducts\n  2026-11-02 09:00:00.491 xcodebuild[25886:6483342] [MT] IDETestOperationsObserverDebug: 15.487 elapsed -- Testing started completed.\n  2026-11-02 09:00:00.491 xcodebuild[25886:6483342] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start\n  2026-11-02 09:00:00.491 xcodebuild[25886:6483342] [MT] IDETestOperationsObserverDebug: 15.487 sec, +15.487 sec -- end\n  Failing tests:\n  \tShapesTests.fails()\n  ** TEST EXECUTE FAILED **\n  Test Run test-without-building failed.\n\n❌ 1 test failed, 3 passed, 1 skipped (⏱️ 25.3s)\n  └ Files:\n     └── ~/Library/Developer/MobileBuildMCP/workspaces/swift-testing-a4e71ce5151c/\n         ├── logs/test_sim_2026-11-02T07-59-35-355Z_pid25448_7021f353.log — Build Logs\n         ├── result-bundles/test_sim_2026-11-02T07-59-35-356Z_pid25448_12376016.xcresult — Result Bundle\n         └── test-products/test_sim_2026-11-02T07-59-35-356Z_pid25448_41192d96.xctestproducts — Test Products\n"
+    }
+  ],
+  "structuredContent": {
+    "schema": "mobilebuildmcp.output.test-result",
+    "schemaVersion": "3",
+    "didError": true,
+    "error": "Tests failed",
+    "data": {
+      "summary": {
+        "status": "FAILED",
+        "durationMs": 25322,
+        "counts": {
+          "passed": 3,
+          "failed": 1,
+          "skipped": 1
+        },
+        "target": "simulator"
+      },
+      "artifacts": {
+        "buildLogPath": "~/Library/Developer/MobileBuildMCP/workspaces/swift-testing-a4e71ce5151c/logs/test_sim_2026-11-02T07-59-35-355Z_pid25448_7021f353.log",
+        "xcresultPath": "~/Library/Developer/MobileBuildMCP/workspaces/swift-testing-a4e71ce5151c/result-bundles/test_sim_2026-11-02T07-59-35-356Z_pid25448_12376016.xcresult",
+        "testProductsPath": "~/Library/Developer/MobileBuildMCP/workspaces/swift-testing-a4e71ce5151c/test-products/test_sim_2026-11-02T07-59-35-356Z_pid25448_41192d96.xctestproducts"
+      },
+      "diagnostics": {
+        "warnings": [],
+        "errors": [],
+        "rawOutput": [
+          "2026-11-02 08:59:37.785 xcodebuild[25570:6482142] Writing test products to /testbed/user/Library/Developer/MobileBuildMCP/workspaces/swift-testing-a4e71ce5151c/test-products/test_sim_2026-11-02T07-59-35-356Z_pid25448_41192d96.xctestproducts",
+          "2026-11-02 09:00:00.491 xcodebuild[25886:6483342] [MT] IDETestOperationsObserverDebug: 15.487 elapsed -- Testing started completed.",
+          "2026-11-02 09:00:00.491 xcodebuild[25886:6483342] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start",
+          "2026-11-02 09:00:00.491 xcodebuild[25886:6483342] [MT] IDETestOperationsObserverDebug: 15.487 sec, +15.487 sec -- end",
+          "Failing tests:",
+          "\tShapesTests.fails()",
+          "** TEST EXECUTE FAILED **",
+          "Test Run test-without-building failed."
+        ],
+        "testFailures": []
+      },
+      "testCases": [
+        {
+          "test": "skipped",
+          "status": "skipped"
+        },
+        {
+          "test": "skipped",
+          "status": "skipped"
+        }
+      ]
+    }
+  },
+  "isError": true
+}

@@ -9,6 +9,8 @@
 # scripts/testbed/generate.sh raw-build     only the raw MobileBuildMCP build capture, on a capture simulator never booted
 # scripts/testbed/generate.sh raw-session   only the raw MobileBuildMCP session tools' answers, on a capture simulator never booted
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
+# scripts/testbed/generate.sh swift-configurations   only the swift-testing fixture and its run through a test plan of two
+#                                           configurations, on the capture simulator; never in a full run
 # scripts/testbed/generate.sh multi-pass    only the plans fixture and the raw captures of runs with several passes or a
 #                                           cancel, on the capture simulator; never in a full run (multi_pass_captures)
 # scripts/testbed/generate.sh neutral-paths only rewrites every committed capture's PATH through scripts/neutral-path.sh; boots nothing
@@ -689,14 +691,40 @@ schemes:
         Kit: all
     test:
       targets: [CancelTests]
+  KitPlans:
+    build:
+      targets:
+        Kit: all
+    test:
+      testPlans:
+        - path: KitPlans.xctestplan
+          defaultPlan: true
 EOF
+  # The plan names its target by the id XcodeGen gives it, so it's written once the project is.
+  printf '{ "configurations" : [], "defaultOptions" : {}, "testTargets" : [], "version" : 1 }\n' > "$fixture/KitPlans.xctestplan"
   xcodegen generate --quiet --spec "$fixture/project.yml" --project "$fixture"
+  target=$(awk '/Begin PBXNativeTarget section/ { on = 1 } /End PBXNativeTarget section/ { on = 0 } on && /\/\* KitTests \*\/ = \{/ { print $1; exit }' "$fixture/SwiftTesting.xcodeproj/project.pbxproj")
+  [ -n "$target" ] || { echo "generate.sh: the swift-testing fixture's KitTests target has no id" >&2; exit 1; }
+  # Swift Testing's tests under a test plan of two configurations, `First` and `Second`, with no options of their own.
+  cat > "$fixture/KitPlans.xctestplan" <<EOF
+{
+  "configurations" : [
+    { "id" : "00000000-0000-0000-0000-00000000000A", "name" : "First", "options" : {} },
+    { "id" : "00000000-0000-0000-0000-00000000000B", "name" : "Second", "options" : {} }
+  ],
+  "defaultOptions" : {},
+  "testTargets" : [
+    { "target" : { "containerPath" : "container:SwiftTesting.xcodeproj", "identifier" : "$target", "name" : "KitTests" } }
+  ],
+  "version" : 1
+}
+EOF
   fixture_json "$fixture" pbxproj-groups xcodegen root
   find "$fixture" -name xcuserdata -prune -exec rm -rf {} +
   echo "$fixture"
 }
 
-if runs swift-testing || [ "$build" = shapes ]; then swift_testing; fi
+if runs swift-testing || [ "$build" = shapes ] || [ "$build" = swift-configurations ]; then swift_testing; fi
 
 # An XCTest bundle whose scheme's test plan has two configurations, `First` and `Second`, with no options of their own:
 # a pass, a failure and a skip, run once in each.
@@ -1765,7 +1793,7 @@ concurrency_captures() {
 
 # What captures/raw holds, for every step that writes there.
 raw_manifest() {
-  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips, test-build-failed FeatureTests/ProbeTests with a type error written into its test file, system-failure-crash a test crashing inside XCTAssertEqual'"'"'s autoclosure written into it, its crash log as system-failure-crash.crash.ips. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted, retry FeatureTests/ProbeTests with -parallel-testing-enabled NO -retry-tests-on-failure -test-iterations 3. On a copy of plans/: configurations is the Kit scheme'"'"'s test plan, its configurations First and Second. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run, shapes-iterations the same with -test-iterations 2, cancel the Cancel scheme'"'"'s. Each <name>-snapshots.json and <name>-midrun.log is the live log, copied each second while it ran. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
+  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips, test-build-failed FeatureTests/ProbeTests with a type error written into its test file, system-failure-crash a test crashing inside XCTAssertEqual'"'"'s autoclosure written into it, its crash log as system-failure-crash.crash.ips. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted, retry FeatureTests/ProbeTests with -parallel-testing-enabled NO -retry-tests-on-failure -test-iterations 3. On a copy of plans/: configurations is the Kit scheme'"'"'s test plan, its configurations First and Second. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run, shapes-iterations the same with -test-iterations 2, cancel the Cancel scheme'"'"'s, shapes-configurations the KitPlans scheme'"'"'s test plan, its configurations First and Second. Each <name>-snapshots.json and <name>-midrun.log is the live log, copied each second while it ran. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
 }
 
 # Result bundle `$1`'s answers to what xcrew asks it, as `<name>` (`$2`) in `$out`, through the calling step's `neutral`:
@@ -2423,6 +2451,25 @@ fi
 if [ "$build" = multi-pass ]; then
   capture_simulator
   multi_pass_captures
+  exit 0
+fi
+
+# Swift Testing's run through a test plan of two configurations, the swift-testing fixture's KitPlans scheme: how its log
+# writes the second configuration's results. The check asks only that it completed and its tests ran, never the shape.
+if [ "$build" = swift-configurations ]; then
+  capture_simulator
+  watched_capture swift-testing SwiftTesting.xcodeproj shapes-configurations '{}' '
+    const fs = require("fs")
+    const result = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+    const log = fs.readFileSync(process.argv[2], "utf8")
+    const wrong = [
+      [result.structuredContent?.schema === "mobilebuildmcp.output.test-result", "the run completed"],
+      [/Test fails\(\) failed after/.test(log), "fails() failed"],
+      [/Test passes\(\) passed after/.test(log), "passes() passed"],
+    ].filter(([ok]) => !ok).map(([, what]) => what)
+    if (wrong.length) { console.error(`generate.sh: the shapes-configurations run did not come to what it holds: ${wrong.join(", ")}`); process.exit(1) }
+  ' KitPlans
+  raw_manifest
   exit 0
 fi
 

@@ -1,0 +1,11 @@
+{
+  "configurations" : [
+    { "id" : "00000000-0000-0000-0000-00000000000A", "name" : "First", "options" : {} },
+    { "id" : "00000000-0000-0000-0000-00000000000B", "name" : "Second", "options" : {} }
+  ],
+  "defaultOptions" : {},
+  "testTargets" : [
+    { "target" : { "containerPath" : "container:SwiftTesting.xcodeproj", "identifier" : "B2EAA01B4B1A8BB47F9017A9", "name" : "KitTests" } }
+  ],
+  "version" : 1
+}
