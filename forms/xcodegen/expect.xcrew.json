@@ -3,8 +3,7 @@
   "container": "App.xcodeproj",
   "containerProblem": null,
   "doctor": {
-    "mobilebuildmcp/project-config": "pass",
-    "xcode-mcp/macro-copy-phase": "pass"
+    "mobilebuildmcp/project-config": "pass"
   },
   "generator": "xcodegen",
   "generatorRoot": ".",

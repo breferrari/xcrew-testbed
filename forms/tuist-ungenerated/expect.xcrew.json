@@ -3,8 +3,7 @@
   "container": null,
   "containerProblem": "generate it first",
   "doctor": {
-    "mobilebuildmcp/project-config": "fail",
-    "xcode-mcp/macro-copy-phase": "pass"
+    "mobilebuildmcp/project-config": "fail"
   },
   "generator": "tuist",
   "generatorRoot": ".",
