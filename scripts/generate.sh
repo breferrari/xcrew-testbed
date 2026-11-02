@@ -960,7 +960,9 @@ capture_simulator() {
 #   SettingsSearchReindexService about 30 s later, each an EXC_BREAKPOINT in XPCPeerRequirement.hasEntitlement ->
 #   __XPC_API_MISUSE__;
 # - on a fresh simulator, during a test run, assetsd aborts on an exception PhotoLibraryServices throws while preparing
-#   its library (queue PLLibraryServicesStateNode, prep-pre-migration); nothing here uses Photos.
+#   its library (queue PLLibraryServicesStateNode, prep-pre-migration); nothing here uses Photos;
+# - UsageTrackingAgent traps on a Swift assertion in DeviceActivity, inside a dispatch_once on the background
+#   cooperative queue (EXC_BREAKPOINT); it crashed on a plain simulator too. Revisit on the next iOS runtime.
 # A report is known only when its process, exception, queue and frames all match an entry. An entry may be added only
 # for an Apple system process, with only Apple frames in the crashing thread, and with evidence that no capture's code
 # is involved. A third new process crashing means this is the wrong tool: let the simulator settle longer after boot.
@@ -971,6 +973,7 @@ known_crash() {
       { process: "AppIntentsLiveEntityService", type: "EXC_BREAKPOINT", signal: "SIGTRAP", queue: "", frames: ["XPCPeerRequirement.hasEntitlement", "__XPC_API_MISUSE__"] },
       { process: "SettingsSearchReindexService", type: "EXC_BREAKPOINT", signal: "SIGTRAP", queue: "", frames: ["XPCPeerRequirement.hasEntitlement", "__XPC_API_MISUSE__"] },
       { process: "assetsd", type: "EXC_CRASH", signal: "SIGABRT", queue: "PLLibraryServicesStateNode", frames: ["prep-pre-migration", "objc_exception_throw", "PLLibraryServicesOperation"] },
+      { process: "UsageTrackingAgent", type: "EXC_BREAKPOINT", signal: "SIGTRAP", queue: "com.apple.root.background-qos.cooperative", frames: ["_assertionFailure", "_dispatch_once_callout"] },
     ]
     const text = require("fs").readFileSync(process.argv[1], "utf8")
     const report = JSON.parse(text.slice(text.indexOf("\n") + 1))
