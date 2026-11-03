@@ -26,6 +26,14 @@ targets:
       - target: Kit
     settings:
       GENERATE_INFOPLIST_FILE: YES
+  NestedTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [NestedTests]
+    dependencies:
+      - target: Kit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
 schemes:
   Kit:
     build:
@@ -39,6 +47,12 @@ schemes:
         Kit: all
     test:
       targets: [CancelTests]
+  Nested:
+    build:
+      targets:
+        Kit: all
+    test:
+      targets: [NestedTests]
   KitPlans:
     build:
       targets:

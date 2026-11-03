@@ -1,0 +1,47 @@
+{
+  "Outer/Inner/fails()": {
+    "test-details": true,
+    "activities": true,
+    "export attachments": 0
+  },
+  "Inner/fails()": {
+    "test-details": false,
+    "activities": false,
+    "export attachments": "none"
+  },
+  "Outer/Inner/flaky()": {
+    "test-details": true,
+    "activities": true,
+    "export attachments": 0
+  },
+  "Inner/flaky()": {
+    "test-details": false,
+    "activities": false,
+    "export attachments": "none"
+  },
+  "Outer/Inner/attaches()": {
+    "test-details": true,
+    "activities": true,
+    "export attachments": 1
+  },
+  "Inner/attaches()": {
+    "test-details": false,
+    "activities": false,
+    "export attachments": "none"
+  },
+  "Outer/Inner/addsNumbers()": {
+    "test-details": true,
+    "activities": true,
+    "export attachments": 0
+  },
+  "Inner/addsNumbers()": {
+    "test-details": false,
+    "activities": false,
+    "export attachments": "none"
+  },
+  "Inner/Adds numbers": {
+    "test-details": false,
+    "activities": false,
+    "export attachments": "none"
+  }
+}

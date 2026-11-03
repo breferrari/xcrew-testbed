@@ -1,0 +1,17 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000003",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000002.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "screen_0_00000000-0000-0000-0000-000000000001.png",
+        "timestamp" : 1793722914.837
+      }
+    ],
+    "testIdentifier" : "Outer/Inner/attaches()",
+    "testIdentifierURL" : "test://com.apple.xcode/SwiftTesting/NestedTests/Outer/Inner/attaches()"
+  }
+]
