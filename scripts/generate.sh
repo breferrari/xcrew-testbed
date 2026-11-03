@@ -9,6 +9,8 @@
 # scripts/testbed/generate.sh raw-build     only the raw MobileBuildMCP build capture, on a capture simulator never booted
 # scripts/testbed/generate.sh raw-session   only the raw MobileBuildMCP session tools' answers, on a capture simulator never booted
 # scripts/testbed/generate.sh shapes        only the swift-testing fixture and its raw capture, on the capture simulator
+# scripts/testbed/generate.sh nested        only the swift-testing fixture and its nested suites' raw captures, retried and
+#                                           plain, on the capture simulator; never in a full run (nested_captures)
 # scripts/testbed/generate.sh swift-configurations   only the swift-testing fixture and its run through a test plan of two
 #                                           configurations, on the capture simulator; never in a full run
 # scripts/testbed/generate.sh multi-pass    only the plans fixture and the raw captures of runs with several passes or a
@@ -634,6 +636,56 @@ import Testing
     }
 }
 EOF
+  # Nested suites, a test a retry passes, a failure with an image and display-named tests: how MobileBuildMCP's text
+  # names each against the bundle's identifier. `flaky()` fails on its odd runs, counted in the simulator's temporary
+  # folder, as field/'s testFlaky does.
+  mkdir -p "$fixture/NestedTests"
+  cat > "$fixture/NestedTests/NestedTests.swift" <<'EOF'
+import Foundation
+import Testing
+@testable import Kit
+
+@Suite struct Outer {
+    @Suite struct Inner {
+        @Test func fails() {
+            #expect(Kit.name == "Other", "the name is Kit")
+        }
+
+        @Test func passes() {
+            #expect(Kit.name == "Kit")
+        }
+
+        @Test func flaky() throws {
+            let counter = FileManager.default.temporaryDirectory.appending(path: "nested-flaky-count")
+            let run = (Int((try? String(contentsOf: counter, encoding: .utf8)) ?? "") ?? 0) + 1
+            try String(run).write(to: counter, atomically: true, encoding: .utf8)
+            #expect(run % 2 == 0, "run \(run) is odd")
+        }
+
+        @Test func attaches() throws {
+            let png = try #require(Data(base64Encoded: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/iZk9HQAAAABJRU5ErkJggg=="))
+            Attachment.record(png, named: "screen.png")
+            #expect(Kit.name == "Other", "the screen shows Kit")
+        }
+
+        @Test("Adds numbers") func addsNumbers() {
+            #expect(1 + 1 == 3, "one and one")
+        }
+    }
+}
+
+@Suite struct Inner {
+    @Test func passes() {
+        #expect(Kit.name == "Kit")
+    }
+}
+
+@Suite struct Arithmetic {
+    @Test("Subtracts numbers") func subtractsNumbers() {
+        #expect(2 - 1 == 1)
+    }
+}
+EOF
   mkdir -p "$fixture/CancelTests"
   cat > "$fixture/CancelTests/CancelTests.swift" <<'EOF'
 import Testing
@@ -678,6 +730,14 @@ targets:
       - target: Kit
     settings:
       GENERATE_INFOPLIST_FILE: YES
+  NestedTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [NestedTests]
+    dependencies:
+      - target: Kit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
 schemes:
   Kit:
     build:
@@ -691,6 +751,12 @@ schemes:
         Kit: all
     test:
       targets: [CancelTests]
+  Nested:
+    build:
+      targets:
+        Kit: all
+    test:
+      targets: [NestedTests]
   KitPlans:
     build:
       targets:
@@ -724,7 +790,7 @@ EOF
   echo "$fixture"
 }
 
-if runs swift-testing || [ "$build" = shapes ] || [ "$build" = swift-configurations ]; then swift_testing; fi
+if runs swift-testing || [ "$build" = shapes ] || [ "$build" = swift-configurations ] || [ "$build" = nested ]; then swift_testing; fi
 
 # An XCTest bundle whose scheme's test plan has two configurations, `First` and `Second`, with no options of their own:
 # a pass, a failure and a skip, run once in each.
@@ -1796,7 +1862,7 @@ concurrency_captures() {
 
 # What captures/raw holds, for every step that writes there.
 raw_manifest() {
-  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips, test-build-failed FeatureTests/ProbeTests with a type error written into its test file, system-failure-crash a test crashing inside XCTAssertEqual'"'"'s autoclosure written into it, its crash log as system-failure-crash.crash.ips. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted, retry FeatureTests/ProbeTests with -parallel-testing-enabled NO -retry-tests-on-failure -test-iterations 3. On a copy of plans/: configurations is the Kit scheme'"'"'s test plan, its configurations First and Second. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run, shapes-iterations the same with -test-iterations 2, cancel the Cancel scheme'"'"'s, shapes-configurations the KitPlans scheme'"'"'s test plan, its configurations First and Second. Each <name>-snapshots.json and <name>-midrun.log is the live log, copied each second while it ran. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
+  printf '{\n  "replay": "each <name>.json is MobileBuildMCP'"'"'s whole JSON-RPC result, content and structuredContent, <name>.log the log it names, and <name>.tests.json, .summary.json and .details.<test>.json what xcresulttool answered about the result bundle it names. On a copy of field/: serial is test_sim of FeatureTests/ProbeTests with -parallel-testing-enabled NO, swift-testing the Core scheme'"'"'s Swift Testing tests, profile a call naming no scheme under a profile whose scheme is Data, empty-filter a selection matching no test, timing FeatureTests/ProbeTests and FeatureTests/CrashTests with -parallel-testing-enabled NO and showTestTiming on, its crash log as timing.crash.ips, test-build-failed FeatureTests/ProbeTests with a type error written into its test file, system-failure-crash a test crashing inside XCTAssertEqual'"'"'s autoclosure written into it, its crash log as system-failure-crash.crash.ips. session-defaults session_show_defaults with two profiles, probe active, and profile-switched session_use_defaults_profile to unit, neither persisted, retry FeatureTests/ProbeTests with -parallel-testing-enabled NO -retry-tests-on-failure -test-iterations 3. On a copy of plans/: configurations is the Kit scheme'"'"'s test plan, its configurations First and Second. On a copy of concurrency/: build_sim is the Warnings scheme'"'"'s build, its simulator never booted. On a copy of swift-testing/: shapes is the Kit scheme'"'"'s run, shapes-iterations the same with -test-iterations 2, cancel the Cancel scheme'"'"'s, shapes-configurations the KitPlans scheme'"'"'s test plan, its configurations First and Second, nested-retry the Nested scheme'"'"'s nested suites and display names with -retry-tests-on-failure -test-iterations 3 and nested the same plainly, each with its failed tests'"'"' activities and <name>.lookups.json, and every attachment under <name>-attachments/. Each <name>-snapshots.json and <name>-midrun.log is the live log, copied each second while it ran. Tests read them and never build",\n  "mobilebuildmcp": "%s"\n}\n' "$(mobilebuildmcp --version | tail -1)" > "$testbed/captures/raw/capture.json"
 }
 
 # Result bundle `$1`'s answers to what xcrew asks it, as `<name>` (`$2`) in `$out`, through the calling step's `neutral`:
@@ -2118,12 +2184,14 @@ midrun_copy() {
 # A watched raw test_sim run of the fixture `$1`, whose project is `$2`, kept in captures/raw as `<name>.json` (`$3`) and
 # the log it names as `<name>.log`, with where the live log's markers stood each second (midrun_copy). `$4` is
 # test_sim's arguments, and `$5` a node check the result and log must pass, or the capture proves nothing and the step
-# stops. `$6` is the scheme, `Kit` unless named; a project that's a `.xcworkspace` is opened as one. On the capture
-# simulator.
+# stops. `$6` is the scheme, `Kit` unless named; a project that's a `.xcworkspace` is opened as one. `$7`, when given,
+# is a step run with the capture's name and its result bundle before the run's folders go, so it can neutralise what it
+# keeps. On the capture simulator.
 watched_capture() {
   out=$testbed/captures/raw
   mkdir -p "$out"
-  rm -f "$out/$3.json" "$out/$3.log" "$out/$3-snapshots.json" "$out/$3-midrun.log" "$out/$3.tests.json" "$out/$3.summary.json" "$out/$3".details.*.json
+  rm -f "$out/$3.json" "$out/$3.log" "$out/$3-snapshots.json" "$out/$3-midrun.log" "$out/$3.tests.json" "$out/$3.summary.json" "$out/$3".details.*.json "$out/$3".activities.*.json "$out/$3.lookups.json"
+  rm -rf "${out:?}/$3-attachments"
   work=$(mktemp -d)/$1
   cp -R "$testbed/$1" "$work"
   derived=$(mktemp -d)
@@ -2143,6 +2211,10 @@ watched_capture() {
   if [ -n "$log" ] && [ -f "$log" ]; then neutral < "$log" | uuids_out > "$out/$3.log"; fi
   bundle=$(raw_bundle "$results/$3.json")
   if [ -n "$bundle" ]; then bundle_answers "$bundle" "$3"; fi
+  if [ -n "${7:-}" ]; then
+    [ -n "$bundle" ] || { echo "generate.sh: the $3 capture names no result bundle on this Mac" >&2; exit 1; }
+    "$7" "$3" "$bundle"
+  fi
   rm -rf "${work:?}" "${derived:?}" "${results:?}"
   echo "$out/$3.json"
 }
@@ -2424,6 +2496,98 @@ if [ "$build" = field-captures ]; then
   # The two-display capture alone boots nothing: it replays simctl's answer, so it needs no capture simulator.
   if [ "${FIELD_CAPTURES:-}" = two-display ]; then simulator=xcrew-testbed; else capture_simulator; fi
   field_captures
+  exit 0
+fi
+
+# Swift Testing's nested suites and display names, the swift-testing fixture's Nested scheme, raw: retried on failure,
+# then plain, on one boot, in that order, as `flaky()` fails on its odd runs and the simulator is fresh: the retried run
+# fails it once and passes it the next, the plain one fails it on its third. Beside each, nested_lookups'. Each check
+# asks only what's known before the run. Never part of a full run.
+nested_captures() {
+  watched_capture swift-testing SwiftTesting.xcodeproj nested-retry '{"extraArgs":["-retry-tests-on-failure","-test-iterations","3"]}' '
+    const fs = require("fs")
+    const result = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+    const log = fs.readFileSync(process.argv[2], "utf8")
+    const wrong = [
+      [result.structuredContent?.schema === "mobilebuildmcp.output.test-result", "the run completed"],
+      [/Test flaky\(\) recorded an issue[\s\S]*Test flaky\(\) started \(repetition 2\)\.(?:(?!Test flaky\(\) )[\s\S])*Test flaky\(\) passed/.test(log), "flaky() failed, then passed when run again"],
+    ].filter(([ok]) => !ok).map(([, what]) => what)
+    if (wrong.length) { console.error(`generate.sh: the nested-retry run did not come to what it holds: ${wrong.join(", ")}`); process.exit(1) }
+  ' Nested nested_lookups
+  watched_capture swift-testing SwiftTesting.xcodeproj nested '{}' '
+    const fs = require("fs")
+    const result = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+    const log = fs.readFileSync(process.argv[2], "utf8")
+    const wrong = [
+      [result.structuredContent?.schema === "mobilebuildmcp.output.test-result", "the run completed"],
+      [/Test fails\(\) failed/.test(log), "fails() failed"],
+      [/Test attaches\(\) failed/.test(log), "attaches() failed"],
+      [/Test flaky\(\) failed/.test(log) && /run 3 is odd/.test(log), "flaky() failed on its third run"],
+      [/"Adds numbers" failed/.test(log), "Adds numbers failed"],
+      [/"Subtracts numbers" passed/.test(log), "Subtracts numbers passed"],
+    ].filter(([ok]) => !ok).map(([, what]) => what)
+    if (wrong.length) { console.error(`generate.sh: the nested run did not come to what it holds: ${wrong.join(", ")}`); process.exit(1) }
+  ' Nested nested_lookups
+}
+
+# For raw capture `$1`, from its result bundle `$2`: each failed test's activities, as `<name>.activities.<id>.json`;
+# what xcresulttool answers about each failed test asked under its full id and under the text's names for it, as
+# `<name>.lookups.json` (`export attachments` as how many it gave, `none` where it failed); and every attachment as
+# `export attachments` gives it, under `<name>-attachments/`. Run by watched_capture while the run's folders are there to
+# neutralise against.
+nested_lookups() {
+  bundle=$2
+  # Each failed test's full id and the text's names for it: its innermost suite with its function, and with its display
+  # name where it has one, as `Inner/addsNumbers()` and `Inner/Adds numbers`.
+  ids=$(node -e '
+    const walk = n => [...(n.nodeType === "Test Case" && n.result === "Failed" ? [n] : []), ...(n.children ?? []).flatMap(walk)]
+    for (const test of JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).testNodes.flatMap(walk)) {
+      const parts = test.nodeIdentifier.split("/"), inner = parts[parts.length - 2]
+      console.log([test.nodeIdentifier, `${inner}/${parts[parts.length - 1]}`, ...(test.name.endsWith(")") ? [] : [`${inner}/${test.name}`])].join("\t"))
+    }
+  ' "$out/$1.tests.json")
+  answers=$(mktemp -d)
+  printf '%s\n' "$ids" | while IFS= read -r line; do
+    [ -n "$line" ] || continue
+    test=$(printf '%s' "$line" | cut -f1)
+    bundle_answer "$bundle" "$out/$1.activities.$(printf '%s' "$test" | sed 's#/#.#g; s#()$##').json" activities --test-id "$test"
+    printf '%s\n' "$line" | tr '\t' '\n' | while IFS= read -r id; do
+      for kind in test-details activities; do
+        if xcrun xcresulttool get test-results "$kind" --test-id "$id" --path "$bundle" --compact > /dev/null 2>&1; then ok=true; else ok=false; fi
+        printf '%s\t%s\t%s\n' "$id" "$kind" "$ok" >> "$answers/lookups.tsv"
+      done
+      rm -rf "$answers/export"
+      if xcrun xcresulttool export attachments --path "$bundle" --output-path "$answers/export" --test-id "$id" > /dev/null 2>&1 && [ -f "$answers/export/manifest.json" ]; then
+        count=$(node -e 'console.log(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).flatMap(t => t.attachments ?? []).length)' "$answers/export/manifest.json")
+      else
+        count=none
+      fi
+      printf '%s\t%s\t%s\n' "$id" "export attachments" "$count" >> "$answers/lookups.tsv"
+    done
+  done
+  node -e '
+    const rows = require("fs").readFileSync(process.argv[1], "utf8").trim().split("\n").map(line => line.split("\t"))
+    const value = answer => answer === "true" ? true : answer === "false" ? false : /^\d+$/.test(answer) ? Number(answer) : answer
+    const out = {}
+    for (const [id, kind, answer] of rows) (out[id] ??= {})[kind] = value(answer)
+    require("fs").writeFileSync(process.argv[2], JSON.stringify(out, null, 2) + "\n")
+  ' "$answers/lookups.tsv" "$out/$1.lookups.json"
+  xcrun xcresulttool export attachments --path "$bundle" --output-path "$out/$1-attachments" > /dev/null
+  neutral < "$out/$1-attachments/manifest.json" | uuids_out > "$answers/manifest.json"
+  # The ids are renumbered as the other captures' are, so each exported file takes the name the manifest now gives it.
+  node -e '
+    const fs = require("fs"), [folder, renamed] = process.argv.slice(1)
+    const names = file => JSON.parse(fs.readFileSync(file, "utf8")).flatMap(test => test.attachments ?? []).map(each => each.exportedFileName)
+    const before = names(`${folder}/manifest.json`), after = names(renamed)
+    before.forEach((name, index) => fs.renameSync(`${folder}/${name}`, `${folder}/${after[index]}`))
+  ' "$out/$1-attachments" "$answers/manifest.json"
+  mv "$answers/manifest.json" "$out/$1-attachments/manifest.json"
+  rm -rf "${answers:?}"
+}
+
+if [ "$build" = nested ]; then
+  capture_simulator
+  nested_captures
   exit 0
 fi
 

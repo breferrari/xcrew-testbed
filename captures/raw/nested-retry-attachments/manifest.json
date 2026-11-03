@@ -1,0 +1,38 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000001",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000005.png",
+        "isAssociatedWithFailure" : false,
+        "repetitionNumber" : 1,
+        "suggestedHumanReadableName" : "screen_0_00000000-0000-0000-0000-000000000004.png",
+        "timestamp" : 1793722898.361
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000001",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000002.png",
+        "isAssociatedWithFailure" : false,
+        "repetitionNumber" : 2,
+        "suggestedHumanReadableName" : "screen_0_00000000-0000-0000-0000-000000000007.png",
+        "timestamp" : 1793722898.361
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "00000000-0000-0000-0000-000000000001",
+        "deviceName" : "xcrew-testbed",
+        "exportedFileName" : "00000000-0000-0000-0000-000000000006.png",
+        "isAssociatedWithFailure" : false,
+        "repetitionNumber" : 3,
+        "suggestedHumanReadableName" : "screen_0_00000000-0000-0000-0000-000000000003.png",
+        "timestamp" : 1793722898.362
+      }
+    ],
+    "testIdentifier" : "Outer/Inner/attaches()",
+    "testIdentifierURL" : "test://com.apple.xcode/SwiftTesting/NestedTests/Outer/Inner/attaches()"
+  }
+]
