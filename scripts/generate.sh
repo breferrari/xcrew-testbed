@@ -2193,8 +2193,8 @@ parallel_captures() {
 # The bundle answers of the raw captures already committed, from the bundles MobileBuildMCP kept on this Mac: no
 # simulator, no new run. All are written, or none: a bundle that's gone is named, and an answer that fails stops the
 # step before anything is moved in. Each run's work copy was a temporary folder, gone since; it's found in the answers
-# and neutralised as the capture's own step did. Not empty-filter, whose answers field/ keeps, nor parallel, which isn't
-# committed, nor multi-pass's four; a fresh `raw`, `parallel` or `multi-pass` capture writes its own.
+# and neutralised as the capture's own step did. Not empty-filter, whose answers field/ keeps, nor parallel, whose own
+# step writes its answers, nor multi-pass's four; a fresh `raw`, `parallel` or `multi-pass` capture writes its own.
 raw_answers() {
   kept="serial swift-testing profile shapes"
   gone=
