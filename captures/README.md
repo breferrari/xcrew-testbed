@@ -180,7 +180,7 @@ What they show:
 
 `scripts/generate.sh parallel` runs `parallel/`'s bundle: `ProbeTests` with a pass, a failure and an `XCTSkip`, and `SlowTests` with a 5 s wait. The scheme runs them in parallel, at most two workers (`-parallel-testing-worker-count 2`), so at most three simulators. The step checks the run came to one failure (`testFails`), one skipped and `testWaits` passed, on the parallel runner, and stops otherwise. It writes `parallel.json`, `parallel.log`, `parallel-snapshots.json` and `parallel-midrun.log`, as shapes does. The mid-run copy is the last one with the tests' build done (`** TEST BUILD SUCCEEDED **`) or the tests started, and no verdict yet.
 
-Its files aren't committed yet: its run left a crash report from a system service in one of xcodebuild's clones that no known entry covers.
+Committed from a run on 2026-11-03 (Xcode 27.2, iOS 27.2, MobileBuildMCP 2.7.1), with `parallel.tests.json`, `parallel.summary.json` and `parallel.details.ProbeTests.testFails.json`, what `xcresulttool` answered about its bundle. MobileBuildMCP counts `1 failed, 2 passed, 1 skipped`, and its log runs the tests `on 'Clone …'`. The run's reports were the known AppIntentsLiveEntityService crash and its clones' shutdown kills, which `shutdown_kill` excuses.
 
 ## Crash reports
 
