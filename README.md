@@ -101,6 +101,12 @@ Paths count as written or with JSON's escaped slashes (`\/`).
 - xcrew's CI checks this repository out at a pinned commit, with its tag beside it.
 - It checks each fixture against `expect.xcrew.json`: what xcrew detects, what its setup writes, and what its doctor reports. Nothing is built in CI.
 
+## Backlog
+
+Captures worth taking with the next capture pull request:
+
+- A UI test failing under test plan configurations whose screens hold the same elements, with a screenshot kept under the first only. `look` should list the elements once, the line on a system alert under the first, and the others "the same as under" it (xcrew#557, whose case a unit test holds for now). The `uitests` capture can't show it: its app names its configuration on screen, and turning `uiTestingScreenshotsEnabled` off for a configuration still left a screen at failure (xcrew 0.17.0's release check, November 4, 2026).
+
 ## Licence
 
 MIT. See [LICENSE](LICENSE).
